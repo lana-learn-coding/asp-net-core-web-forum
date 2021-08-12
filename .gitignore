@@ -2,9 +2,5 @@
 bin
 obj
 
-# Node
-package.json
-package-lock.json
-
 # Intellij
 .idea
