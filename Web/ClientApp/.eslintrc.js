@@ -20,7 +20,9 @@ module.exports = {
     ],
     'class-methods-use-this': 'off',
     'no-shadow': 'off',
-    'no-param-reassign': ['error', { props: false }],
+    'no-use-before-define': 'off',
+    'linebreak-style': 'off',
+    'no-param-reassign': ['warn', { props: false }],
     'object-curly-newline': ['error', {
       ImportDeclaration: {
         multiline: true,
