@@ -62,12 +62,15 @@ namespace Web
 
             // Visit http://localhost:8080 to access the client
             // I have already configured the proxy on webpack so we dont need to configure cors
-            app.UseSpa(spa =>
+            if (Configuration.GetValue<bool>("ServeSPA"))
             {
-                spa.Options.SourcePath = "ClientApp";
-                if (!env.IsDevelopment()) return;
-                spa.UseVueCli("serve", 8080, forceKill: true, https: false);
-            });
+                app.UseSpa(spa =>
+                {
+                    spa.Options.SourcePath = "ClientApp";
+                    if (!env.IsDevelopment()) return;
+                    spa.UseVueCli("serve", 8080, forceKill: true, https: false);
+                });
+            }
         }
     }
 }
