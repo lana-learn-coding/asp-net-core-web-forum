@@ -4,3 +4,6 @@ obj
 
 # Intellij
 .idea
+
+# VS
+.vs
