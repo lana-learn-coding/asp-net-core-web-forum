@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import { useRouter } from '@/composable/compat';
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_API_URI || '/api',
   withCredentials: true,
 });
 

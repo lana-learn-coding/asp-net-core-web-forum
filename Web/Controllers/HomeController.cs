@@ -3,7 +3,7 @@
 namespace Web.Controllers
 {
     [ApiController]
-    [Route("/home")]
+    [Route("/api/home")]
     public class HomeController : ControllerBase
     {
         [HttpGet]
