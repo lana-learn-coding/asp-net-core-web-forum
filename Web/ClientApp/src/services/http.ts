@@ -28,7 +28,7 @@ export function useHttp(): HttpClient {
       return (await promise).data;
     } catch (e) {
       if (e.response.status === 401) {
-        await router.push({ name: '401' });
+        await router.push({ name: 'Unauthorized' });
       }
       throw e;
     }
