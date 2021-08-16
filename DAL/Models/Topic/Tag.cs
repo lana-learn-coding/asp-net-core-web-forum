@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Models.Topic
 {
+    // Tags help categorizing Threads subject
     public class Tag : Entity
     {
         public override string RawSlug => Name;

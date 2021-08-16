@@ -4,7 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models
 {
-    public abstract class Entity : IIdentified<Guid>, IAuditable, IComparable, ISlugged
+    
+    // Base entity model with default entity and comparison method
+    public abstract class Entity : IIdentified, IAuditable, IComparable, ISlugged
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -25,11 +27,13 @@ namespace DAL.Models
         }
     }
 
-    public interface IIdentified<T>
+    public interface IIdentified
     {
-        public T Id { get; set; }
+        public Guid Id { get; set; }
     }
 
+    // This interface to mark entities which Creation and Modification date 
+    // will be tracked automatically
     public interface IAuditable
     {
         DateTime CreatedAt { get; set; }
@@ -37,6 +41,8 @@ namespace DAL.Models
         DateTime UpdatedAt { get; set; }
     }
 
+    // This interface to mark entities that will be slugged when save of update
+    // The RawSlug prop will determine which field to slug
     public interface ISlugged
     {
         string Slug { get; set; }

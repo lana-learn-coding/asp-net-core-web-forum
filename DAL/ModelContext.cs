@@ -11,6 +11,7 @@ using SlugityLib;
 
 namespace DAL
 {
+    // I use EF6 instead of EFCore because i need the TPC model (which is not supported by EFCore yet)
     public class ModelContext : DbContext
     {
         private static readonly Slugity Slugity = new();
@@ -30,6 +31,8 @@ namespace DAL
         {
             modelBuilder.Entity<Role>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
         }
 
         public override int SaveChanges()
