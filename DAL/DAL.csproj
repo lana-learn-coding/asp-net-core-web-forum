@@ -8,6 +8,7 @@
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
       <PackageReference Include="Bogus" Version="33.0.2" />
       <PackageReference Include="EntityFramework" Version="6.4.4" />
+      <PackageReference Include="EntityFramework.DynamicLinq" Version="1.2.12" />
       <PackageReference Include="Slugity" Version="1.0.4" />
     </ItemGroup>
 
