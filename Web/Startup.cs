@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using VueCliMiddleware;
+using Web.Filter;
 
 namespace Web
 {
@@ -23,7 +24,10 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddControllers(config => { config.Filters.Add(new ModelStateInvalidFilter()); })
+                .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -32,6 +36,7 @@ namespace Web
                     Title = "WebForum API",
                     Description = "WebForum project API doc. Access client <a href=\"http://localhost:8080\">here</a>"
                 });
+                c.OperationFilter<SwaggerIgnorePropertiesFilter>();
             });
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
