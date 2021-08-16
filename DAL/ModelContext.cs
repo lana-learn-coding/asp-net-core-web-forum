@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DAL.Database;
 using DAL.Models;
 using DAL.Models.Auth;
+using DAL.Models.Topic;
 using SlugityLib;
 
 namespace DAL
@@ -15,6 +16,10 @@ namespace DAL
         private static readonly Slugity Slugity = new();
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Tag> Tags { get; set; }
 
         public ModelContext(string connection) : base(connection)
         {
@@ -39,6 +44,7 @@ namespace DAL
             return base.SaveChangesAsync(cancellationToken);
         }
 
+        // Audit date and slug generation handle
         private void SetProperties()
         {
             foreach (var entity in ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
@@ -55,7 +61,7 @@ namespace DAL
             {
                 if (entity.Entity is not IAuditable updated) continue;
                 updated.UpdatedAt = DateTime.Now;
-                
+
                 if (entity.Entity is not ISlugged slugged) continue;
                 slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
             }

@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using Bogus;
 using DAL.Models.Auth;
+using DAL.Models.Topic;
 
 
 namespace DAL.Database
@@ -12,6 +13,8 @@ namespace DAL.Database
         {
             base.Seed(context);
             SeedUsers(context);
+
+            SeedTopic(context);
             context.SaveChanges();
         }
 
@@ -50,6 +53,28 @@ namespace DAL.Database
                     }
                 );
             }
+        }
+
+        private static void SeedTopic(ModelContext context)
+        {
+            context.Categories.AddRange(new[]
+            {
+                new Category { Name = "General Discussion" },
+                new Category { Name = "Question & Answer" },
+                new Category { Name = "Feedback" }
+            });
+
+            context.Tags.AddRange(new[]
+            {
+                new Tag { Name = "Neurology" },
+                new Tag { Name = "Surgery" },
+                new Tag { Name = "Urology" },
+                new Tag { Name = "Infectious Diseases" },
+                new Tag { Name = "Hematology" },
+                new Tag { Name = "Dermatology" },
+                new Tag { Name = "Endocrinology & Diabetes" },
+                new Tag { Name = "Gastroenterology & Liver Diseases" }
+            });
         }
     }
 }
