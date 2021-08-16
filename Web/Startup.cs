@@ -1,4 +1,6 @@
 using System;
+using System.Data.Entity;
+using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +35,8 @@ namespace Web
             });
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
+            services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
+            services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
