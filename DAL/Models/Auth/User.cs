@@ -6,6 +6,8 @@ namespace DAL.Models.Auth
 {
     public class User : Entity
     {
+        public override string RawSlug => Username;
+
         [Column(TypeName = "VARCHAR")]
         [StringLength(200)]
         public string Avatar { get; set; }

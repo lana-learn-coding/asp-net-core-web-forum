@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using DAL.Database;
 using DAL.Models;
 using DAL.Models.Auth;
+using SlugityLib;
 
 namespace DAL
 {
     public class ModelContext : DbContext
     {
+        private static readonly Slugity Slugity = new();
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -44,12 +46,18 @@ namespace DAL
                 if (entity.Entity is not IAuditable created) continue;
                 created.CreatedAt = DateTime.Now;
                 created.UpdatedAt = DateTime.Now;
+
+                if (entity.Entity is not ISlugged slugged) continue;
+                slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
             }
 
             foreach (var entity in ChangeTracker.Entries().Where(p => p.State == EntityState.Modified))
             {
                 if (entity.Entity is not IAuditable updated) continue;
                 updated.UpdatedAt = DateTime.Now;
+                
+                if (entity.Entity is not ISlugged slugged) continue;
+                slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
             }
         }
     }

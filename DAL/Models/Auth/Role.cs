@@ -7,6 +7,8 @@ namespace DAL.Models.Auth
 {
     public class Role : Entity
     {
+        public override string RawSlug => Name;
+
         [Column(TypeName = "VARCHAR")]
         [StringLength(20)]
         [Index(IsUnique = true)]

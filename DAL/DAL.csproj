@@ -8,11 +8,7 @@
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
       <PackageReference Include="Bogus" Version="33.0.2" />
       <PackageReference Include="EntityFramework" Version="6.4.4" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models\Topic" />
-      <Folder Include="Models\Forum" />
+      <PackageReference Include="Slugity" Version="1.0.4" />
     </ItemGroup>
 
 </Project>
