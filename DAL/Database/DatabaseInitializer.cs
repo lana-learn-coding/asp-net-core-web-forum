@@ -42,7 +42,6 @@ namespace DAL.Database
             );
 
             for (var i = 1; i <= 20; i++)
-            {
                 context.Users.Add(new User
                     {
                         Avatar = faker.Person.Avatar,
@@ -52,7 +51,6 @@ namespace DAL.Database
                         Phone = faker.Person.Phone + i
                     }
                 );
-            }
         }
 
         private static void SeedTopic(ModelContext context)

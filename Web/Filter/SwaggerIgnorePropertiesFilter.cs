@@ -21,9 +21,7 @@ namespace Web.Filter
             var queries = context.ApiDescription.ParameterDescriptions.Where(p =>
                 p.Source.Equals(BindingSource.Query) && p.CustomAttributes().Any(p => p is JsonIgnoreAttribute));
             foreach (var queryParam in queries)
-            {
                 operation.Parameters.Remove(operation.Parameters.Single(w => w.Name.Equals(queryParam.Name)));
-            }
         }
     }
 }

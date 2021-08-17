@@ -12,7 +12,7 @@ namespace Web.Filter
         public static readonly JsonSerializerOptions SerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
         };
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -22,13 +22,11 @@ namespace Web.Filter
         public void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.Result == null && !context.ModelState.IsValid)
-            {
                 context.Result = new JsonResult(new SerializableError(context.ModelState))
                 {
                     SerializerSettings = SerializerOptions,
                     StatusCode = 400
                 };
-            }
         }
     }
 }

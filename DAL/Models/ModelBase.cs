@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models
 {
-    
     // Base entity model with default entity and comparison method
     public abstract class Entity : IIdentified, IAuditable, IComparable, ISlugged
     {

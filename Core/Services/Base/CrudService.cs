@@ -112,7 +112,6 @@ namespace Core.Services.Base
 
             var total = baseQuery.Count();
             if (total == 0)
-            {
                 return new Page<T>
                 {
                     Data = new List<T>(),
@@ -124,7 +123,6 @@ namespace Core.Services.Base
                         TotalItems = 0
                     }
                 };
-            }
 
             var sort = string.Join(",", pageQuery.Sort);
 

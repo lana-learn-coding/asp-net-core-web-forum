@@ -10,7 +10,7 @@ namespace Core.Services
         {
         }
     }
-    
+
     public class TagService : SimpleCrudService<Tag>
     {
         public TagService(DbContext context) : base(context)
