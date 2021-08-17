@@ -13,6 +13,7 @@ namespace DAL.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
+        [Column(TypeName = "VARCHAR")]
         [Index(IsUnique = true)]
         public string Slug { get; set; }
 

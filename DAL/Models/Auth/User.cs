@@ -12,10 +12,14 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
+        [Column(TypeName = "VARCHAR")]
+        [MinLength(3)]
+        [StringLength(100)]
         public string FullName { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [StringLength(50)]
+        [MinLength(5)]
+        [StringLength(80)]
         [Index(IsUnique = true)]
         [Required]
         public string Username { get; set; }
@@ -27,12 +31,12 @@ namespace DAL.Models.Auth
         public string Email { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [StringLength(20)]
+        [StringLength(30)]
         [Index(IsUnique = true)]
         public string Phone { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [MinLength(6)]
+        [MinLength(8)]
         [StringLength(120)]
         public string Password { get; set; }
 
