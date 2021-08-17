@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { useRoute } from './composable/compat';
+import { useRoute } from '@/composable/compat';
 
 export default defineComponent({
   name: 'App',
@@ -18,3 +18,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+body, main {
+  min-height: 100vh;
+}
+</style>

@@ -1,5 +1,7 @@
 <template>
-  <ckeditor :editor="editor" v-model="input"></ckeditor>
+  <v-input class="mt-1" :error-messages="errorMessages">
+    <ckeditor :editor="editor" v-model="input"></ckeditor>
+  </v-input>
 </template>
 
 <script lang="ts">
