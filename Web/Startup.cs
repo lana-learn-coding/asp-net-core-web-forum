@@ -1,5 +1,5 @@
-using System;
 using System.Data.Entity;
+using Core.Services.Base;
 using DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +46,14 @@ namespace Web
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
             services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
+
+            services.AddHttpContextAccessor();
+            services.Scan(scan => scan
+                .FromAssembliesOf(typeof(ICrudService<>))
+                .AddClasses(classes => classes.AssignableTo(typeof(ICrudService<>)))
+                .AsSelf()
+                .WithScopedLifetime()
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
