@@ -9,7 +9,7 @@ namespace Web.Filter
     {
         public int Order => -2000;
 
-        private static readonly JsonSerializerOptions SerializerOptions = new()
+        public static readonly JsonSerializerOptions SerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,

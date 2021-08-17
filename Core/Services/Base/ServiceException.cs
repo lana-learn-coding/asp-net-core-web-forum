@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Core.Services.Base
@@ -38,10 +37,23 @@ namespace Core.Services.Base
         }
     }
 
+
+    // 403
+    public class ForbiddenException : ServiceException
+    {
+        public ForbiddenException(string message) : base(message)
+        {
+        }
+
+        public ForbiddenException() : base("You don't have permission to do this")
+        {
+        }
+    }
+
     // 400
     public class InvalidDataException : ServiceException
     {
-        private IDictionary<string, ICollection<string>> ModelErrors { get; }
+        public IDictionary<string, ICollection<string>> ModelErrors { get; }
 
         public InvalidDataException(string field, params string[] messages) : base("Model is invalid")
         {

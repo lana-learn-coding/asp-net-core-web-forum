@@ -25,7 +25,11 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddControllers(config => { config.Filters.Add(new ModelStateInvalidFilter()); })
+                .AddControllers(config =>
+                {
+                    config.Filters.Add(new ModelStateInvalidFilter());
+                    config.Filters.Add(new ServiceExceptionFilter());
+                })
                 .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; });
 
             services.AddSwaggerGen(c =>
