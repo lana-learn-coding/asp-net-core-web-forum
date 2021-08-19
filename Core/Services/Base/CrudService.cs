@@ -59,7 +59,7 @@ namespace Core.Services.Base
                 throw new ServiceException(e);
             }
 
-            return Query(DbSet).First(e => e.Id == entity.Id);
+            return Query(DbSet).FirstOrDefault(e => e.Id == entity.Id);
         }
 
         /// Delete entity. Overrideable
@@ -148,7 +148,7 @@ namespace Core.Services.Base
         public T Get(Guid id)
         {
             if (id == null) throw new DataNotFoundException($"{typeof(T).Name} without id found");
-            var found = Query(DbSet).First(e => e.Id == id);
+            var found = Query(DbSet).FirstOrDefault(e => e.Id == id);
             return found ?? throw new DataNotFoundException($"{typeof(T).Name} with id {id} not found!");
         }
 
@@ -183,7 +183,7 @@ namespace Core.Services.Base
         public T Get(string slug)
         {
             if (slug == null) throw new DataNotFoundException($"{typeof(T).Name} without slug not found");
-            var found = Query(DbSet).First(e => e.Slug == slug);
+            var found = Query(DbSet).FirstOrDefault(e => e.Slug == slug);
             return found ?? throw new DataNotFoundException($"{typeof(T).Name} with slug {slug} not found!");
         }
 
