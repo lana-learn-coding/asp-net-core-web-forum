@@ -25,9 +25,9 @@ export interface HttpClient {
 
   delete<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
 
-  post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  post<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T>;
 
-  put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+  put<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T>;
 }
 
 export function useHttp(): HttpClient {
