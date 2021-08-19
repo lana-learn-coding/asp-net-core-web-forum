@@ -64,32 +64,30 @@ export function useHttp(): HttpClient {
   };
 }
 
-export type PagedQueryParams = Dictionary & { page: number; size: number }
+export type PagedQueryParams<Q extends Dictionary> = Q & { page: number; size: number }
 
-export interface UseQueryResult<T> {
+export interface UseQueryResult<T, Q extends Dictionary> {
   data: Ref<UnwrapRef<T[]>>;
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
-  query: UnwrapRef<PagedQueryParams>;
+  query: UnwrapRef<PagedQueryParams<Q>>;
+
+  fetchData(): Promise<void>;
 
   fetchData(): Promise<void>;
 }
 
 export interface UseQueryOptions {
   syncQuery: boolean;
+  syncFields?: string[];
 }
 
-export function useQuery<T>(
+export function useQuery<T, Q extends Dictionary>(
   url: string,
-  params: Dictionary & { page?: number; size?: number } = {},
-  options: UseQueryOptions = { syncQuery: false },
-): UseQueryResult<T> {
-  const route = useRoute();
+  params?: Q,
+  options: UseQueryOptions = { syncQuery: true },
+): UseQueryResult<T, Q> {
   const data = ref<T[]>([]);
-  const query = reactive<PagedQueryParams>({
-    page: parseInt(route.params?.page ?? 1, 10),
-    size: parseInt(route.params?.size ?? 15, 10),
-    ...params,
-  });
+  const route = useRoute();
 
   const meta = reactive(
     {
@@ -102,19 +100,80 @@ export function useQuery<T>(
     },
   );
 
+  const query = reactive<PagedQueryParams<Q>>({
+    page: 1,
+    size: 15,
+    ...params,
+  } as PagedQueryParams<Q>);
+
+  function mergeQuery(params?: Dictionary): Dictionary {
+    const currentParams = { ...query } as Dictionary;
+    if (!params) return currentParams;
+
+    Object.keys(params).forEach((param) => {
+      // Check field if syncFields specified
+      if (options.syncFields && !options.syncFields.includes(param)) {
+        return;
+      }
+
+      const currentValue = currentParams[param];
+
+      // Assign directly if type is same
+      const raw = params[param];
+      if (raw === null || raw === undefined) {
+        currentParams[param] = '';
+        return;
+      }
+      if (Array.isArray(raw)) {
+        if (Array.isArray(currentValue)) {
+          currentParams[param] = raw;
+          return;
+        }
+        // If current param type is not array, then process first element
+        if (raw.length === 0) raw.push('');
+        [params[param]] = raw;
+      } else if (typeof raw === typeof currentValue) {
+        currentParams[param] = raw;
+        return;
+      }
+
+      // Convert if type is different
+      const value = params[param]?.toString();
+      if (!value) {
+        currentParams[param] = '';
+        return;
+      }
+      if (typeof currentValue === 'boolean') {
+        currentParams[param] = value === 'true';
+        return;
+      }
+      if (typeof currentValue === 'number') {
+        const num = Number(value);
+        if (!Number.isNaN(num)) {
+          currentParams[param] = num;
+          return;
+        }
+      }
+      currentParams[param] = value;
+    });
+    return currentParams;
+  }
+
   watch(
     query,
-    (val) => fetchData(val),
+    (val) => fetchData(val as PagedQueryParams<Q>),
     { deep: true },
   );
 
   const router = useRouter();
   const client = useHttp();
 
-  async function fetchData(queryParams: Dictionary & { page?: number; size?: number } = {}) {
+  async function fetchData(queryParams?: PagedQueryParams<Q>) {
     meta.loading = true;
     try {
-      const newParams: PagedQueryParams = { ...query, ...queryParams };
+      const newParams = options.syncQuery
+        ? mergeQuery(queryParams) as PagedQueryParams<Q>
+        : { ...query, ...queryParams };
       const res = await client.get<Page<T>>(url, { params: newParams });
 
       data.value = res.data as UnwrapRefSimple<T>[];
@@ -131,7 +190,11 @@ export function useQuery<T>(
   }
 
   onMounted(async () => {
-    await fetchData();
+    if (options.syncQuery) {
+      await fetchData(route.query as PagedQueryParams<Q>);
+    } else {
+      await fetchData();
+    }
     meta.initialized = true;
   });
 
