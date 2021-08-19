@@ -3,6 +3,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import vuetify from '@/plugins/vuetify';
 import '@/plugins/composition-api';
+import '@/composable/directives';
 
 Vue.config.productionTip = false;
 
