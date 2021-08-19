@@ -8,7 +8,7 @@ import {
   UnwrapRefSimple,
   watch,
 } from '@vue/composition-api';
-import { useRoute, useRouter } from '@/composable/compat';
+import { noop, useRoute, useRouter } from '@/composable/compat';
 import { Dictionary, Page, PageMeta } from '@/services/model';
 
 const http = axios.create({
@@ -105,58 +105,8 @@ export function useQuery<T, Q extends Dictionary>(
     size: 15,
     ...params,
   } as PagedQueryParams<Q>);
-
-  function mergeQuery(params?: Dictionary): Dictionary {
-    const currentParams = { ...query } as Dictionary;
-    if (!params) return currentParams;
-
-    Object.keys(params).forEach((param) => {
-      // Check field if syncFields specified
-      if (options.syncFields && !options.syncFields.includes(param)) {
-        return;
-      }
-
-      const currentValue = currentParams[param];
-
-      // Assign directly if type is same
-      const raw = params[param];
-      if (raw === null || raw === undefined) {
-        currentParams[param] = '';
-        return;
-      }
-      if (Array.isArray(raw)) {
-        if (Array.isArray(currentValue)) {
-          currentParams[param] = raw;
-          return;
-        }
-        // If current param type is not array, then process first element
-        if (raw.length === 0) raw.push('');
-        [params[param]] = raw;
-      } else if (typeof raw === typeof currentValue) {
-        currentParams[param] = raw;
-        return;
-      }
-
-      // Convert if type is different
-      const value = params[param]?.toString();
-      if (!value) {
-        currentParams[param] = '';
-        return;
-      }
-      if (typeof currentValue === 'boolean') {
-        currentParams[param] = value === 'true';
-        return;
-      }
-      if (typeof currentValue === 'number') {
-        const num = Number(value);
-        if (!Number.isNaN(num)) {
-          currentParams[param] = num;
-          return;
-        }
-      }
-      currentParams[param] = value;
-    });
-    return currentParams;
+  if (options.syncQuery) {
+    Object.assign(query, mergeQuery(route.query, query, params, options.syncFields));
   }
 
   watch(
@@ -171,9 +121,7 @@ export function useQuery<T, Q extends Dictionary>(
   async function fetchData(queryParams?: PagedQueryParams<Q>) {
     meta.loading = true;
     try {
-      const newParams = options.syncQuery
-        ? mergeQuery(queryParams) as PagedQueryParams<Q>
-        : { ...query, ...queryParams };
+      const newParams = { ...query, ...queryParams };
       const res = await client.get<Page<T>>(url, { params: newParams });
 
       data.value = res.data as UnwrapRefSimple<T>[];
@@ -182,7 +130,7 @@ export function useQuery<T, Q extends Dictionary>(
       query.size = res.meta.perPage;
 
       if (options.syncQuery) {
-        await router.push({ query: newParams });
+        await router.push({ query: newParams }).catch(noop);
       }
     } finally {
       meta.loading = false;
@@ -190,11 +138,7 @@ export function useQuery<T, Q extends Dictionary>(
   }
 
   onMounted(async () => {
-    if (options.syncQuery) {
-      await fetchData(route.query as PagedQueryParams<Q>);
-    } else {
-      await fetchData();
-    }
+    await fetchData();
     meta.initialized = true;
   });
 
@@ -204,4 +148,71 @@ export function useQuery<T, Q extends Dictionary>(
     query,
     fetchData,
   };
+}
+
+/**
+ * Merge 2 query params to new ones
+ * Work like Object.assign but with some improvement that help converting queries value
+ *
+ * @param origin origin params. this object maintain the origin type of each param
+ * @param params the params to merge
+ * @param defaultValues default values (in case the params is null, default will set origin field to empty string. use
+ * this object to set default value to those field
+ * @param fields field to incluce, if not specified, merge all field
+ */
+function mergeQuery(params: Dictionary, origin: Dictionary, defaultValues: Dictionary = {}, fields?: string[]): Dictionary {
+  const currentParams = { ...origin } as Dictionary;
+  if (!params) return currentParams;
+
+  Object.keys(params).forEach((param) => {
+    // Check field if sync fields specified
+    if (fields && !fields.includes(param)) {
+      return;
+    }
+
+    const currentValue = currentParams[param];
+
+    // Assign directly if type is same
+    const raw = params[param];
+    if (raw === null || raw === undefined) {
+      currentParams[param] = defaultValues[param] ?? '';
+      return;
+    }
+    if (currentValue === null || currentValue === undefined) {
+      currentParams[param] = raw;
+      return;
+    }
+    if (Array.isArray(raw)) {
+      if (Array.isArray(currentValue)) {
+        currentParams[param] = raw;
+        return;
+      }
+      // If current param type is not array, then process first element
+      if (raw.length === 0) raw.push('');
+      [params[param]] = raw;
+    } else if (typeof raw === typeof currentValue) {
+      currentParams[param] = raw;
+      return;
+    }
+
+    // Convert if type is different
+    const value = params[param]?.toString();
+    if (!value) {
+      currentParams[param] = defaultValues[param] ?? '';
+      return;
+    }
+    if (typeof currentValue === 'boolean') {
+      currentParams[param] = value === 'true';
+      return;
+    }
+    if (typeof currentValue === 'number') {
+      const num = Number(value);
+      if (!Number.isNaN(num)) {
+        currentParams[param] = num;
+        return;
+      }
+    }
+    currentParams[param] = value;
+  });
+  return currentParams;
 }
