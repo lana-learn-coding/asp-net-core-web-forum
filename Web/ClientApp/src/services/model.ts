@@ -20,3 +20,12 @@ export interface ModelBase {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Category extends ModelBase {
+  name: string;
+  icon?: string;
+}
+
+export interface Tag extends ModelBase {
+  name: string;
+}

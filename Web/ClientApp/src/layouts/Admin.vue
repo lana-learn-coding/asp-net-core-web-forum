@@ -97,11 +97,11 @@ export default defineComponent({
         title: 'Topics',
         icon: 'style',
         links: [
-          { title: 'Category', icon: 'label_important', name: 'Dashboard' },
-          { title: 'Tag', icon: 'local_offer', name: 'Dashboard' },
+          { title: 'Category', icon: 'label_important', name: 'ManageCategory' },
+          { title: 'Tag', icon: 'local_offer', name: 'ManageTag' },
         ],
       },
-      { title: 'Users', icon: 'person', name: 'Dashboard' },
+      { title: 'Users', icon: 'person', name: 'Home' },
     ];
 
     return {
