@@ -100,14 +100,11 @@ export function useQuery<T, Q extends Dictionary>(
     },
   );
 
-  const query = reactive<PagedQueryParams<Q>>({
-    page: 1,
-    size: 15,
-    ...params,
-  } as PagedQueryParams<Q>);
+  const baseQuery = { page: 1, size: 15, ...params };
   if (options.syncQuery) {
-    Object.assign(query, mergeQuery(route.query, query, params, options.syncFields));
+    Object.assign(baseQuery, mergeQuery(route.query, baseQuery, params, options.syncFields));
   }
+  const query = reactive<PagedQueryParams<Q>>(baseQuery as PagedQueryParams<Q>);
 
   watch(
     query,
