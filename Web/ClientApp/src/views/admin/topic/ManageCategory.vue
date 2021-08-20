@@ -82,11 +82,11 @@ export default defineComponent({
       { text: 'Action', value: 'action' },
     ];
 
-    const {
-      query,
-      data,
-      meta,
-    } = useQuery<Category, { search: string }>('/categories');
+    const { query, data, meta } = useQuery<Category>('/categories')({
+      dialog: false,
+      slug: '',
+      search: '',
+    });
     const http = useHttp();
 
     async function remove(slug: string) {

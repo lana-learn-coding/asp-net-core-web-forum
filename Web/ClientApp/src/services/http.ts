@@ -69,9 +69,7 @@ export interface UseQueryResult<T, Q extends FlatDictionary> {
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
   query: UnwrapRef<PagedQueryParam<Q>>;
 
-  fetchData(): Promise<void>;
-
-  fetchData(): Promise<void>;
+  fetch(): Promise<void>;
 }
 
 type PagedQueryParam<Q> = Q & { page: number; size: number }
@@ -99,14 +97,14 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
 
     watch(
       query,
-      (val) => fetchData(val as Q),
+      (val) => fetch(val as Q),
       { deep: true },
     );
 
     const router = useRouter();
     const client = useHttp();
 
-    async function fetchData(queryParams?: Q) {
+    async function fetch(queryParams?: Q) {
       meta.loading = true;
       try {
         const newParams = { ...query, ...queryParams };
@@ -124,7 +122,7 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
     }
 
     onMounted(async () => {
-      await fetchData();
+      await fetch();
       meta.initialized = true;
     });
 
@@ -132,7 +130,7 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
       data,
       meta,
       query,
-      fetchData,
+      fetch,
     };
   };
 }

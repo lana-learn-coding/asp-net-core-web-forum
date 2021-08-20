@@ -77,11 +77,11 @@ export default defineComponent({
       { text: 'Action', value: 'action' },
     ];
 
-    const {
-      query,
-      data,
-      meta,
-    } = useQuery<Tag, { search: string }>('/tags');
+    const { query, data, meta } = useQuery<Tag>('/tags')({
+      dialog: false,
+      slug: '',
+      search: '',
+    });
     const http = useHttp();
 
     async function remove(slug: string) {
