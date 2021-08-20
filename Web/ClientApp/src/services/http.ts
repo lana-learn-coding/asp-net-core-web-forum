@@ -9,7 +9,7 @@ import {
   watch,
 } from '@vue/composition-api';
 import { noop, useRoute, useRouter } from '@/composable/compat';
-import { Dictionary, Page, PageMeta, Primitive } from '@/services/model';
+import { Dictionary, FlatDictionary, Page, PageMeta, Primitive } from '@/services/model';
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_API_URI || '/api',
@@ -64,82 +64,76 @@ export function useHttp(): HttpClient {
   };
 }
 
-export interface UseQueryResult<T, Q extends QueryParams> {
+export interface UseQueryResult<T, Q extends FlatDictionary> {
   data: Ref<UnwrapRef<T[]>>;
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
-  query: UnwrapRef<Q>;
+  query: UnwrapRef<PagedQueryParam<Q>>;
 
   fetchData(): Promise<void>;
 
   fetchData(): Promise<void>;
 }
 
-export interface QueryParams {
-  page: number;
-  size: number;
-
-  [key: string]: Primitive | Primitive[];
-}
-
+type PagedQueryParam<Q> = Q & { page: number; size: number }
 type RouteQueryParam = string | (string | null)[] | null | undefined
+type UseQueryCurlyFunction<T> = <Q extends FlatDictionary>(params?: Q) => UseQueryResult<T, Q>
 
-export function useQuery<T, Q extends QueryParams>(
-  url: string,
-  params?: Partial<Q>,
-): UseQueryResult<T, Q> {
-  const data = ref<T[]>([]);
-  const route = useRoute();
+export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
+  return <Q extends FlatDictionary>(params?: Q) => {
+    const data = ref<T[]>([]);
+    const route = useRoute();
 
-  const meta = reactive(
-    {
-      currentPage: 1,
-      perPage: 15,
-      totalPages: 1,
-      totalItems: 0,
-      loading: false,
-      initialized: false,
-    },
-  );
+    const meta = reactive(
+      {
+        currentPage: 1,
+        perPage: 15,
+        totalPages: 1,
+        totalItems: 0,
+        loading: false,
+        initialized: false,
+      },
+    );
 
-  const baseQuery = { page: 1, size: 15, ...params };
-  const query = reactive<Q>(mergeQuery(baseQuery, route.query) as Q);
+    const baseQuery = { page: 1, size: 15, ...params };
+    const query = reactive<PagedQueryParam<Q>>(mergeQuery(baseQuery, route.query) as PagedQueryParam<Q>);
 
-  watch(
-    query,
-    (val) => fetchData(val as Q),
-    { deep: true },
-  );
+    watch(
+      query,
+      (val) => fetchData(val as Q),
+      { deep: true },
+    );
 
-  const router = useRouter();
-  const client = useHttp();
+    const router = useRouter();
+    const client = useHttp();
 
-  async function fetchData(queryParams?: Q) {
-    meta.loading = true;
-    try {
-      const newParams = { ...query, ...queryParams };
-      const res = await client.get<Page<T>>(url, { params: newParams });
+    async function fetchData(queryParams?: Q) {
+      meta.loading = true;
+      try {
+        const newParams = { ...query, ...queryParams };
+        const res = await client.get<Page<T>>(url, { params: newParams });
 
-      data.value = res.data as UnwrapRefSimple<T>[];
-      Object.assign(meta, res.meta);
-      query.page = res.meta.currentPage;
-      query.size = res.meta.perPage;
+        data.value = res.data as UnwrapRefSimple<T>[];
+        Object.assign(meta, res.meta);
+        query.page = res.meta.currentPage;
+        query.size = res.meta.perPage;
 
-      await router.push({ query: newParams as Record<string, RouteQueryParam> }).catch(noop);
-    } finally {
-      meta.loading = false;
+        await router.push({ query: newParams as Record<string, RouteQueryParam> }).catch(noop);
+      } finally {
+        meta.loading = false;
+      }
     }
-  }
 
-  onMounted(async () => {
-    await fetchData();
-    meta.initialized = true;
-  });
+    onMounted(async () => {
+      await fetchData();
+      meta.initialized = true;
+    });
 
-  return {
-    data,
-    meta,
-    query,
-    fetchData,
+    return {
+      data,
+      meta,
+      query,
+      fetchData,
+    };
   };
 }
 
@@ -151,7 +145,7 @@ export function useQuery<T, Q extends QueryParams>(
  * @param origin origin params. this object maintain the origin type of each param
  * @param params the params to merge
  */
-function mergeQuery(origin: QueryParams, params: Record<string, RouteQueryParam>): QueryParams {
+function mergeQuery(origin: FlatDictionary, params: Record<string, RouteQueryParam>): FlatDictionary {
   const result = { ...origin };
   if (!params) return result;
 
