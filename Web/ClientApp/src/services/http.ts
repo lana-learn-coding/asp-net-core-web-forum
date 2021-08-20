@@ -9,7 +9,7 @@ import {
   watch,
 } from '@vue/composition-api';
 import { noop, useRoute, useRouter } from '@/composable/compat';
-import { Dictionary, Page, PageMeta } from '@/services/model';
+import { Dictionary, Page, PageMeta, Primitive } from '@/services/model';
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_API_URI || '/api',
@@ -83,7 +83,7 @@ export interface UseQueryOptions {
 
 export function useQuery<T, Q extends Dictionary>(
   url: string,
-  params?: Q,
+  params?: Partial<Q>,
   options: UseQueryOptions = { syncQuery: true },
 ): UseQueryResult<T, Q> {
   const data = ref<T[]>([]);
@@ -127,7 +127,7 @@ export function useQuery<T, Q extends Dictionary>(
       query.size = res.meta.perPage;
 
       if (options.syncQuery) {
-        await router.push({ query: newParams }).catch(noop);
+        await router.push({ query: (newParams as any) }).catch(noop);
       }
     } finally {
       meta.loading = false;
@@ -155,11 +155,10 @@ export function useQuery<T, Q extends Dictionary>(
  * @param params the params to merge
  * @param defaultValues default values (in case the params is null, default will set origin field to empty string. use
  * this object to set default value to those field
- * @param fields field to incluce, if not specified, merge all field
+ * @param fields field to include, if not specified, merge all field
  */
-function mergeQuery(params: Dictionary, origin: Dictionary, defaultValues: Dictionary = {}, fields?: string[]): Dictionary {
-  const currentParams = { ...origin } as Dictionary;
-  if (!params) return currentParams;
+function mergeQuery(origin: Dictionary, params: Dictionary, defaultValues: Dictionary = {}, fields?: string[]): Dictionary {
+  if (!params) return origin;
 
   Object.keys(params).forEach((param) => {
     // Check field if sync fields specified
@@ -167,49 +166,65 @@ function mergeQuery(params: Dictionary, origin: Dictionary, defaultValues: Dicti
       return;
     }
 
-    const currentValue = currentParams[param];
-
-    // Assign directly if type is same
-    const raw = params[param];
-    if (raw === null || raw === undefined) {
-      currentParams[param] = defaultValues[param] ?? '';
+    const value = params[param];
+    if (typeof value === 'object') {
       return;
     }
-    if (currentValue === null || currentValue === undefined) {
-      currentParams[param] = raw;
-      return;
+    const parsedValue = convertParamValue(params[param] as Primitive | Primitive[], origin[param], defaultValues[param]);
+    origin[param] = parsedValue;
+    if (parsedValue === null) {
+      delete origin[param];
     }
-    if (Array.isArray(raw)) {
-      if (Array.isArray(currentValue)) {
-        currentParams[param] = raw;
-        return;
-      }
-      // If current param type is not array, then process first element
-      if (raw.length === 0) raw.push('');
-      [params[param]] = raw;
-    } else if (typeof raw === typeof currentValue) {
-      currentParams[param] = raw;
-      return;
-    }
-
-    // Convert if type is different
-    const value = params[param]?.toString();
-    if (!value) {
-      currentParams[param] = defaultValues[param] ?? '';
-      return;
-    }
-    if (typeof currentValue === 'boolean') {
-      currentParams[param] = value === 'true';
-      return;
-    }
-    if (typeof currentValue === 'number') {
-      const num = Number(value);
-      if (!Number.isNaN(num)) {
-        currentParams[param] = num;
-        return;
-      }
-    }
-    currentParams[param] = value;
   });
-  return currentParams;
+
+  return origin;
+}
+
+/**
+ * Try to restore value type from example
+ * ex:
+ * value = '2', example = 1 => origin = 2
+ * value = 2, example = 1 => origin = 2
+ */
+function convertParamValue<T>(raw: Primitive | Primitive[], example?: T, defaultValue?: T): T | null {
+  if (raw === null || raw === undefined) {
+    return defaultValue ?? null;
+  }
+
+  if (example === null || example === undefined) {
+    return raw as unknown as T; // unknown type of T as T is null
+  }
+
+  if (Array.isArray(raw)) {
+    if (Array.isArray(example)) {
+      return raw as unknown as T;
+    }
+    // If current param type is not array, then process first element
+    if (raw.length === 0) raw.push('');
+    [raw] = raw;
+  } else if (typeof raw === typeof example) {
+    return raw as unknown as T;
+  }
+
+  // Convert if type is different
+  const value = raw?.toString().trim();
+  if (!value) {
+    return defaultValue ?? null;
+  }
+
+  if (typeof example === 'string') {
+    return value as unknown as T;
+  }
+
+  if (typeof example === 'boolean') {
+    return (value === 'true') as unknown as T;
+  }
+
+  if (typeof example === 'number') {
+    const num = Number(value);
+    if (!Number.isNaN(num)) {
+      return num as unknown as T;
+    }
+  }
+  return null;
 }
