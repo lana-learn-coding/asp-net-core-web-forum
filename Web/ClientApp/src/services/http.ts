@@ -64,27 +64,28 @@ export function useHttp(): HttpClient {
   };
 }
 
-export type PagedQueryParams<Q extends Dictionary> = Q & { page: number; size: number }
-
-export interface UseQueryResult<T, Q extends Dictionary> {
+export interface UseQueryResult<T, Q extends QueryParams> {
   data: Ref<UnwrapRef<T[]>>;
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
-  query: UnwrapRef<PagedQueryParams<Q>>;
+  query: UnwrapRef<Q>;
 
   fetchData(): Promise<void>;
 
   fetchData(): Promise<void>;
 }
 
-export interface UseQueryOptions {
-  syncQuery: boolean;
-  syncFields?: string[];
+export interface QueryParams {
+  page: number;
+  size: number;
+
+  [key: string]: Primitive | Primitive[];
 }
 
-export function useQuery<T, Q extends Dictionary>(
+type RouteQueryParam = string | (string | null)[] | null | undefined
+
+export function useQuery<T, Q extends QueryParams>(
   url: string,
   params?: Partial<Q>,
-  options: UseQueryOptions = { syncQuery: true },
 ): UseQueryResult<T, Q> {
   const data = ref<T[]>([]);
   const route = useRoute();
@@ -101,21 +102,18 @@ export function useQuery<T, Q extends Dictionary>(
   );
 
   const baseQuery = { page: 1, size: 15, ...params };
-  if (options.syncQuery) {
-    Object.assign(baseQuery, mergeQuery(route.query, baseQuery, params, options.syncFields));
-  }
-  const query = reactive<PagedQueryParams<Q>>(baseQuery as PagedQueryParams<Q>);
+  const query = reactive<Q>(mergeQuery(baseQuery, route.query) as Q);
 
   watch(
     query,
-    (val) => fetchData(val as PagedQueryParams<Q>),
+    (val) => fetchData(val as Q),
     { deep: true },
   );
 
   const router = useRouter();
   const client = useHttp();
 
-  async function fetchData(queryParams?: PagedQueryParams<Q>) {
+  async function fetchData(queryParams?: Q) {
     meta.loading = true;
     try {
       const newParams = { ...query, ...queryParams };
@@ -126,9 +124,7 @@ export function useQuery<T, Q extends Dictionary>(
       query.page = res.meta.currentPage;
       query.size = res.meta.perPage;
 
-      if (options.syncQuery) {
-        await router.push({ query: (newParams as any) }).catch(noop);
-      }
+      await router.push({ query: newParams as Record<string, RouteQueryParam> }).catch(noop);
     } finally {
       meta.loading = false;
     }
@@ -149,36 +145,29 @@ export function useQuery<T, Q extends Dictionary>(
 
 /**
  * Merge 2 query params to new ones
- * Work like Object.assign but with some improvement that help converting queries value
+ * Work like Object.assign but with some improvement that help converting route queries
+ * to typed query params
  *
  * @param origin origin params. this object maintain the origin type of each param
  * @param params the params to merge
- * @param defaultValues default values (in case the params is null, default will set origin field to empty string. use
- * this object to set default value to those field
- * @param fields field to include, if not specified, merge all field
  */
-function mergeQuery(origin: Dictionary, params: Dictionary, defaultValues: Dictionary = {}, fields?: string[]): Dictionary {
-  if (!params) return origin;
+function mergeQuery(origin: QueryParams, params: Record<string, RouteQueryParam>): QueryParams {
+  const result = { ...origin };
+  if (!params) return result;
 
   Object.keys(params).forEach((param) => {
-    // Check field if sync fields specified
-    if (fields && !fields.includes(param)) {
-      return;
-    }
-
-    const value = params[param];
-    if (typeof value === 'object') {
-      return;
-    }
-    const parsedValue = convertParamValue(params[param] as Primitive | Primitive[], origin[param], defaultValues[param]);
-    origin[param] = parsedValue;
-    if (parsedValue === null) {
-      delete origin[param];
+    const value = convertParamValue(params[param], result[param]);
+    if (value !== null) {
+      result[param] = value;
+    } else {
+      delete result[param];
     }
   });
 
-  return origin;
+  return result;
 }
+
+type PrimitiveArray = Primitive | Primitive[]
 
 /**
  * Try to restore value type from example
@@ -186,30 +175,39 @@ function mergeQuery(origin: Dictionary, params: Dictionary, defaultValues: Dicti
  * value = '2', example = 1 => origin = 2
  * value = 2, example = 1 => origin = 2
  */
-function convertParamValue<T>(raw: Primitive | Primitive[], example?: T, defaultValue?: T): T | null {
+function convertParamValue<T extends PrimitiveArray>(raw: RouteQueryParam, example?: T): T | null {
   if (raw === null || raw === undefined) {
-    return defaultValue ?? null;
+    return null;
   }
 
   if (example === null || example === undefined) {
     return raw as unknown as T; // unknown type of T as T is null
   }
 
-  if (Array.isArray(raw)) {
+  if (raw instanceof Array) {
     if (Array.isArray(example)) {
-      return raw as unknown as T;
+      if (example.length === 0) {
+        return raw as unknown as T;
+      }
+
+      // If both is an array, then parse all the array using type of first item in example
+      return raw.map((val) => convertParamValue(val, example[0])) as unknown as T;
     }
-    // If current param type is not array, then process first element
+
+    // If example is not an array, then process first raw param
     if (raw.length === 0) raw.push('');
-    [raw] = raw;
-  } else if (typeof raw === typeof example) {
+    return convertParamValue(raw[0], example);
+  }
+
+  // Convert if type is same
+  if (typeof raw === typeof example) {
     return raw as unknown as T;
   }
 
   // Convert if type is different
   const value = raw?.toString().trim();
   if (!value) {
-    return defaultValue ?? null;
+    return null;
   }
 
   if (typeof example === 'string') {

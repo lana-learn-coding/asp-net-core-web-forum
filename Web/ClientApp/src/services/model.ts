@@ -1,5 +1,11 @@
+export type Primitive = string | number | boolean
+
 export interface Dictionary {
-  [key: string]: any;
+  [key: string]: Primitive | Primitive[] | Dictionary | Dictionary[];
+}
+
+export interface FlatDictionary {
+  [key: string]: Primitive | Primitive[];
 }
 
 export interface PageMeta {
