@@ -1,4 +1,4 @@
-import { ComponentInstance, getCurrentInstance } from '@vue/composition-api';
+import { ComponentInstance, getCurrentInstance, UnwrapRef } from '@vue/composition-api';
 import VueRouter, { Route } from 'vue-router';
 
 export function useVM(): ComponentInstance {
@@ -17,4 +17,14 @@ export function useRouter(): VueRouter {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop(): void {
+}
+
+export function useSetters<T>(obj: UnwrapRef<T>): { [K in keyof T]: (val: K) => void } {
+  const setters = {};
+  Object.keys(obj as T).forEach((key) => {
+    setters[key] = (val) => {
+      obj[key] = val;
+    };
+  });
+  return setters as { [K in keyof T]: (val: K) => void };
 }

@@ -1,9 +1,9 @@
 <template>
-  <v-card class="elevation-2">
-    <v-card-title>
+  <crud-table :table="table" title="Categories" url="/categories" :filter="filter">
+    <template #filter="{bind, on}">
       <v-text-field
-        v-debounce="x => query.search = x"
-        :value="query.search"
+        v-debounce="on.search"
+        :value="bind.search"
         append-icon="search"
         label="Search"
         single-line
@@ -11,66 +11,68 @@
       >
       </v-text-field>
       <v-spacer></v-spacer>
-      <v-btn color="primary">Create</v-btn>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="data"
-      :server-items-length="meta.totalItems"
-      :items-per-page="query.size"
-      :page="query.page"
-      :loading="meta.loading"
-    >
-      <template #item.icon="{ item }">
-        <v-icon>{{ item.icon || 'folder' }}</v-icon>
-      </template>
+      <div></div>
+    </template>
 
-      <template #item.createdAt="{ item }">
-        {{ formatDate(item.createdAt) }}
-      </template>
+    <template #form="{slug, on}">
+      <crud-edit-form
+        v-on="on"
+        :value="slug"
+        :form="form"
+        title="Category"
+        url="categories"
+      >
+        <template #field.icon="{value, input, error}">
+          <v-text-field
+            :value="value"
+            :error-messages="error"
+            @input="input"
+            label="Icon"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </template>
 
-      <template #item.updatedAt="{ item }">
-        {{ formatDate(item.updatedAt) }}
-      </template>
+        <template #field.name="{value, input, error}">
+          <v-text-field
+            :value="value"
+            :error-messages="error"
+            @input="input"
+            label="Name"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </template>
+      </crud-edit-form>
+    </template>
 
-      <template #item.action="{ item }">
-        <v-btn
-          class="mx-2"
-          icon
-          color="primary"
-        >
-          <v-icon dark>
-            edit
-          </v-icon>
-        </v-btn>
+    <template #item.icon="{ item }">
+      <v-icon>{{ item.icon || 'folder' }}</v-icon>
+    </template>
 
-        <v-btn
-          class="mx-2"
-          icon
-          color="error"
-          @click="remove(item.slug)"
-        >
-          <v-icon dark>
-            delete
-          </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
-  </v-card>
+    <template #item.createdAt="{ item }">
+      {{ formatDate(item.createdAt) }}
+    </template>
+
+    <template #item.updatedAt="{ item }">
+      {{ formatDate(item.updatedAt) }}
+    </template>
+  </crud-table>
 </template>
 
 <script lang="ts">
-import { useTitle } from '@vueuse/core';
-import { defineComponent } from '@vue/composition-api';
-import { useHttp, useQuery } from '@/services/http';
+import { defineComponent, reactive } from '@vue/composition-api';
 import { formatDate } from '@/composable/date';
-import { Category } from '@/services/model';
+import CrudTable from '@/components/CrudTable.vue';
+import CrudEditForm from '@/components/CrudEditForm.vue';
 
 export default defineComponent({
   name: 'ManageCategory',
+  components: { CrudEditForm, CrudTable },
   setup() {
-    useTitle('Manage Category');
-    const headers = [
+    const table = [
       {
         text: 'Id',
         sortable: false,
@@ -82,25 +84,20 @@ export default defineComponent({
       { text: 'Action', value: 'action' },
     ];
 
-    const { query, data, meta } = useQuery<Category>('/categories')({
-      dialog: false,
-      slug: '',
+    const filter = reactive({
       search: '',
     });
-    const http = useHttp();
 
-    async function remove(slug: string) {
-      await http.delete(`/categories/${slug}`);
-      data.value = data.value.filter((item) => item.slug !== slug);
-    }
+    const form = reactive({
+      icon: '',
+      name: '',
+    });
 
     return {
-      query,
-      meta,
-      data,
-      headers,
+      table,
+      filter,
       formatDate,
-      remove,
+      form,
     };
   },
 });
