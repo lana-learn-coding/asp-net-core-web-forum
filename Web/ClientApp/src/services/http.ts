@@ -115,6 +115,13 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
         query.page = res.meta.currentPage;
         query.size = res.meta.perPage;
 
+        Object.keys(newParams).forEach((key) => {
+          const value = newParams[key]?.toString().trim();
+          if (value && value !== baseQuery[key]?.toString().trim()) {
+            return;
+          }
+          delete newParams[key];
+        });
         await router.push({ query: newParams as Record<string, RouteQueryParam> }).catch(noop);
       } finally {
         meta.loading = false;
@@ -148,12 +155,16 @@ function mergeQuery(origin: FlatDictionary, params: Record<string, RouteQueryPar
   if (!params) return result;
 
   Object.keys(params).forEach((param) => {
-    const value = convertParamValue(params[param], result[param]);
-    if (value !== null) {
-      result[param] = value;
-    } else {
+    if (param.startsWith('_')) {
       delete result[param];
+      return;
     }
+    const value = convertParamValue(params[param], result[param]);
+    if (value === null) {
+      delete result[param];
+      return;
+    }
+    result[param] = value;
   });
 
   return result;
