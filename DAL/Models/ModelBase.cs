@@ -7,6 +7,7 @@ namespace DAL.Models
     // Base entity model with default entity and comparison method
     public abstract class Entity : IIdentified, IAuditable, IComparable, ISlugged
     {
+        [JsonIgnore]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
