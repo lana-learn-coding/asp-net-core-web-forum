@@ -64,6 +64,45 @@ export function useHttp(): HttpClient {
   };
 }
 
+type PrimitiveOrPrimitiveArray = Primitive | Primitive[]
+
+export function useRouteQuery<T extends PrimitiveOrPrimitiveArray>(name: string, defaultValue?: T): Ref<UnwrapRef<T>> {
+  if (defaultValue == null) {
+    return useRouteQuery(name, '') as Ref<UnwrapRef<T>>;
+  }
+
+  const query = ref<T>(defaultValue);
+  const route = useRoute();
+  const router = useRouter();
+
+  watch(
+    query,
+    (val) => {
+      const queryParams = { ...route.query };
+      const rawValue = val.toString().trim();
+      if (!rawValue || rawValue === defaultValue.toString().trim()) {
+        delete queryParams[name];
+      } else {
+        queryParams[name] = val as never;
+      }
+      router.push({ query: queryParams }).catch(noop);
+    },
+    { deep: true },
+  );
+
+  const queryParams = { ...route.query };
+  if (queryParams[name]) {
+    const converted = convertParamValue(queryParams[name], defaultValue);
+    if (converted == null) {
+      delete queryParams[name];
+      router.push({ query: queryParams }).catch(noop);
+    } else {
+      query.value = converted as UnwrapRef<T>;
+    }
+  }
+  return query;
+}
+
 export interface UseQueryResult<T, Q extends FlatDictionary> {
   data: Ref<UnwrapRef<T[]>>;
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
@@ -122,7 +161,7 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
           }
           delete newParams[key];
         });
-        await router.push({ query: newParams as Record<string, RouteQueryParam> }).catch(noop);
+        await router.push({ query: { ...route.query, ...newParams } as Record<string, RouteQueryParam> }).catch(noop);
       } finally {
         meta.loading = false;
       }
@@ -170,15 +209,13 @@ function mergeQuery(origin: FlatDictionary, params: Record<string, RouteQueryPar
   return result;
 }
 
-type PrimitiveArray = Primitive | Primitive[]
-
 /**
  * Try to restore value type from example
  * ex:
  * value = '2', example = 1 => origin = 2
  * value = 2, example = 1 => origin = 2
  */
-function convertParamValue<T extends PrimitiveArray>(raw: RouteQueryParam, example?: T): T | null {
+function convertParamValue<T extends PrimitiveOrPrimitiveArray>(raw: RouteQueryParam, example?: T): T | null {
   if (raw === null || raw === undefined) {
     return null;
   }
