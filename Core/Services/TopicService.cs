@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using Core.Services.Base;
 using DAL.Models.Topic;
 
@@ -8,6 +9,7 @@ namespace Core.Services
     {
         public CategoryService(DbContext context) : base(context)
         {
+            DefaultSort = new List<string> { "Priority", "CreatedAt" };
         }
     }
 
