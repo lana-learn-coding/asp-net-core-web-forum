@@ -1,5 +1,11 @@
 <template>
-  <crud-table :table="table" title="Categories" url="/categories" :filter="filter">
+  <crud-table
+    :table="table"
+    :form="form"
+    title="Categories"
+    url="/categories"
+    :filter="filter"
+  >
     <template #filter="{bind, on}">
       <v-text-field
         v-debounce="on.search"
@@ -10,53 +16,42 @@
         hide-details
       >
       </v-text-field>
-      <v-spacer></v-spacer>
-      <div></div>
+      <v-spacer class="d-none d-md-block"></v-spacer>
     </template>
 
-    <template #form="{slug, on}">
-      <crud-edit-form
-        v-on="on"
-        :value="slug"
-        :form="form"
-        title="Category"
-        url="categories"
+    <template #form.icon="{value, input, error}">
+      <v-text-field
+        :value="value"
+        :error-messages="error"
+        @input="input"
+        label="Icon"
+        persistent-placeholder
+        required
       >
-        <template #field.icon="{value, input, error}">
-          <v-text-field
-            :value="value"
-            :error-messages="error"
-            @input="input"
-            label="Icon"
-            persistent-placeholder
-            required
-          >
-          </v-text-field>
-        </template>
-
-        <template #field.name="{value, input, error}">
-          <v-text-field
-            :value="value"
-            :error-messages="error"
-            @input="input"
-            label="Name"
-            persistent-placeholder
-            required
-          >
-          </v-text-field>
-        </template>
-      </crud-edit-form>
+      </v-text-field>
     </template>
 
-    <template #item.icon="{ item }">
+    <template #form.name="{value, input, error}">
+      <v-text-field
+        :value="value"
+        :error-messages="error"
+        @input="input"
+        label="Name"
+        persistent-placeholder
+        required
+      >
+      </v-text-field>
+    </template>
+
+    <template #table.icon="{ item }">
       <v-icon>{{ item.icon || 'folder' }}</v-icon>
     </template>
 
-    <template #item.createdAt="{ item }">
+    <template #table.createdAt="{ item }">
       {{ formatDate(item.createdAt) }}
     </template>
 
-    <template #item.updatedAt="{ item }">
+    <template #table.updatedAt="{ item }">
       {{ formatDate(item.updatedAt) }}
     </template>
   </crud-table>
