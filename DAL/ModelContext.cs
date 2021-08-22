@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Database;
 using DAL.Models;
 using DAL.Models.Auth;
+using DAL.Models.Forum;
 using DAL.Models.Topic;
 using SlugityLib;
+using Thread = DAL.Models.Forum.Thread;
 
 namespace DAL
 {
@@ -29,10 +32,17 @@ namespace DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
             modelBuilder.Entity<Role>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
+
+            modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Thread>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Post>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Vote>().Map(m => m.MapInheritedProperties());
         }
 
         public override int SaveChanges()

@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DAL.Models.Forum;
 
 namespace DAL.Models.Topic
 {
@@ -16,5 +18,8 @@ namespace DAL.Models.Topic
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify a name")]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Thread> Threads { get; set; }
     }
 }

@@ -58,4 +58,11 @@ namespace DAL.Models
         Normal = 30,
         Low = 40
     }
+
+    public enum AccessMode
+    {
+        Public,
+        Protected,
+        Private
+    }
 }
