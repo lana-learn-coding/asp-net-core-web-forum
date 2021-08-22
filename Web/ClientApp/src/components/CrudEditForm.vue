@@ -1,14 +1,15 @@
 <template>
-  <v-card :width="width">
-    <v-card-title v-if="isEdit">Edit {{ title }}}</v-card-title>
+  <v-card :width="width" :min-width="$vuetify.breakpoint.mdAndUp ? '500px' : '320px'">
+    <v-card-title v-if="isEdit">Edit {{ formTitle }}}</v-card-title>
     <v-card-subtitle v-if="isEdit">id: {{ slug }}</v-card-subtitle>
-    <v-card-title v-else>Create {{ title }}</v-card-title>
+    <v-card-title v-else>Create {{ formTitle }}</v-card-title>
     <v-card-text>
       <form>
         <!-- Form fields-->
         <template v-for="(_, field) of formField">
           <slot
-            :name="`field.${field}`"
+            :name="`form.${field}`"
+            :isEdit="isEdit"
             :value="formField[field]"
             :error="errors[field]"
             :input="(x) => formField[field] = x"
@@ -26,6 +27,7 @@
             Submit
           </v-btn>
           <v-btn
+            v-if="$vuetify.breakpoint.smAndUp"
             class="mr-4"
             @click="clear"
             color="green"
@@ -44,6 +46,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from '@vue/composition-api';
+import { singular } from 'pluralize';
 import { useHttp } from '@/services/http';
 import { useForm } from '@/composable/form';
 
@@ -85,6 +88,7 @@ export default defineComponent({
     const isEdit = computed(() => !!slug.value);
     const loading = ref(false);
     const http = useHttp();
+    const formTitle = computed(() => singular(props.title || 'item'));
 
     async function submit() {
       loading.value = true;
@@ -138,6 +142,7 @@ export default defineComponent({
       close,
       clear,
       loading,
+      formTitle,
     };
   },
 });

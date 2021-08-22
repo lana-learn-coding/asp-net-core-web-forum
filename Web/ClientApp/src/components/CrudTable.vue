@@ -8,49 +8,87 @@
         <template #activator="{on, attrs}">
           <v-btn color="primary" v-bind="attrs" v-on="on">Create</v-btn>
         </template>
-        <slot name="form" :slug="slug" :on="onForm"></slot>
+
+        <!-- Form slot. expose #form.<name> slot for customization-->
+        <slot name="form" :slug="slug" :on="onForm">
+          <crud-edit-form
+            v-on="onForm"
+            :value="slug"
+            :form="form || {}"
+            :title="title"
+            :url="url"
+            :width="formWidth"
+          >
+            <template
+              v-for="(_, field) of form"
+              v-slot:[`form.${field}`]="{ error, isEdit, value, input }"
+            >
+              <slot
+                :name="`form.${field}`"
+                :isEdit="isEdit"
+                :value="value"
+                :error="error"
+                :input="input"
+              >
+                {{ item[field] }}
+              </slot>
+            </template>
+          </crud-edit-form>
+        </slot>
       </v-dialog>
     </v-card-title>
+
     <v-card-subtitle class="d-flex">
       <slot name="filter" :bind="query" :on="onQuery"></slot>
     </v-card-subtitle>
-    <v-data-table
-      :headers="table"
+
+    <!-- Data table slot. expose #item.<name> slots (as #table.<name>) for customization-->
+    <slot
+      name="table"
+      :table="table"
       :items="data"
-      :server-items-length="meta.totalItems"
-      :items-per-page="query.size"
-      :page="query.page"
-      :loading="meta.loading"
+      :meta="meta"
+      :query="query"
+      :onUpdate="update"
+      :onDelete="remove"
     >
-      <!-- Table column slot-->
-      <template v-for="(_, col) of table" v-slot:[`item.${col}`]="{ item }">
-        <slot :name="`item.${col}`" :item="item">{{ item[col] }}</slot>
-      </template>
+      <v-data-table
+        :headers="table"
+        :items="data"
+        :server-items-length="meta.totalItems"
+        :items-per-page="query.size"
+        :page="query.page"
+        :loading="meta.loading"
+      >
+        <template v-for="(_, col) of table" v-slot:[`item.${col}`]="{ item }">
+          <slot :name="`table.${col}`" :item="item">{{ item[col] }}</slot>
+        </template>
 
-      <template #item.action="{ item }">
-        <v-btn
-          class="mx-2"
-          icon
-          color="primary"
-          @click="update(item.slug)"
-        >
-          <v-icon>
-            edit
-          </v-icon>
-        </v-btn>
+        <template #item.action="{ item }">
+          <v-btn
+            class="mx-2"
+            icon
+            color="primary"
+            @click="update(item.slug)"
+          >
+            <v-icon>
+              edit
+            </v-icon>
+          </v-btn>
 
-        <v-btn
-          class="mx-2"
-          icon
-          color="error"
-          @click="remove(item.slug)"
-        >
-          <v-icon>
-            delete
-          </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
+          <v-btn
+            class="mx-2"
+            icon
+            color="error"
+            @click="remove(item.slug)"
+          >
+            <v-icon>
+              delete
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+    </slot>
   </v-card>
 </template>
 
@@ -59,11 +97,13 @@ import { defineComponent, PropType } from '@vue/composition-api';
 import { DataTableHeader } from 'vuetify';
 import { useTitle } from '@vueuse/core';
 import { useHttp, useQuery, useRouteQuery } from '@/services/http';
-import { Dictionary } from '@/services/model';
+import { Dictionary, FlatDictionary } from '@/services/model';
 import { useSetters } from '@/composable/compat';
+import CrudEditForm from '@/components/CrudEditForm.vue';
 
 export default defineComponent({
   name: 'CrudTable',
+  components: { CrudEditForm },
   props: {
     url: {
       type: String,
@@ -74,12 +114,20 @@ export default defineComponent({
       required: true,
     },
     filter: {
-      type: Object,
+      type: Object as PropType<FlatDictionary>,
       required: false,
     },
     table: {
       type: Array as PropType<DataTableHeader[]>,
       required: true,
+    },
+    form: {
+      type: Object as PropType<Dictionary>,
+      required: false,
+    },
+    formWidth: {
+      type: String,
+      required: false,
     },
   },
   setup(props) {
