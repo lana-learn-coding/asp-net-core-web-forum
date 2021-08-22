@@ -21,49 +21,51 @@
         dense
         nav
       >
-        <template v-for="item in links">
+        <v-list-item-group color="primary">
+          <template v-for="item in links">
 
-          <v-list-group
-            v-if="item.links"
-            :key="item.title"
-            :prepend-icon="item.icon"
-          >
-            <template v-slot:activator>
-              <v-list-item-title>Topic</v-list-item-title>
-            </template>
+            <v-list-group
+              v-if="item.links"
+              :key="item.title"
+              :prepend-icon="item.icon"
+            >
+              <template v-slot:activator>
+                <v-list-item-title>Topic</v-list-item-title>
+              </template>
+              <v-list-item
+                v-for="link in item.links"
+                :key="link.title"
+                :to="link.name ? { name: link.name } : null"
+                exact-path
+                link
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ link.icon || 'dashboard' }}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ link.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+
             <v-list-item
-              v-for="link in item.links"
-              :key="link.title"
-              :to="link.name ? { name: link.name } : null"
+              v-else
+              :key="item.title"
+              :to="item.name ? { name: item.name } : null"
               exact-path
               link
             >
               <v-list-item-icon>
-                <v-icon>{{ link.icon || 'dashboard' }}</v-icon>
+                <v-icon>{{ item.icon || 'dashboard' }}</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title>{{ link.title }}</v-list-item-title>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-          </v-list-group>
-
-          <v-list-item
-            v-else
-            :key="item.title"
-            :to="item.name ? { name: item.name } : null"
-            exact-path
-            link
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon || 'dashboard' }}</v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
@@ -84,12 +86,13 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
+import { useVuetify } from '@/composable/compat';
 
 export default defineComponent({
   name: 'Admin',
   setup() {
     const title = useTitle('Admin', { observe: true });
-    const drawer = ref(true);
+    const drawer = ref(useVuetify().breakpoint.lgAndUp);
 
     const links = [
       { title: 'Dashboard', icon: 'bar_chart', name: 'Dashboard' },

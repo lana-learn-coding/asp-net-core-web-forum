@@ -1,5 +1,6 @@
 import { ComponentInstance, getCurrentInstance, UnwrapRef } from '@vue/composition-api';
 import VueRouter, { Route } from 'vue-router';
+import { Framework as Vuetify } from 'vuetify';
 
 export function useVM(): ComponentInstance {
   const instance = getCurrentInstance();
@@ -27,4 +28,8 @@ export function useSetters<T>(obj: UnwrapRef<T>): { [K in keyof T]: (val: K) => 
     };
   });
   return setters as { [K in keyof T]: (val: K) => void };
+}
+
+export function useVuetify(): Vuetify {
+  return useVM().$vuetify;
 }
