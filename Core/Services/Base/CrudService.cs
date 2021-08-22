@@ -8,7 +8,7 @@ using DAL.Models;
 
 namespace Core.Services.Base
 {
-    public interface ICrudService<T> where T : class, IIdentified, ISlugged
+    public interface ICrudService<T> where T : Entity
     {
         T Create(T entity);
 

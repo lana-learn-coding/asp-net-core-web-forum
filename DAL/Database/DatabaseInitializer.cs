@@ -60,11 +60,7 @@ namespace DAL.Database
                 new Category { Name = "General Discussion" },
                 new Category { Name = "Question & Answer" },
                 new Category { Name = "Feedback" },
-                new Category
-                {
-                    Id = Guid.Empty,
-                    Name = "Uncategorized"
-                }
+                new Category(Guid.Empty) { Name = "Uncategorized" }
             });
 
             context.Tags.AddRange(new[]

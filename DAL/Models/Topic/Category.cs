@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -24,5 +26,15 @@ namespace DAL.Models.Topic
         // Control order of categories
         // Top important categories are show on front page
         public ushort Priority { get; set; } = (ushort)Models.Priority.Normal;
+
+        public Category()
+        {
+        }
+
+        public Category(Guid id) : base(id)
+        {
+        }
+
+        public virtual ICollection<Forum.Forum> Forums { get; set; }
     }
 }
