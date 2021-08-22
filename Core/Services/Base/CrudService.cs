@@ -38,6 +38,7 @@ namespace Core.Services.Base
         private static readonly Func<IQueryable<T>, IQueryable<T>> NoQuery = query => query;
         protected readonly DbSet<T> DbSet;
         protected readonly DbContext Context;
+        protected List<string> DefaultSort = new() { "CreatedAt" };
 
         protected CrudService(DbContext context)
         {
@@ -124,7 +125,7 @@ namespace Core.Services.Base
                     }
                 };
 
-            var sort = string.Join(",", pageQuery.Sort);
+            var sort = string.Join(",", pageQuery.IsSorted ? pageQuery.Sort : DefaultSort);
 
             var items = baseQuery
                 .OrderBy(sort)

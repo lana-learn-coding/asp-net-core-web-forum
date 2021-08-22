@@ -8,7 +8,7 @@ namespace Core.Dto
     {
         private int _page = 1;
         private int _size = 15;
-        private List<string> _sort = new() { "CreatedAt" };
+        private List<string> _sort = new();
 
         public int Page
         {
@@ -55,5 +55,9 @@ namespace Core.Dto
 
         [JsonIgnore]
         public int Take => _size;
+
+
+        [JsonIgnore]
+        public bool IsSorted => _sort.Count > 0;
     }
 }
