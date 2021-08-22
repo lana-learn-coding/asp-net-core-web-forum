@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DAL.Models.Auth
 {
     public class User : Entity
     {
+        [NotMapped]
+        [JsonIgnore]
         public override string RawSlug => Username;
 
         [Column(TypeName = "VARCHAR")]

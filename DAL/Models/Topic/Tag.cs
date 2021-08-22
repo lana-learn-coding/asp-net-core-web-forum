@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DAL.Models.Topic
 {
     // Tags help categorizing Threads subject
     public class Tag : Entity
     {
+        [NotMapped]
+        [JsonIgnore]
         public override string RawSlug => Name;
 
         [Column(TypeName = "VARCHAR")]

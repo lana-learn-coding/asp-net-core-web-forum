@@ -4,7 +4,6 @@ using Bogus;
 using DAL.Models.Auth;
 using DAL.Models.Topic;
 
-
 namespace DAL.Database
 {
     public class DatabaseInitializer : CreateDatabaseIfNotExists<ModelContext>
@@ -59,7 +58,8 @@ namespace DAL.Database
             {
                 new Category { Name = "General Discussion" },
                 new Category { Name = "Question & Answer" },
-                new Category { Name = "Feedback" }
+                new Category { Name = "Feedback" },
+                new Category { Name = "Uncategorized" }
             });
 
             context.Tags.AddRange(new[]

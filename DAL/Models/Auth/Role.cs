@@ -7,6 +7,8 @@ namespace DAL.Models.Auth
 {
     public class Role : Entity
     {
+        [NotMapped]
+        [JsonIgnore]
         public override string RawSlug => Name;
 
         [Column(TypeName = "VARCHAR")]

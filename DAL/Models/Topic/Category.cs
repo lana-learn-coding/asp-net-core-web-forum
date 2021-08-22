@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DAL.Models.Topic
 {
     // Categories help categorizing Forums and SubForums main subject 
     public class Category : Entity
     {
+        [NotMapped]
+        [JsonIgnore]
         public override string RawSlug => Name;
 
         [Column(TypeName = "VARCHAR")]
