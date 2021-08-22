@@ -11,7 +11,7 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Name;
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [StringLength(20)]
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify a name")]

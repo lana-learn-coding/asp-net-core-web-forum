@@ -11,7 +11,7 @@ namespace DAL.Models.Topic
         [JsonIgnore]
         public override string RawSlug => Name;
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [StringLength(50)]
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify a name")]

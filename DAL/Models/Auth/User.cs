@@ -11,11 +11,11 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Username;
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [StringLength(200)]
         public string Avatar { get; set; }
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [MinLength(3)]
         [StringLength(100)]
         public string FullName { get; set; }
@@ -27,7 +27,7 @@ namespace DAL.Models.Auth
         [Required]
         public string Username { get; set; }
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [StringLength(200)]
         [Index(IsUnique = true)]
         [Required]
