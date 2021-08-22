@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using Bogus;
 using DAL.Models.Auth;
@@ -59,7 +60,11 @@ namespace DAL.Database
                 new Category { Name = "General Discussion" },
                 new Category { Name = "Question & Answer" },
                 new Category { Name = "Feedback" },
-                new Category { Name = "Uncategorized" }
+                new Category
+                {
+                    Id = Guid.Empty,
+                    Name = "Uncategorized"
+                }
             });
 
             context.Tags.AddRange(new[]
