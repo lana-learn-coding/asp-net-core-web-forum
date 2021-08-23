@@ -3,7 +3,7 @@
     :table="table"
     :form="form"
     title="Categories"
-    url="/categories"
+    url="categories"
     :filter="filter"
   >
     <template #filter="{bind, on}">

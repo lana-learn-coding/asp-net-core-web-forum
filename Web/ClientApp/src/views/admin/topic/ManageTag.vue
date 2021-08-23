@@ -2,7 +2,7 @@
   <crud-table
     :table="table"
     title="Tags"
-    url="/tags"
+    url="tags"
     :filter="filter"
     :form="form"
   >
