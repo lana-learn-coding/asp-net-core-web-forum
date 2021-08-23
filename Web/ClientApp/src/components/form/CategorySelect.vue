@@ -29,7 +29,7 @@ export default defineComponent({
     value: String,
     itemValue: {
       type: String,
-      default: 'id',
+      default: 'uid',
     },
     errorMessages: [String, Array],
     label: String,

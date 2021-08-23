@@ -21,7 +21,7 @@ export interface Page<T> {
 }
 
 export interface ModelBase {
-  id: string;
+  uid: string;
   slug: string;
   createdAt: string;
   updatedAt: string;
