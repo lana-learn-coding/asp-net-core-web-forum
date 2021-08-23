@@ -4,7 +4,7 @@
       {{ title }}
       <v-spacer></v-spacer>
       <slot name="action" :bind="query" :on="onQuery"></slot>
-      <v-dialog v-model="dialog" width="unset">
+      <v-dialog v-model="dialog" width="unset" transition="fade-transition" eager>
         <template #activator="{on, attrs}">
           <v-btn color="primary" v-bind="attrs" v-on="on">Create</v-btn>
         </template>
