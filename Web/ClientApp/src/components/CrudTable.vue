@@ -56,8 +56,8 @@
         :headers="table"
         :items="data"
         :server-items-length="meta.totalItems"
-        :items-per-page="query.size"
-        :page="query.page"
+        :items-per-page.sync="query.size"
+        :page.sync="query.page"
         :loading="meta.loading"
       >
         <template v-for="col of table" v-slot:[`item.${col.value}`]="{ item }">
