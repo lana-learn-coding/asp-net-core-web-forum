@@ -10,7 +10,7 @@
         </template>
 
         <!-- Form slot. expose #form.<name> slot for customization-->
-        <slot name="form" :slug="slug" :on="onForm">
+        <slot :slug="slug" :on="onForm">
           <crud-edit-form
             v-on="onForm"
             :value="slug"
@@ -19,18 +19,14 @@
             :url="url"
             :width="formWidth"
           >
-            <template
-              v-for="(_, field) of form"
-              v-slot:[`form.${field}`]="{ error, isEdit, value, input }"
-            >
+            <template #form="{values, isEdit, errors, inputs}">
               <slot
-                :name="`form.${field}`"
+                name="form"
                 :isEdit="isEdit"
-                :value="value"
-                :error="error"
-                :input="input"
+                :values="values"
+                :errors="errors"
+                :inputs="inputs"
               >
-                {{ item[field] }}
               </slot>
             </template>
           </crud-edit-form>

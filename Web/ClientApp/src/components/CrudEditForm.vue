@@ -10,16 +10,14 @@
     <v-card-text>
       <v-form ref="formRef">
         <!-- Form fields-->
-        <template v-for="(_, field) of formField">
-          <slot
-            :name="`form.${field}`"
-            :isEdit="isEdit"
-            :value="formField[field]"
-            :error="errors[field]"
-            :input="(x) => formField[field] = x"
-          >
-          </slot>
-        </template>
+        <slot
+          name="form"
+          :isEdit="isEdit"
+          :values="formBinding.fields"
+          :errors="formBinding.errors"
+          :inputs="formBinding.inputs"
+        >
+        </slot>
 
         <div class="mt-3">
           <v-btn
@@ -53,6 +51,7 @@ import { computed, defineComponent, ref, watch } from '@vue/composition-api';
 import { singular } from 'pluralize';
 import { useHttp } from '@/services/http';
 import { useForm } from '@/composable/form';
+import { useSetters } from '@/composable/compat';
 
 export default defineComponent({
   name: 'CrudEditForm',
@@ -84,7 +83,7 @@ export default defineComponent({
     const formRef = ref<any>(null);
 
     const {
-      form: formField,
+      form,
       errors,
       setErrors,
       clearErrors,
@@ -103,12 +102,12 @@ export default defineComponent({
       loading.value = true;
       try {
         if (isEdit.value) {
-          const data = await http.put(`${props.url}/${slug.value}`, formField);
-          Object.assign(formField, data);
+          const data = await http.put(`${props.url}/${slug.value}`, form);
+          Object.assign(form, data);
           emit('change');
           return;
         }
-        await http.post(props.url, formField);
+        await http.post(props.url, form);
         emit('change');
         close();
       } catch (e) {
@@ -134,7 +133,7 @@ export default defineComponent({
         try {
           loading.value = true;
           const data = await http.get(`/${props.url}/${slug.value}`);
-          Object.assign(formField, data);
+          Object.assign(form, data);
         } catch {
           close();
         } finally {
@@ -143,9 +142,15 @@ export default defineComponent({
       }
     }, { immediate: true });
 
+    const formBinding = computed(() => ({
+      fields: form,
+      errors,
+      inputs: useSetters(form),
+    }));
+
     return {
       formRef,
-      formField,
+      formBinding,
       slug,
       errors,
       isEdit,

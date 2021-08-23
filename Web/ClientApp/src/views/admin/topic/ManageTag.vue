@@ -19,11 +19,11 @@
       <v-spacer class="d-none d-md-block"></v-spacer>
     </template>
 
-    <template #form.name="{value, input, error}">
+    <template #form="{ values, inputs, errors}">
       <v-text-field
-        :value="value"
-        :error-messages="error"
-        @input="input"
+        :value="values.name"
+        :error-messages="errors.name"
+        @input="inputs.name"
         label="Name"
         persistent-placeholder
         required
