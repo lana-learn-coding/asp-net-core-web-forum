@@ -47,14 +47,14 @@ namespace DAL.Models.Forum
 
         // Public: Anyone can create a thread
         // Protected: Anyone can create a thread, but require admin approval to display
+        // Internal: For future usage. now its treated as Protected 
         // Private: Only Admin can create a thread
-        [Column(TypeName = "VARCHAR")]
-        public AccessMode ThreadAccess = AccessMode.Public;
+        public AccessMode ThreadAccess { get; set; } = AccessMode.Public;
 
         // Public: Anyone can access the forum
         // Protected: Anyone who logged in can access the forum
+        // Internal: For future usage. now its treated as Protected
         // Private: Only admin (and moderators if we had that feature) can access the forum
-        [Column(TypeName = "VARCHAR")]
-        public AccessMode ForumAccess = AccessMode.Public;
+        public AccessMode ForumAccess { get; set; } = AccessMode.Public;
     }
 }

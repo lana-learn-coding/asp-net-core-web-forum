@@ -65,8 +65,9 @@ namespace DAL.Models
 
     public enum AccessMode
     {
-        Public,
-        Protected,
-        Private
+        Public = 0,
+        Protected = 1,
+        Internal = 2,
+        Private = 3
     }
 }
