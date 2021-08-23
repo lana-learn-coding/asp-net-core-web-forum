@@ -154,14 +154,15 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
         query.page = res.meta.currentPage;
         query.size = res.meta.perPage;
 
-        Object.keys(newParams).forEach((key) => {
-          const value = newParams[key]?.toString().trim();
+        const newQuery = { ...route.query, ...newParams };
+        Object.keys(newQuery).forEach((key) => {
+          const value = newQuery[key]?.toString().trim();
           if (value && value !== baseQuery[key]?.toString().trim()) {
             return;
           }
-          delete newParams[key];
+          delete newQuery[key];
         });
-        await router.push({ query: { ...route.query, ...newParams } as Record<string, RouteQueryParam> }).catch(noop);
+        await router.push({ query: newQuery as Record<string, RouteQueryParam> }).catch(noop);
       } finally {
         meta.loading = false;
       }
