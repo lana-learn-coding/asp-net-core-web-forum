@@ -1,6 +1,11 @@
 <template>
-  <v-input class="mt-1" :error-messages="errorMessages">
-    <ckeditor :editor="editor" v-model="input"></ckeditor>
+  <v-input :error-messages="errorMessages" class="mt-2">
+    <div :class="{ 'pt-5': !!label }" style="width: 100%">
+      <label
+        class="v-label theme--light"
+        style="left: 0; top: 0; position: absolute; font-size: 13px">{{ label }}</label>
+      <ckeditor :editor="editor" v-model="input"></ckeditor>
+    </div>
   </v-input>
 </template>
 
@@ -15,6 +20,7 @@ export default defineComponent({
   props: {
     value: { type: String },
     errorMessages: { type: [String, Array] },
+    label: String,
   },
 
   components: {
