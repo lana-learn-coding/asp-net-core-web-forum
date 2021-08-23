@@ -5,7 +5,7 @@
     :items="data"
     :loading="loading"
     :error-messages="errorMessages"
-    item-value="id"
+    :item-value="itemValue"
     item-text="name"
     :label="label || 'Category'"
     :persistent-placeholder="persistentPlaceholder"
@@ -27,6 +27,10 @@ export default defineComponent({
   name: 'CategorySelect',
   props: {
     value: String,
+    itemValue: {
+      type: String,
+      default: 'id',
+    },
     errorMessages: [String, Array],
     label: String,
     required: Boolean,
