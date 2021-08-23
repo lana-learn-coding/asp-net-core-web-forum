@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -26,14 +25,6 @@ namespace DAL.Models.Topic
         // Control order of categories
         // Top important categories are show on front page
         public short Priority { get; set; } = (short)Models.Priority.Normal;
-
-        public Category()
-        {
-        }
-
-        public Category(Guid id) : base(id)
-        {
-        }
 
         [JsonIgnore]
         public virtual ICollection<Forum.Forum> Forums { get; set; }

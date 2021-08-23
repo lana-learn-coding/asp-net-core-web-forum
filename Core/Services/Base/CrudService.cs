@@ -84,6 +84,7 @@ namespace Core.Services.Base
         protected virtual void Update(T current, T entity)
         {
             var entry = Context.Entry(current);
+            entity.Id = current.Id;
             entry.CurrentValues.SetValues(entity);
             try
             {

@@ -7,8 +7,12 @@ namespace DAL.Models
     // Base entity model with default entity and comparison method
     public abstract class Entity : IAuditable, IComparable, ISlugged
     {
+        [JsonIgnore]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Guid Id { get; protected set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        [NotMapped]
+        public Guid Uid => Id;
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -20,16 +24,6 @@ namespace DAL.Models
         [NotMapped]
         [JsonIgnore]
         public virtual string RawSlug => Id.ToString();
-
-        protected Entity(Guid id)
-        {
-            Id = id;
-        }
-
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-        }
 
         public int CompareTo(object obj)
         {
