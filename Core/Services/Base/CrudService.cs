@@ -24,6 +24,8 @@ namespace Core.Services.Base
 
         T Delete(string slug);
 
+        T Find(Func<IQueryable<T>, IQueryable<T>> query, bool optional = false);
+
         List<T> List();
 
         List<T> List(Func<IQueryable<T>, IQueryable<T>> query);
@@ -101,6 +103,15 @@ namespace Core.Services.Base
         /// and CRUD methods
         protected abstract IQueryable<T> Query(DbSet<T> dbSet);
 
+        /// Find one entity, custom query can be passed
+        public virtual T Find(Func<IQueryable<T>, IQueryable<T>> query, bool optional = false)
+        {
+            var entity = query.Invoke(Query(DbSet)).FirstOrDefault();
+            if (optional) return entity;
+
+            return entity ?? throw new DataNotFoundException($"{typeof(T).Name} not found");
+        }
+
         /// Query entities, custom query can be passed
         public virtual List<T> List(Func<IQueryable<T>, IQueryable<T>> query)
         {
@@ -149,7 +160,7 @@ namespace Core.Services.Base
 
         public T Get(Guid id)
         {
-            if (id == null) throw new DataNotFoundException($"{typeof(T).Name} without id found");
+            if (id == null) throw new DataNotFoundException($"{typeof(T).Name} without id not found");
             var found = Query(DbSet).FirstOrDefault(e => e.Id == id);
             return found ?? throw new DataNotFoundException($"{typeof(T).Name} with id {id} not found!");
         }
