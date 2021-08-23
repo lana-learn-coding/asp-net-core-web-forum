@@ -4,7 +4,7 @@
     :max-width="$vuetify.breakpoint.lgAndUp ? '1200px' : $vuetify.breakpoint.width - 40"
     :min-width="$vuetify.breakpoint.mdAndUp ? '500px' : '320px'"
   >
-    <v-card-title v-if="isEdit">Edit {{ formTitle }}}</v-card-title>
+    <v-card-title v-if="isEdit">Edit {{ formTitle }}</v-card-title>
     <v-card-subtitle v-if="isEdit">id: {{ slug }}</v-card-subtitle>
     <v-card-title v-else>Create {{ formTitle }}</v-card-title>
     <v-card-text>
@@ -80,7 +80,8 @@ export default defineComponent({
       get: () => props.value,
       set: (val) => emit('input', val),
     });
-    const formRef = ref(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formRef = ref<any>(null);
 
     const {
       form: formField,

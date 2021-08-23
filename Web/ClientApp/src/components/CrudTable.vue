@@ -60,8 +60,8 @@
         :page="query.page"
         :loading="meta.loading"
       >
-        <template v-for="(_, col) of table" v-slot:[`item.${col}`]="{ item }">
-          <slot :name="`table.${col}`" :item="item">{{ item[col] }}</slot>
+        <template v-for="col of table" v-slot:[`item.${col.value}`]="{ item }">
+          <slot :name="`table.${col.value}`" :item="item">{{ item[col.value] }}</slot>
         </template>
 
         <template #item.action="{ item }">
