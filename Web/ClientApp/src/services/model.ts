@@ -35,3 +35,14 @@ export interface Category extends ModelBase {
 export interface Tag extends ModelBase {
   name: string;
 }
+
+export interface Forum extends ModelBase {
+  title: string,
+  icon: string,
+  subTitle: string,
+  description: string,
+  threadAccess: number | string,
+  forumAccess: number | string,
+  categoryId: number,
+  category: Category,
+}

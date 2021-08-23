@@ -104,6 +104,7 @@ export default defineComponent({
           { title: 'Tag', icon: 'local_offer', name: 'ManageTag' },
         ],
       },
+      { title: 'Forum', icon: 'forum', name: 'ManageForum' },
       { title: 'Users', icon: 'person', name: 'Home' },
     ];
 
