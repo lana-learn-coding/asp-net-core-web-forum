@@ -55,7 +55,7 @@ namespace DAL.Models
         string RawSlug { get; }
     }
 
-    public enum Priority : uint
+    public enum Priority : short
     {
         VeryHigh = 10,
         High = 20,

@@ -26,7 +26,7 @@ namespace DAL.Models.Forum
 
         // Control order of threads
         // If priority > High then thread will be pinned 
-        public ushort Priority { get; set; } = (ushort)Models.Priority.Normal;
+        public short Priority { get; set; } = (short)Models.Priority.Normal;
 
         public bool Pinned => Priority > (ushort)Models.Priority.High;
 

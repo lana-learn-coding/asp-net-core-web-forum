@@ -25,7 +25,7 @@ namespace DAL.Models.Topic
 
         // Control order of categories
         // Top important categories are show on front page
-        public ushort Priority { get; set; } = (ushort)Models.Priority.Normal;
+        public short Priority { get; set; } = (short)Models.Priority.Normal;
 
         public Category()
         {
@@ -35,6 +35,7 @@ namespace DAL.Models.Topic
         {
         }
 
+        [JsonIgnore]
         public virtual ICollection<Forum.Forum> Forums { get; set; }
     }
 }

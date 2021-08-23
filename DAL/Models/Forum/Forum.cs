@@ -43,7 +43,7 @@ namespace DAL.Models.Forum
 
         // Control order of forums
         // Top important forums are show on front page
-        public ushort Priority { get; set; } = (ushort)Models.Priority.Normal;
+        public short Priority { get; set; } = (short)Models.Priority.Normal;
 
         // Public: Anyone can create a thread
         // Protected: Anyone can create a thread, but require admin approval to display
