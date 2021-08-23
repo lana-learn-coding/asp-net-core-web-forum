@@ -86,3 +86,12 @@ export function useCategories(): UseListResult<Category> {
     loading,
   };
 }
+
+export function useAccessType(): { name: string, color: string }[] {
+  return [
+    { name: 'Public', color: 'green' },
+    { name: 'Protected', color: 'yellow darken-2' },
+    { name: 'Internal', color: 'orange' },
+    { name: 'Private', color: 'deep-orange' },
+  ];
+}

@@ -2,7 +2,9 @@
   <v-select
     :value="value"
     @input="input"
-    :items="['Public', 'Protected', 'Private']"
+    :items="data"
+    item-value="id"
+    item-text="text"
     :error-messages="errorMessages"
     :label="label || 'Access Type'"
     :persistent-placeholder="persistentPlaceholder"
@@ -22,7 +24,7 @@ import { defineComponent } from '@vue/composition-api';
 export default defineComponent({
   name: 'AccessSelect',
   props: {
-    value: String,
+    value: [Number, String],
     errorMessages: [String, Array],
     label: String,
     required: Boolean,
@@ -31,17 +33,24 @@ export default defineComponent({
     hideDetails: Boolean,
   },
   setup(props, { emit }) {
+    const data = [
+      { text: 'Public', id: 0 },
+      { text: 'Protected', id: 1 },
+      { text: 'Private', id: 3 },
+    ];
+
     function input(val: string) {
       emit('input', val);
     }
 
     function ruleRequired(val: string): boolean | string {
-      return !!val.trim() || 'Please select categories';
+      return val != null || 'Please select access type';
     }
 
     return {
       input,
       ruleRequired,
+      data,
     };
   },
 });
