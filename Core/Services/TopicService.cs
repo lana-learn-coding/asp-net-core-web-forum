@@ -20,6 +20,12 @@ namespace Core.Services
                 throw new ConflictException("Cannot delete base category: Uncategorized");
             }
 
+            // set deleted forum category to Uncategorized
+            foreach (var forum in entity.Forums)
+            {
+                forum.CategoryId = Guid.Empty;
+            }
+
             base.Delete(entity);
         }
     }
