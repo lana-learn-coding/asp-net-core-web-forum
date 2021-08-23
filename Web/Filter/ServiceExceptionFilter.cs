@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Services.Base;
+﻿using Core.Services.Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -25,6 +24,14 @@ namespace Web.Filter
                     context.Result = new JsonResult(new { exception.Message })
                     {
                         StatusCode = 403
+                    };
+                    return;
+
+                case UnauthorizedException exception:
+                    context.ExceptionHandled = true;
+                    context.Result = new JsonResult(new { exception.Message })
+                    {
+                        StatusCode = 401
                     };
                     return;
 

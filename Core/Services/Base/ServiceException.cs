@@ -37,6 +37,18 @@ namespace Core.Services.Base
         }
     }
 
+    // 401
+    public class UnauthorizedException : ServiceException
+    {
+        public UnauthorizedException(string message) : base(message)
+        {
+        }
+
+        public UnauthorizedException() : base("Unauthorized user")
+        {
+        }
+    }
+
 
     // 403
     public class ForbiddenException : ServiceException
