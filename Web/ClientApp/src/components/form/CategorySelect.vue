@@ -1,0 +1,50 @@
+<template>
+  <v-select
+    :value="value"
+    @input="input"
+    :items="data"
+    :loading="loading"
+    :error-messages="errorMessages"
+    item-value="id"
+    item-text="name"
+    :label="label || 'Category'"
+    :persistent-placeholder="persistentPlaceholder"
+    :required="required"
+    :single-line="singleLine"
+    :hide-details="hideDetails"
+    :clearable="!required"
+    @click:clear="input('')"
+  >
+  </v-select>
+</template>
+
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
+import { useCategories } from '@/composable/form';
+
+export default defineComponent({
+  name: 'CategorySelect',
+  props: {
+    value: String,
+    errorMessages: [String, Array],
+    label: String,
+    required: Boolean,
+    persistentPlaceholder: Boolean,
+    singleLine: Boolean,
+    hideDetails: Boolean,
+  },
+  setup(props, { emit }) {
+    const { data, loading } = useCategories();
+
+    function input(val: string) {
+      emit('input', val);
+    }
+
+    return {
+      data,
+      loading,
+      input,
+    };
+  },
+});
+</script>

@@ -10,7 +10,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 import { computed, defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
-  name: 'Editor',
+  name: 'EditorInput',
 
   props: {
     value: { type: String },
