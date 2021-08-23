@@ -13,6 +13,7 @@
     :single-line="singleLine"
     :hide-details="hideDetails"
     :clearable="!required"
+    :rules="required ? [ruleRequired] : []"
     @click:clear="input('')"
   >
   </v-select>
@@ -40,10 +41,15 @@ export default defineComponent({
       emit('input', val);
     }
 
+    function ruleRequired(val: string): boolean | string {
+      return !!val.trim() || 'Please select categories';
+    }
+
     return {
       data,
       loading,
       input,
+      ruleRequired,
     };
   },
 });

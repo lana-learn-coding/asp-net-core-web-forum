@@ -1,10 +1,14 @@
 <template>
-  <v-card :width="width" :min-width="$vuetify.breakpoint.mdAndUp ? '500px' : '320px'">
+  <v-card
+    :width="width"
+    :max-width="$vuetify.breakpoint.lgAndUp ? '1200px' : $vuetify.breakpoint.width - 40"
+    :min-width="$vuetify.breakpoint.mdAndUp ? '500px' : '320px'"
+  >
     <v-card-title v-if="isEdit">Edit {{ formTitle }}}</v-card-title>
     <v-card-subtitle v-if="isEdit">id: {{ slug }}</v-card-subtitle>
     <v-card-title v-else>Create {{ formTitle }}</v-card-title>
     <v-card-text>
-      <form>
+      <v-form ref="formRef">
         <!-- Form fields-->
         <template v-for="(_, field) of formField">
           <slot
@@ -27,7 +31,7 @@
             Submit
           </v-btn>
           <v-btn
-            v-if="$vuetify.breakpoint.smAndUp"
+            v-if="$vuetify.breakpoint.mdAndUp"
             class="mr-4"
             @click="clear"
             color="green"
@@ -39,7 +43,7 @@
             Back
           </v-btn>
         </div>
-      </form>
+      </v-form>
     </v-card-text>
   </v-card>
 </template>
@@ -76,6 +80,7 @@ export default defineComponent({
       get: () => props.value,
       set: (val) => emit('input', val),
     });
+    const formRef = ref(null);
 
     const {
       form: formField,
@@ -91,6 +96,9 @@ export default defineComponent({
     const formTitle = computed(() => singular(props.title || 'item'));
 
     async function submit() {
+      if (!formRef.value.validate()) {
+        return;
+      }
       loading.value = true;
       try {
         if (isEdit.value) {
@@ -112,6 +120,7 @@ export default defineComponent({
     function clear() {
       clearErrors();
       clearForm();
+      formRef.value.resetValidation();
     }
 
     function close() {
@@ -134,6 +143,7 @@ export default defineComponent({
     }, { immediate: true });
 
     return {
+      formRef,
       formField,
       slug,
       errors,
