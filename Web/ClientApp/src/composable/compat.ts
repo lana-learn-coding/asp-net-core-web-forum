@@ -20,6 +20,10 @@ export function useRouter(): VueRouter {
 export function noop(): void {
 }
 
+export function next<T>(x: T): T {
+  return x;
+}
+
 export function useSetters<T>(obj: UnwrapRef<T>): { [K in keyof T]: (val: K) => void } {
   const setters = {};
   Object.keys(obj as T).forEach((key) => {

@@ -16,52 +16,55 @@ const http = axios.create({
   withCredentials: true,
 });
 
-export interface HttpClient {
-  unwrapped: AxiosInstance,
+export class HttpClient {
+  public readonly client: AxiosInstance = http;
 
-  request<T>(config: AxiosRequestConfig): Promise<T>;
+  protected async intercept<T>(promise: Promise<AxiosPromise<T>>): Promise<T> {
+    return (await promise).data;
+  }
 
-  get<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  async request<T>(config: AxiosRequestConfig): Promise<T> {
+    return this.intercept(this.client.request(config));
+  }
 
-  delete<T>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.intercept(this.client.get(url, config));
+  }
 
-  post<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T>;
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.intercept(this.client.delete(url, config));
+  }
 
-  put<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T>;
+  async post<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T> {
+    return this.intercept(this.client.post(url, data, config));
+  }
+
+  async put<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T> {
+    return this.intercept(this.client.put(url, data, config));
+  }
 }
 
-export function useHttp(): HttpClient {
-  const router = useRouter();
+export class HookedHttpClient extends HttpClient {
+  private router = useRouter();
 
-  async function request<T>(promise: Promise<AxiosPromise<T>>): Promise<T> {
+  protected async intercept<T>(promise: Promise<AxiosPromise<T>>): Promise<T> {
     try {
-      return (await promise).data;
+      return super.intercept(promise);
     } catch (e) {
       if (e.response.status === 401) {
-        await router.push({ name: 'Unauthorized' });
+        await this.router.push({ name: 'Unauthorized' });
       }
       throw e;
     }
   }
+}
 
-  return {
-    unwrapped: http,
-    async request<T>(config: AxiosRequestConfig): Promise<T> {
-      return request(http.request(config));
-    },
-    async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-      return request(http.get(url, config));
-    },
-    async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-      return request(http.delete(url, config));
-    },
-    async post<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T> {
-      return request(http.post(url, data, config));
-    },
-    async put<T>(url: string, data?: Dictionary, config?: AxiosRequestConfig): Promise<T> {
-      return request(http.put(url, data, config));
-    },
-  };
+export function useCoreHttp(): HttpClient {
+  return new HttpClient();
+}
+
+export function useHttp(): HttpClient {
+  return new HookedHttpClient();
 }
 
 type PrimitiveOrPrimitiveArray = Primitive | Primitive[]
