@@ -20,7 +20,7 @@ namespace Core.Services
             }
 
             var user = Find(query =>
-                query.Where(user => user.Username.Equals(username) || user.Password.Equals(username)));
+                query.Where(user => user.Username.Equals(username) || user.Email.Equals(username)), true);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
@@ -63,6 +63,11 @@ namespace Core.Services
             {
                 throw new InvalidDataException("Password", "Password must contain number and character");
             }
+        }
+
+        protected override IQueryable<User> Query(DbSet<User> dbSet)
+        {
+            return dbSet.Include("Roles");
         }
     }
 }

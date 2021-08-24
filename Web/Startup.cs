@@ -85,6 +85,7 @@ namespace Web
             services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
 
             services.AddHttpContextAccessor();
+            services.AddMemoryCache();
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(ICrudService<>))
                 .AddClasses(classes => classes.AssignableTo(typeof(ICrudService<>)))
@@ -96,6 +97,7 @@ namespace Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var https = Configuration.GetValue<bool>("Https");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -103,6 +105,7 @@ namespace Web
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebForum v1"));
             }
 
+            if (https) app.UseHttpsRedirection();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment()) app.UseSpaStaticFiles();
@@ -122,7 +125,7 @@ namespace Web
                 {
                     spa.Options.SourcePath = "ClientApp";
                     if (!env.IsDevelopment()) return;
-                    spa.UseVueCli("serve", 8080, forceKill: true, https: false);
+                    spa.UseVueCli("serve", 8080, forceKill: true, https: https);
                 });
         }
     }
