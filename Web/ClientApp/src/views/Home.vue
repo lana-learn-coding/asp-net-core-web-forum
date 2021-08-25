@@ -1,10 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <div class="about">
-      <h1>This is an Home page</h1>
-    </div>
-  </div>
+  <v-row>
+    <v-col
+      cols="12"
+      sm="2"
+    >
+      <v-sheet
+        rounded="lg"
+        min-height="268"
+      >
+        <!--  -->
+      </v-sheet>
+    </v-col>
+
+    <v-col
+      cols="12"
+      sm="8"
+    >
+      <v-sheet
+        min-height="70vh"
+        rounded="lg"
+      >
+        <!--  -->
+      </v-sheet>
+    </v-col>
+
+    <v-col
+      cols="12"
+      sm="2"
+    >
+      <v-sheet
+        rounded="lg"
+        min-height="268"
+      >
+        <!--  -->
+      </v-sheet>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
