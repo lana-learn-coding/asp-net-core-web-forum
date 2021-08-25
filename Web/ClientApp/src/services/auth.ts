@@ -53,13 +53,6 @@ export function useUser(): UseUserResult {
   const { client } = useCoreHttp();
   const user = reactive(storage.value);
 
-  if (user.isAuthenticated) {
-    user.loading = true;
-    refresh().finally(() => {
-      user.loading = false;
-    });
-  }
-
   // register auto-token refresh interceptor
   client.interceptors.response.use(next, async (error: AxiosError) => {
     if (!error.response?.status || error.response.status !== 401) throw error;
