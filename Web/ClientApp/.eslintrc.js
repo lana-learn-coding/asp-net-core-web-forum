@@ -23,6 +23,7 @@ module.exports = {
     'no-use-before-define': 'off',
     'linebreak-style': 'off',
     'no-param-reassign': ['warn', { props: false }],
+    'max-classes-per-file': ['off'],
     'object-curly-newline': ['error', {
       ImportDeclaration: {
         multiline: true,
