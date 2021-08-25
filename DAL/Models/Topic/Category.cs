@@ -22,6 +22,10 @@ namespace DAL.Models.Topic
         [StringLength(30)]
         public string Icon { get; set; }
 
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Description { get; set; }
+
         // Control order of categories
         // Top important categories are show on front page
         public short Priority { get; set; } = (short)Models.Priority.Normal;
