@@ -17,6 +17,7 @@ export interface UseUserResult {
 export interface AuthUser {
   uid: string;
   slug: string;
+  username: string;
   fullName: string;
   email: string;
   avatar: string;
@@ -34,8 +35,9 @@ export interface JwtToken {
 const defaultUser = {
   uid: '',
   slug: '',
-  fullName: 'annon',
-  email: 'annon',
+  fullName: 'anon',
+  username: 'anon',
+  email: 'anon',
   avatar: '',
   roles: [],
   isAuthenticated: false,

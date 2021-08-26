@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app flat color="white">
+    <v-app-bar app flat>
       <v-container class="py-0 fill-height">
         <v-toolbar-title class="ml-1">Dr. Forum</v-toolbar-title>
 
@@ -67,7 +67,6 @@
 
         <v-btn
           v-if="!user.isAuthenticated"
-          class="mr-3"
           :to="{ name: 'Login' }"
           exact-path
           text
@@ -78,47 +77,69 @@
         <div v-else>
           <v-menu
             bottom
-            min-width="400px"
+            min-width="200px"
             rounded
             offset-y
           >
             <template v-slot:activator="{ on }">
               <v-btn
+                class="ml-4"
                 icon
                 x-large
                 v-on="on"
               >
-                <v-avatar color="purple darken-1"></v-avatar>
+                <v-avatar>
+                  <v-img
+                    :src="user.avatar || '@/assets/anon.png'"
+                    lazy-src="@/assets/anon_thumbnail.png"
+                    :alt="user.username"
+                  ></v-img>
+                </v-avatar>
               </v-btn>
             </template>
             <v-card>
               <v-list-item-content class="justify-center">
                 <div class="mx-auto text-center">
-                  <v-avatar color="purple darken-1 mb-2"></v-avatar>
+                  <v-avatar class="mb-2">
+                    <v-img
+                      :src="user.avatar || '@/assets/anon.png'"
+                      lazy-src="@/assets/anon_thumbnail.png"
+                      :alt="user.username"
+                    ></v-img>
+                  </v-avatar>
                   <h3>{{ user.fullName }}</h3>
                   <p class="caption mt-1">
                     {{ user.email }}
                   </p>
-                  <v-divider class="my-1"></v-divider>
-                  <v-divider class="my-1"></v-divider>
+                  <v-divider class="my-2"></v-divider>
                   <v-btn
                     depressed
                     dense
                     text
-                    :to="{ name: 'Logout' }"
+                    :to="{ name: 'Me' }"
+                  >
+                    Profiles
+                  </v-btn>
+                  <v-divider class="my-2"></v-divider>
+                  <v-btn
+                    depressed
+                    dense
+                    text
+                    @click="logout"
                   >
                     Log out
                   </v-btn>
-                  <v-divider class="my-1"></v-divider>
-                  <v-btn
-                    v-can="'Admin'"
-                    depressed
-                    dense
-                    text
-                    :to="{ name: 'Admin' }"
-                  >
-                    Admin
-                  </v-btn>
+                  <template v-can="'Admin'">
+                    <v-divider class="my-2"></v-divider>
+                    <v-btn
+                      depressed
+                      dense
+                      text
+                      :to="{ name: 'Admin' }"
+                    >
+                      Admin
+                    </v-btn>
+                  </template>
                 </div>
               </v-list-item-content>
             </v-card>
@@ -127,7 +148,7 @@
       </v-container>
     </v-app-bar>
 
-    <v-main class="grey lighten-3">
+    <v-main class="grey lighten-2">
       <v-container class="mt-2 mt-md-3 mt-lg-4 mt-xl-5">
         <router-view></router-view>
       </v-container>
@@ -164,7 +185,7 @@ export default defineComponent({
       },
     ]);
 
-    const { user } = useUser();
+    const { user, logout } = useUser();
     const keyword = ref('');
 
     const categories = useCategories();
@@ -172,9 +193,12 @@ export default defineComponent({
       if (loading) return;
       const topic = navs.value.find((nav) => nav.text === 'Topics');
       if (!topic) return;
-      topic.links = categories.data.value.map((cat) => ({ text: cat.name, name: 'Categories', slug: cat.slug }));
+      topic.links = categories.data.value.map((cat) => ({
+        text: cat.name,
+        name: 'Categories',
+        slug: cat.slug,
+      }));
       navs.value = [...navs.value];
-      console.log(navs.value);
     });
 
     return {
@@ -182,6 +206,7 @@ export default defineComponent({
       navs,
       keyword,
       focus,
+      logout,
     };
   },
 });
