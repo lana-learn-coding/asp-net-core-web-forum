@@ -2,15 +2,14 @@
 using Core.Services;
 using DAL.Models.Forum;
 using Microsoft.AspNetCore.Mvc;
-using Web.Controllers.Base;
 
-namespace Web.Controllers
+namespace Web.Controllers.Admin
 {
     [ApiController]
-    [Route("/api/forums")]
-    public class ForumController : AbstractQueryableCrudController<Forum>
+    [Route("/api/admin/forums")]
+    public class AdminForumController : AbstractAdminController<Forum>
     {
-        public ForumController(ForumService service) : base(service)
+        public AdminForumController(ForumService service) : base(service)
         {
         }
 

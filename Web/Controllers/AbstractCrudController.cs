@@ -6,7 +6,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers.Base
+namespace Web.Controllers
 {
     public abstract class AbstractCrudController<T> : Controller where T : Entity
     {
@@ -19,7 +19,7 @@ namespace Web.Controllers.Base
 
         [HttpGet]
         [Route("all")]
-        public IActionResult All([FromQuery] int skip = 0, [FromQuery] int take = 1000)
+        public virtual IActionResult All([FromQuery] int skip = 0, [FromQuery] int take = 1000)
         {
             return new JsonResult(
                 Service.List(query => Query(query)
@@ -32,7 +32,7 @@ namespace Web.Controllers.Base
 
         [HttpGet]
         [Route("")]
-        public IActionResult Index([FromQuery] PageQuery pageQuery)
+        public virtual IActionResult Index([FromQuery] PageQuery pageQuery)
         {
             return new JsonResult(Service.Page(pageQuery, Query));
         }
@@ -41,7 +41,7 @@ namespace Web.Controllers.Base
 
         [HttpGet]
         [Route("{slug}")]
-        public IActionResult Show(string slug)
+        public virtual IActionResult Show(string slug)
         {
             return Guid.TryParse(slug, out var id)
                 ? new JsonResult(id)

@@ -2,9 +2,8 @@
 using Core.Services;
 using DAL.Models.Topic;
 using Microsoft.AspNetCore.Mvc;
-using Web.Controllers.Base;
 
-namespace Web.Controllers
+namespace Web.Controllers.Public
 {
     [ApiController]
     [Route("/api/categories")]

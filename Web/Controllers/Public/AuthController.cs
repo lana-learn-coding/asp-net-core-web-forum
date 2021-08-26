@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Web.Dto.Auth;
 
-namespace Web.Controllers
+namespace Web.Controllers.Public
 {
     [ApiController]
     [Route("/api/auth")]

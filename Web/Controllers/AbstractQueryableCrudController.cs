@@ -1,7 +1,7 @@
 using Core.Services.Base;
 using DAL.Models;
 
-namespace Web.Controllers.Base
+namespace Web.Controllers
 {
     public abstract class AbstractQueryableCrudController<T> : AbstractCrudController<T> where T : Entity
     {
