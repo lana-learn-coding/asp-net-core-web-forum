@@ -107,7 +107,7 @@
                       :alt="user.username"
                     ></v-img>
                   </v-avatar>
-                  <h3>{{ user.fullName }}</h3>
+                  <h3>{{ user.username }}</h3>
                   <p class="caption mt-1">
                     {{ user.email }}
                   </p>
