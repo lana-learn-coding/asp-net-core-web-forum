@@ -15,7 +15,6 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
-        [Required]
         [Column(TypeName = "NVARCHAR")]
         [MinLength(3)]
         [StringLength(150)]

@@ -139,7 +139,6 @@ namespace Web.Controllers.Public
             var claims = new List<Claim>
             {
                 new("username", user.Username),
-                new("fullname", user.FullName),
                 new("email", user.Email)
             };
 
