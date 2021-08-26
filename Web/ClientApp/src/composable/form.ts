@@ -95,3 +95,17 @@ export function useAccessType(): { name: string, color: string }[] {
     { name: 'Private', color: 'deep-orange' },
   ];
 }
+
+const priorities = [
+  { name: 'VeryHigh', color: 'green', max: 10 },
+  { name: 'High', color: 'yellow darken-2', max: 20 },
+  { name: 'Normal', color: 'orange', max: 30 },
+  { name: 'Low', color: 'deep-orange', max: 40 },
+];
+
+export function usePriority(priority: number): { name: string, color: string } {
+  if (priority >= 40) {
+    return priorities[3];
+  }
+  return priorities.find((x) => x.max + 10 > priority) ?? priorities[3];
+}

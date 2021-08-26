@@ -5,6 +5,7 @@
     title="Categories"
     url="categories"
     :filter="filter"
+    form-width="500px"
   >
     <template #filter="{bind, on}">
       <v-text-field
@@ -20,29 +21,66 @@
     </template>
 
     <template #form="{ values, inputs, errors}">
-      <v-text-field
-        :value="values.icon"
-        :error-messages="errors.icon"
-        @input="inputs.icon"
-        label="Icon"
-        persistent-placeholder
-        required
-      >
-      </v-text-field>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            :value="values.name"
+            :error-messages="errors.name"
+            @input="inputs.name"
+            label="Name"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
 
-      <v-text-field
-        :value="values.name"
-        :error-messages="errors.name"
-        @input="inputs.name"
-        label="Name"
-        persistent-placeholder
-        required
-      >
-      </v-text-field>
+        <v-col>
+          <v-text-field
+            :value="values.icon"
+            :error-messages="errors.icon"
+            @input="inputs.icon"
+            label="Icon"
+            persistent-placeholder
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col>
+          <v-text-field
+            :value="values.priority"
+            :error-messages="errors.priority"
+            @input="inputs.priority"
+            label="Priority"
+            persistent-placeholder
+            type="number"
+            min="0"
+            step="1"
+            :hint="getPriority(values.priority).name"
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <v-text-field
+            :value="values.description"
+            :error-messages="errors.description"
+            @input="inputs.description"
+            label="Description"
+            persistent-placeholder
+          >
+          </v-text-field>
+        </v-col>
+      </v-row>
     </template>
 
     <template #table.icon="{ item }">
       <v-icon>{{ item.icon || 'folder' }}</v-icon>
+    </template>
+
+    <template #table.priority="{ item }">
+      <v-chip :color="getPriority(item.priority).color" dark label small>
+        {{ getPriority(item.priority).name }} : {{ item.priority }}
+      </v-chip>
     </template>
 
     <template #table.createdAt="{ item }">
@@ -60,6 +98,7 @@ import { defineComponent, reactive } from '@vue/composition-api';
 import { formatDate } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
+import { usePriority } from '@/composable/form';
 
 export default defineComponent({
   name: 'ManageCategory',
@@ -73,7 +112,9 @@ export default defineComponent({
       },
       { text: 'icon', value: 'icon' },
       { text: 'Name', value: 'name' },
-      { text: 'Created At', value: 'createdAt' },
+      { text: 'Description', value: 'description' },
+      { text: 'Priority', value: 'priority' },
+      { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action' },
     ];
 
@@ -84,6 +125,8 @@ export default defineComponent({
     const form = reactive({
       icon: '',
       name: '',
+      priority: 20,
+      description: '',
     });
 
     return {
@@ -91,6 +134,7 @@ export default defineComponent({
       filter,
       formatDate,
       form,
+      getPriority: usePriority,
     };
   },
 });
