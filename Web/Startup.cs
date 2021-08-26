@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VueCliMiddleware;
+using Web.Dto;
 using Web.Filter;
 
 namespace Web
@@ -83,6 +84,7 @@ namespace Web
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
             services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddHttpContextAccessor();
             services.AddMemoryCache();

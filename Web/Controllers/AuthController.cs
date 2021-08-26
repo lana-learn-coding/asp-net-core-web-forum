@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Core.Services;
 using Core.Services.Base;
 using DAL.Models.Auth;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Web.Dto;
+using Web.Dto.Auth;
 
 namespace Web.Controllers
 {
@@ -22,17 +23,19 @@ namespace Web.Controllers
     {
         private readonly UserService _service;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
         // Keep refresh token in cache instead of database
         // The token will disappear after x days, or after server restart
         private readonly IMemoryCache _cache;
 
 
-        public AuthController(UserService service, IConfiguration configuration, IMemoryCache cache)
+        public AuthController(IMapper mapper, UserService service, IConfiguration configuration, IMemoryCache cache)
         {
             _service = service;
             _configuration = configuration;
             _cache = cache;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -155,7 +158,7 @@ namespace Web.Controllers
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expires = token.ValidTo,
-                User = new AuthUser(user)
+                User = _mapper.Map<AuthUser>(user)
             };
             if (!remember) return jwt;
 

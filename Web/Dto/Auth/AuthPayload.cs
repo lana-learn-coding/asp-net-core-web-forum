@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Web.Dto
+namespace Web.Dto.Auth
 {
     public class AuthPayload
     {

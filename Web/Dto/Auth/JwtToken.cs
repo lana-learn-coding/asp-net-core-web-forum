@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace Web.Dto
+namespace Web.Dto.Auth
 {
     public class JwtToken
     {
