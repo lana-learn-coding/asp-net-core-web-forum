@@ -129,7 +129,7 @@
                   >
                     Log out
                   </v-btn>
-                  <template v-can="'Admin'">
+                  <template v-auth="'Admin'">
                     <v-divider class="my-2"></v-divider>
                     <v-btn
                       depressed

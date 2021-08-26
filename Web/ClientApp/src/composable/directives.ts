@@ -10,13 +10,17 @@ Vue.directive('debounce', getDirective('2', {
 }));
 
 const { user } = useUser();
-Vue.directive('can', {
+Vue.directive('auth', {
   bind(el, binding) {
-    const role = binding.expression?.replace(/['"]/g, '') || '';
-    if (user.roles.includes(role)) {
-      return;
+    if (!user.isAuthenticated && el.style) {
+      el.style.display = 'none';
     }
-    if (el.style?.display) {
+
+    const role = binding.expression?.replace(/['"]/g, '') || '';
+    if (!role || role === 'User') return;
+    if (role && user.roles && user.roles.includes(role)) return;
+
+    if (el.style) {
       el.style.display = 'none';
     }
   },

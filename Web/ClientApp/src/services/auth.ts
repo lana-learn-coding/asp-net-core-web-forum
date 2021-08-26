@@ -22,7 +22,7 @@ export interface AuthUser {
   email: string;
   avatar: string;
 
-  roles: string[];
+  roles: string[] | null;
   isAuthenticated: boolean;
   loading: boolean;
 }
@@ -39,7 +39,7 @@ const defaultUser = {
   username: 'anon',
   email: 'anon',
   avatar: '',
-  roles: [],
+  roles: null,
   isAuthenticated: false,
   loading: false,
 };
