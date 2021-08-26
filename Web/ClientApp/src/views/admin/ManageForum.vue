@@ -3,7 +3,7 @@
     :table="table"
     :form="form"
     title="Forums"
-    url="forums"
+    url="admin/forums"
     :filter="filter"
     form-width="900px"
   >
