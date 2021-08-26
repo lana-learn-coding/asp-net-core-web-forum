@@ -24,9 +24,7 @@ namespace DAL.Database
 
             context.Roles.AddRange(new[]
             {
-                admin,
-                new Role { Name = "Moderator" },
-                new Role { Name = "User" }
+                admin
             });
 
             var faker = new Faker();
