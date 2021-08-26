@@ -5,7 +5,7 @@
     title="Forums"
     url="forums"
     :filter="filter"
-    form-width="1000px"
+    form-width="900px"
   >
     <template #filter="{bind, on}">
       <v-text-field
@@ -32,72 +32,103 @@
     </template>
 
     <template #form="{values, inputs, errors}">
-      <v-text-field
-        :value="values.title"
-        :error-messages="errors.title"
-        @input="inputs.title"
-        label="Title"
-        persistent-placeholder
-        required
-      >
-      </v-text-field>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            :value="values.title"
+            :error-messages="errors.title"
+            @input="inputs.title"
+            label="Title"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
 
-      <access-select
-        :value="values.forumAccess"
-        @input="inputs.forumAccess"
-        :error-messages="errors.forumAccess"
-        label="Forum Access"
-        persistent-placeholder
-        required
-      >
-      </access-select>
+        <v-col cols="12">
+          <v-text-field
+            :value="values.subTitle"
+            :error-messages="errors.subTitle"
+            @input="inputs.subTitle"
+            label="Sub Title"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
 
-      <access-select
-        :value="values.threadAccess"
-        @input="inputs.threadAccess"
-        :error-messages="errors.threadAccess"
-        label="Thread Access"
-        persistent-placeholder
-        required
-      >
-      </access-select>
+        <v-col>
+          <access-select
+            :value="values.forumAccess"
+            @input="inputs.forumAccess"
+            :error-messages="errors.forumAccess"
+            label="Forum Access"
+            persistent-placeholder
+            required
+          >
+          </access-select>
+        </v-col>
 
-      <category-select
-        :value="values.categoryId"
-        @input="inputs.categoryId"
-        :error-messages="errors.categoryId"
-        persistent-placeholder
-        required
-      >
-      </category-select>
+        <v-col>
+          <access-select
+            :value="values.threadAccess"
+            @input="inputs.threadAccess"
+            :error-messages="errors.threadAccess"
+            label="Thread Access"
+            persistent-placeholder
+            required
+          >
+          </access-select>
+        </v-col>
 
-      <v-text-field
-        :value="values.subTitle"
-        :error-messages="errors.subTitle"
-        @input="inputs.subTitle"
-        label="Sub Title"
-        persistent-placeholder
-        required
-      >
-      </v-text-field>
+        <v-col cols="12">
+          <category-select
+            :value="values.categoryId"
+            @input="inputs.categoryId"
+            :error-messages="errors.categoryId"
+            persistent-placeholder
+            required
+          >
+          </category-select>
+        </v-col>
 
-      <v-text-field
-        :value="values.icon"
-        :error-messages="errors.icon"
-        @input="inputs.icon"
-        label="Icon"
-        hint="Material icon name"
-        persistent-placeholder
-        required
-      >
-      </v-text-field>
+        <v-col>
+          <v-text-field
+            :value="values.icon"
+            :error-messages="errors.icon"
+            @input="inputs.icon"
+            label="Icon"
+            hint="Material icon name"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
 
-      <editor-input
-        :value="values.description"
-        :error-messages="errors.description"
-        @input="inputs.description"
-      >
-      </editor-input>
+        <v-col>
+          <v-text-field
+            :value="values.priority"
+            :error-messages="errors.priority"
+            @input="inputs.priority"
+            label="Priority"
+            persistent-placeholder
+            type="number"
+            min="0"
+            step="1"
+            :hint="getPriority(values.priority).name"
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <editor-input
+            :value="values.description"
+            :error-messages="errors.description"
+            @input="inputs.description"
+          >
+          </editor-input>
+        </v-col>
+      </v-row>
     </template>
 
     <template #table.subTitle="{ item }">
@@ -130,6 +161,12 @@
       </v-chip>
     </template>
 
+    <template #table.priority="{ item }">
+      <v-chip :color="getPriority(item.priority).color" dark label small>
+        {{ getPriority(item.priority).name }} : {{ item.priority }}
+      </v-chip>
+    </template>
+
     <template #table.createdAt="{ item }">
       {{ formatDate(item.createdAt) }}
     </template>
@@ -147,7 +184,7 @@ import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
 import CategorySelect from '@/components/form/CategorySelect.vue';
 import AccessSelect from '@/components/form/AccessSelect.vue';
-import { useAccessType } from '@/composable/form';
+import { useAccessType, usePriority } from '@/composable/form';
 import EditorInput from '@/components/form/EditorInput.vue';
 
 export default defineComponent({
@@ -163,7 +200,8 @@ export default defineComponent({
       { text: 'Title', value: 'title' },
       { text: 'Subtitle', value: 'subTitle' },
       { text: 'Category', value: 'category' },
-      { text: 'Created At', value: 'createdAt' },
+      { text: 'Priority', value: 'priority' },
+      { text: 'Updated At', value: 'updatedAt' },
       { text: 'Forum/Thread Access', value: 'access' },
       { text: 'Action', value: 'action', sortable: false },
     ];
@@ -181,6 +219,7 @@ export default defineComponent({
       subTitle: '',
       icon: '',
       description: '',
+      priority: 20,
     });
 
     return {
@@ -189,6 +228,7 @@ export default defineComponent({
       formatDate,
       form,
       access: useAccessType(),
+      getPriority: usePriority,
     };
   },
 });
