@@ -31,7 +31,7 @@ import { AlertOptions, useAlert } from '@/composable/message';
 import { noop } from '@/composable/compat';
 
 export default defineComponent({
-  name: 'AppAlert',
+  name: 'TheAppAlert',
   setup() {
     const defaultOptions: AlertOptions = {
       cb: noop as () => Promise<void>,
