@@ -14,31 +14,49 @@ const admin: RouteConfig = {
       path: '/',
       redirect: () => ({ name: 'Dashboard' }),
       name: 'Admin',
+      meta: {
+        roles: ['Admin'],
+      },
     },
     {
       path: 'dashboard',
       component: Dashboard,
       name: 'Dashboard',
+      meta: {
+        roles: ['Admin'],
+      },
     },
     {
       path: 'categories',
       component: ManageCategory,
       name: 'ManageCategory',
+      meta: {
+        roles: ['Admin'],
+      },
     },
     {
       path: 'tags',
       component: ManageTag,
       name: 'ManageTag',
+      meta: {
+        roles: ['Admin'],
+      },
     },
     {
       path: 'forums',
       component: ManageForum,
       name: 'ManageForum',
+      meta: {
+        roles: ['Admin'],
+      },
     },
     {
       path: 'users',
       component: ManageUser,
       name: 'ManageUser',
+      meta: {
+        roles: ['Admin'],
+      },
     },
   ],
 };

@@ -53,6 +53,8 @@ export class HookedHttpClient extends HttpClient {
     } catch (e) {
       if (e.response.status === 401) {
         await this.router.push({ name: 'Unauthorized' });
+      } else if (e.response.status === 403) {
+        await this.router.push({ name: 'NotFound' });
       }
       throw e;
     }

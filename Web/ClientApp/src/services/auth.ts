@@ -107,3 +107,17 @@ export function useUser(): UseUserResult {
     refresh,
   };
 }
+
+const { user } = useUser();
+
+export function isAuthorized(roles?: string | string[]): boolean {
+  if (!user.isAuthenticated) return false;
+  if (!roles || roles.length === 0) return isAuthorized('User');
+
+  if (Array.isArray(roles)) {
+    return !roles.some((role) => !isAuthorized(role));
+  }
+
+  if (roles === 'User') return true;
+  return !!user.roles && user.roles.includes(roles);
+}
