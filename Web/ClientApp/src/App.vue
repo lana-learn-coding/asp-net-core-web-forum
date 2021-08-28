@@ -4,6 +4,7 @@
     <transition name="load">
       <component v-if="!preload" :is="$route.meta.layout || 'main'">
         <router-view></router-view>
+        <app-alert></app-alert>
       </component>
     </transition>
   </div>
@@ -12,10 +13,11 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import Startup from '@/views/Startup.vue';
+import AppAlert from '@/components/app/AppAlert.vue';
 
 export default defineComponent({
   name: 'App',
-  components: { Startup },
+  components: { AppAlert, Startup },
   setup() {
     const preload = ref(true);
     return {
