@@ -15,11 +15,6 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
-        [MinLength(3)]
-        [StringLength(150)]
-        public string FullName { get; set; }
-
         [Column(TypeName = "VARCHAR")]
         [MinLength(5)]
         [StringLength(80)]
@@ -34,14 +29,11 @@ namespace DAL.Models.Auth
         public string Email { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [StringLength(30)]
-        [Index(IsUnique = true)]
-        public string Phone { get; set; }
-
-        [Column(TypeName = "VARCHAR")]
         [MinLength(8)]
         [StringLength(120)]
         public string Password { get; set; }
+
+        public virtual UserInfo UserInfo { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; }
     }

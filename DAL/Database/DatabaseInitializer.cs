@@ -32,10 +32,8 @@ namespace DAL.Database
                 {
                     Avatar = faker.Person.Avatar,
                     Username = "Admin",
-                    FullName = "The Real Admin",
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = faker.Person.Email,
-                    Phone = faker.Person.Phone,
                     Roles = new List<Role> { admin }
                 }
             );
@@ -45,10 +43,8 @@ namespace DAL.Database
                     {
                         Avatar = faker.Person.Avatar,
                         Username = faker.Person.UserName + i,
-                        FullName = faker.Person.FullName,
                         Password = BCrypt.Net.BCrypt.HashPassword("1"),
                         Email = faker.Person.Email + i,
-                        Phone = faker.Person.Phone + i
                     }
                 );
         }
