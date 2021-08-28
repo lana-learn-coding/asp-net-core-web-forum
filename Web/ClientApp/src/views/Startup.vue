@@ -18,6 +18,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import { useUser } from '@/services/auth';
+import { useCategories } from '@/composable/form';
+import { noop } from '@/composable/compat';
 
 export default defineComponent({
   emits: ['loaded'],
@@ -36,7 +38,8 @@ export default defineComponent({
       if (user.isAuthenticated) {
         user.loading = true;
         try {
-          await refresh();
+          await refresh().catch(noop);
+          await useCategories().fetch().catch(noop);
         } finally {
           user.loading = false;
         }
