@@ -2,46 +2,29 @@
   <v-row>
     <v-col
       cols="12"
-      sm="2"
+      md="9"
     >
-      <v-sheet
-        rounded="lg"
-        min-height="268"
-      >
+      <v-sheet rounded
+               min-height="70vh">
         <!--  -->
       </v-sheet>
     </v-col>
 
     <v-col
       cols="12"
-      sm="8"
+      md="3"
     >
-      <v-sheet
-        min-height="70vh"
-        rounded="lg"
-      >
-        <!--  -->
-      </v-sheet>
-    </v-col>
-
-    <v-col
-      cols="12"
-      sm="2"
-    >
-      <v-sheet
-        rounded="lg"
-        min-height="268"
-      >
-        <!--  -->
-      </v-sheet>
+      <app-forum-statistics></app-forum-statistics>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 
 export default Vue.extend({
   name: 'Home',
+  components: { AppForumStatistics },
 });
 </script>
