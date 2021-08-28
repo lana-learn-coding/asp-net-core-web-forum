@@ -4,6 +4,7 @@ import Dashboard from '@/views/admin/Dashboard.vue';
 import ManageCategory from '@/views/admin/topic/ManageCategory.vue';
 import ManageTag from '@/views/admin/topic/ManageTag.vue';
 import ManageForum from '@/views/admin/ManageForum.vue';
+import ManageUser from '@/views/admin/ManageUser.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -33,6 +34,11 @@ const admin: RouteConfig = {
       path: 'forums',
       component: ManageForum,
       name: 'ManageForum',
+    },
+    {
+      path: 'users',
+      component: ManageUser,
+      name: 'ManageUser',
     },
   ],
 };

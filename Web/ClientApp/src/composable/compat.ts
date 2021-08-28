@@ -1,4 +1,10 @@
-import { ComponentInstance, getCurrentInstance, UnwrapRef } from '@vue/composition-api';
+import {
+  ComponentInstance,
+  getCurrentInstance,
+  reactive,
+  UnwrapRef,
+  watch,
+} from '@vue/composition-api';
 import VueRouter, { Route } from 'vue-router';
 import { Framework as Vuetify } from 'vuetify';
 
@@ -8,8 +14,17 @@ export function useVM(): ComponentInstance {
   return instance.proxy;
 }
 
-export function useRoute(): Route {
-  return useVM().$route;
+export function useRoute(): UnwrapRef<Route> {
+  const vm = useVM();
+  const route = reactive({ ...vm.$route });
+
+  watch(
+    () => vm.$route,
+    (r) => {
+      Object.assign(route, r);
+    },
+  );
+  return route;
 }
 
 export function useRouter(): VueRouter {

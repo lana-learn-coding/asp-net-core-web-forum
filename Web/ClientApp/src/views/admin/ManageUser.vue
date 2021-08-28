@@ -1,0 +1,143 @@
+<template>
+  <crud-table
+    :table="table"
+    :form="form"
+    title="Users"
+    url="admin/users"
+    :filter="filter"
+  >
+    <template #filter="{bind, on}">
+      <v-text-field
+        class="mr-3"
+        v-debounce="on.search"
+        :value="bind.search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      >
+      </v-text-field>
+      <v-spacer class="d-none d-md-block"></v-spacer>
+    </template>
+
+    <template #form="{values, inputs, errors}">
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            :value="values.username"
+            :error-messages="errors.username"
+            @input="inputs.username"
+            label="Username"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <v-text-field
+            :value="values.password"
+            :error-messages="errors.password"
+            @input="inputs.password"
+            label="Password"
+            type="password"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <v-text-field
+            :value="values.email"
+            :error-messages="errors.email"
+            @input="inputs.email"
+            label="Email"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
+      </v-row>
+    </template>
+
+    <template #table.avatar="{ item }">
+      <v-avatar size="32">
+        <v-img
+          :src="item.avatar || '@/assets/anon_.png'"
+          lazy-src="@/assets/anon_thumbnail.png">
+        </v-img>
+      </v-avatar>
+    </template>
+
+    <template #table.roles="{ item }">
+      <template v-if="item.roles.length">
+        <v-chip color="primary" dark label small v-for="role of item.roles" :key="role.name">
+          {{ role.name }}
+        </v-chip>
+      </template>
+      <v-chip v-else label small>User</v-chip>
+    </template>
+
+    <template #table.createdAt="{ item }">
+      {{ formatDate(item.createdAt) }}
+    </template>
+
+    <template #table.updatedAt="{ item }">
+      {{ formatDate(item.updatedAt) }}
+    </template>
+  </crud-table>
+</template>
+
+<script lang="ts">
+import { defineComponent, reactive } from '@vue/composition-api';
+import { formatDate } from '@/composable/date';
+import CrudTable from '@/components/CrudTable.vue';
+import CrudEditForm from '@/components/CrudEditForm.vue';
+import CategorySelect from '@/components/form/CategorySelect.vue';
+import AccessSelect from '@/components/form/AccessSelect.vue';
+import { useAccessType, usePriority } from '@/composable/form';
+import EditorInput from '@/components/form/EditorInput.vue';
+
+export default defineComponent({
+  name: 'ManageUser',
+  components: { EditorInput, AccessSelect, CategorySelect, CrudEditForm, CrudTable },
+  setup() {
+    const table = [
+      {
+        text: 'Id',
+        sortable: false,
+        value: 'slug',
+      },
+      { text: 'Avatar', value: 'avatar' },
+      { text: 'Username', value: 'username' },
+      { text: 'Email', value: 'email' },
+      { text: 'Name', value: 'fullName' },
+      { text: 'Phone', value: 'phone' },
+      { text: 'Roles', value: 'roles' },
+      { text: 'Updated At', value: 'updatedAt' },
+      { text: 'Action', value: 'action', sortable: false },
+    ];
+
+    const filter = reactive({
+      search: '',
+    });
+
+    const form = reactive({
+      username: '',
+      email: '',
+      password: '',
+      avatar: '',
+    });
+
+    return {
+      table,
+      filter,
+      formatDate,
+      form,
+      access: useAccessType(),
+      getPriority: usePriority,
+    };
+  },
+});
+</script>
