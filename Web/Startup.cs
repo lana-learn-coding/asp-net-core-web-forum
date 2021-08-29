@@ -89,8 +89,8 @@ namespace Web
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
             services.Scan(scan => scan
-                .FromAssembliesOf(typeof(ICrudService<>))
-                .AddClasses(classes => classes.AssignableTo(typeof(ICrudService<>)))
+                .FromAssembliesOf(typeof(SimpleCrudService<>))
+                .AddClasses(classes => classes.AssignableTo(typeof(SimpleCrudService<>)))
                 .AsSelf()
                 .WithScopedLifetime()
             );

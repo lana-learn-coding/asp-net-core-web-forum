@@ -13,9 +13,9 @@ namespace Core.Services
             DefaultSort = new List<string> { "Priority", "CreatedAt" };
         }
 
-        protected override IQueryable<Forum> Query(DbSet<Forum> dbSet)
+        protected override IQueryable<Forum> Query(IQueryable<Forum> queryable)
         {
-            return dbSet.Include("Category");
+            return queryable.Include("Category");
         }
     }
 }

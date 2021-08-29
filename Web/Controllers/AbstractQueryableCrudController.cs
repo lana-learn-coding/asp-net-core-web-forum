@@ -5,7 +5,7 @@ namespace Web.Controllers
 {
     public abstract class AbstractQueryableCrudController<T> : AbstractCrudController<T> where T : Entity
     {
-        protected AbstractQueryableCrudController(CrudService<T> service) : base(service)
+        protected AbstractQueryableCrudController(CrudService<T, T> service) : base(service)
         {
         }
 

@@ -8,7 +8,7 @@ namespace Web.Controllers.Admin
 {
     public abstract class AbstractAdminController<T> : AbstractQueryableCrudController<T> where T : Entity
     {
-        protected AbstractAdminController(CrudService<T> service) : base(service)
+        protected AbstractAdminController(CrudService<T, T> service) : base(service)
         {
         }
 

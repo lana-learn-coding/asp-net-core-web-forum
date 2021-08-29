@@ -65,9 +65,9 @@ namespace Core.Services
             }
         }
 
-        protected override IQueryable<User> Query(DbSet<User> dbSet)
+        protected override IQueryable<User> Query(IQueryable<User> queryable)
         {
-            return dbSet.Include("Roles");
+            return queryable.Include("Roles");
         }
     }
 }

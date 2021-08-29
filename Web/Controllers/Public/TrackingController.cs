@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,20 @@ namespace Web.Controllers.Public
         public JsonResult ActiveThreads()
         {
             return new JsonResult(new List<string>());
+        }
+
+        [Route("active-forums")]
+        [HttpGet]
+        [ResponseCache(Duration = 300)]
+        public JsonResult ActiveForums([FromQuery(Name = "categories[]")] List<string> categories)
+        {
+            // get 8 of each categories
+            var forums = _context.Forums
+                .Where(x => categories.Contains(x.Category.Slug))
+                .GroupBy(c => c.CategoryId)
+                .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
+                .Include("Category");
+            return new JsonResult(forums);
         }
 
         [Route("logs")]

@@ -10,9 +10,9 @@ namespace Web.Controllers
 {
     public abstract class AbstractCrudController<T> : Controller where T : Entity
     {
-        protected readonly CrudService<T> Service;
+        protected readonly CrudService<T, T> Service;
 
-        protected AbstractCrudController(CrudService<T> service)
+        protected AbstractCrudController(CrudService<T, T> service)
         {
             Service = service;
         }
@@ -60,9 +60,7 @@ namespace Web.Controllers
         [Route("{slug}")]
         public IActionResult Update(string slug, [FromBody] T entity)
         {
-            return Guid.TryParse(slug, out var id)
-                ? new JsonResult(Service.Update(id, entity))
-                : new JsonResult(Service.Update(slug, entity));
+            return new JsonResult(Service.Update(slug, entity));
         }
 
         [HttpDelete]
@@ -70,7 +68,6 @@ namespace Web.Controllers
         [Route("{slug}")]
         public IActionResult Destroy(string slug)
         {
-            if (Guid.TryParse(slug, out var id)) Service.Delete(id);
             Service.Delete(slug);
             return new OkResult();
         }
@@ -78,7 +75,7 @@ namespace Web.Controllers
 
     public class SimpleCrudController<T> : AbstractCrudController<T> where T : Entity
     {
-        public SimpleCrudController(CrudService<T> service) : base(service)
+        public SimpleCrudController(CrudService<T, T> service) : base(service)
         {
         }
 

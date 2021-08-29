@@ -8,48 +8,42 @@ using DAL.Models;
 
 namespace Core.Services.Base
 {
-    public interface ICrudService<T> where T : Entity
+    public interface ICrudService<W, R> where W : Entity where R : IIdentified
     {
-        T Create(T entity);
+        R Create(W entity);
 
-        T Update(Guid id, T entity);
+        R Update(string slug, W entity);
 
-        T Get(Guid id);
+        void Delete(string slug);
 
-        T Delete(Guid id);
+        R Get(string slug);
 
-        T Update(string slug, T entity);
+        R Find(Func<IQueryable<W>, IQueryable<W>> query, bool optional = false);
 
-        T Get(string slug);
+        List<R> List();
 
-        T Delete(string slug);
+        List<R> List(Func<IQueryable<W>, IQueryable<W>> query);
 
-        T Find(Func<IQueryable<T>, IQueryable<T>> query, bool optional = false);
+        Page<R> Page(PageQuery pageQuery);
 
-        List<T> List();
-
-        List<T> List(Func<IQueryable<T>, IQueryable<T>> query);
-
-        Page<T> Page(PageQuery pageQuery);
-
-        Page<T> Page(PageQuery pageQuery, Func<IQueryable<T>, IQueryable<T>> query);
+        Page<R> Page(PageQuery pageQuery, Func<IQueryable<W>, IQueryable<W>> query);
     }
 
-    public abstract class CrudService<T> : ICrudService<T> where T : Entity
+    public abstract class CrudService<W, R> : ICrudService<W, R> where W : Entity where R : IIdentified
     {
-        private static readonly Func<IQueryable<T>, IQueryable<T>> NoQuery = query => query;
-        protected readonly DbSet<T> DbSet;
+        private static readonly Func<IQueryable<W>, IQueryable<W>> NoQuery = query => query;
+        protected readonly DbSet<W> DbSet;
         protected readonly DbContext Context;
         protected List<string> DefaultSort = new() { "CreatedAt" };
 
         protected CrudService(DbContext context)
         {
-            DbSet = context.Set<T>();
+            DbSet = context.Set<W>();
             Context = context;
         }
 
         /// Save new Entity. Overrideable 
-        public virtual T Create(T entity)
+        public virtual R Create(W entity)
         {
             DbSet.Add(entity);
             try
@@ -62,12 +56,12 @@ namespace Core.Services.Base
                 throw new ServiceException(e);
             }
 
-            return Query(DbSet).FirstOrDefault(e => e.Id == entity.Id);
+            return Get(entity.Id.ToString());
         }
 
         /// Delete entity. Overrideable
         /// This one is base delete method. others delete method depends on this
-        protected virtual void Delete(T entity)
+        protected virtual void Delete(W entity)
         {
             DbSet.Remove(entity);
             try
@@ -83,7 +77,7 @@ namespace Core.Services.Base
 
         /// Update entity. Overrideable
         /// This one is base update method. others update method depends on this
-        protected virtual void Update(T current, T entity)
+        protected virtual void Update(W current, W entity)
         {
             var entry = Context.Entry(current);
             entity.Id = current.Id;
@@ -101,33 +95,33 @@ namespace Core.Services.Base
 
         /// Custom query processing. This help us to add eager loading into all query
         /// and CRUD methods
-        protected abstract IQueryable<T> Query(DbSet<T> dbSet);
+        protected abstract IQueryable<R> Query(IQueryable<W> queryable);
 
         /// Find one entity, custom query can be passed
-        public virtual T Find(Func<IQueryable<T>, IQueryable<T>> query, bool optional = false)
+        public virtual R Find(Func<IQueryable<W>, IQueryable<W>> query, bool optional = false)
         {
-            var entity = query.Invoke(Query(DbSet)).FirstOrDefault();
+            var entity = Query(query.Invoke(DbSet)).FirstOrDefault();
             if (optional) return entity;
 
-            return entity ?? throw new DataNotFoundException($"{typeof(T).Name} not found");
+            return entity ?? throw new DataNotFoundException($"{typeof(W).Name} not found");
         }
 
         /// Query entities, custom query can be passed
-        public virtual List<T> List(Func<IQueryable<T>, IQueryable<T>> query)
+        public virtual List<R> List(Func<IQueryable<W>, IQueryable<W>> query)
         {
-            return query.Invoke(Query(DbSet)).ToList();
+            return Query(query.Invoke(DbSet)).ToList();
         }
 
         /// Query entities result in page, custom query can be passed
-        public virtual Page<T> Page(PageQuery pageQuery, Func<IQueryable<T>, IQueryable<T>> query)
+        public virtual Page<R> Page(PageQuery pageQuery, Func<IQueryable<W>, IQueryable<W>> query)
         {
-            var baseQuery = query.Invoke(Query(DbSet));
+            var baseQuery = Query(query.Invoke(DbSet));
 
             var total = baseQuery.Count();
             if (total == 0)
-                return new Page<T>
+                return new Page<R>
                 {
-                    Data = new List<T>(),
+                    Data = new List<R>(),
                     Meta = new PageMeta
                     {
                         CurrentPage = 1,
@@ -145,7 +139,7 @@ namespace Core.Services.Base
                 .Take(pageQuery.Take)
                 .ToList();
 
-            return new Page<T>
+            return new Page<R>
             {
                 Data = items,
                 Meta = new PageMeta
@@ -158,68 +152,74 @@ namespace Core.Services.Base
             };
         }
 
-        public T Get(Guid id)
+        public R Update(string slug, W entity)
         {
-            if (id == null) throw new DataNotFoundException($"{typeof(T).Name} without id not found");
-            var found = Query(DbSet).FirstOrDefault(e => e.Id == id);
-            return found ?? throw new DataNotFoundException($"{typeof(T).Name} with id {id} not found!");
-        }
-
-        public T Update(Guid id, T entity)
-        {
-            var current = Get(id);
+            var current = GetForWrite(slug);
             Update(current, entity);
-            return current;
+            return Get(current.Id.ToString());
         }
 
-        public T Delete(Guid id)
+        public void Delete(string slug)
         {
-            var current = Get(id);
+            var current = GetForWrite(slug);
             Delete(current);
-            return current;
         }
 
-        public T Update(string slug, T entity)
+        public R Get(string slug)
         {
-            var current = Get(slug);
-            Update(current, entity);
-            return current;
+            if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
+
+            if (Guid.TryParse(slug, out var id))
+            {
+                var foundById = Query(DbSet.Where(e => e.Id == id)).FirstOrDefault();
+                return foundById ?? throw new DataNotFoundException($"{typeof(W).Name} with id {slug} not found!");
+            }
+
+            var found = Query(DbSet.Where(e => e.Slug == slug)).FirstOrDefault();
+            return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
         }
 
-        public T Delete(string slug)
+        private W GetForWrite(string slug)
         {
-            var current = Get(slug);
-            Delete(current);
-            return current;
+            if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
+
+            if (Guid.TryParse(slug, out var id))
+            {
+                var foundById = DbSet.FirstOrDefault(e => e.Id == id);
+                return foundById ?? throw new DataNotFoundException($"{typeof(W).Name} with id {slug} not found!");
+            }
+
+            var found = DbSet.FirstOrDefault(e => e.Slug == slug);
+            return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
         }
 
-        public T Get(string slug)
-        {
-            if (slug == null) throw new DataNotFoundException($"{typeof(T).Name} without slug not found");
-            var found = Query(DbSet).FirstOrDefault(e => e.Slug == slug);
-            return found ?? throw new DataNotFoundException($"{typeof(T).Name} with slug {slug} not found!");
-        }
-
-        public List<T> List()
+        public List<R> List()
         {
             return List(NoQuery);
         }
 
-        public Page<T> Page(PageQuery pageQuery)
+        public Page<R> Page(PageQuery pageQuery)
         {
             return Page(pageQuery, NoQuery);
         }
     }
 
-    public class SimpleCrudService<T> : CrudService<T> where T : Entity
+    public abstract class CrudService<T> : CrudService<T, T> where T : Entity
     {
-        protected override IQueryable<T> Query(DbSet<T> dbSet)
+        protected CrudService(DbContext context) : base(context)
         {
-            return dbSet.AsQueryable();
         }
+    }
 
+    public class SimpleCrudService<T> : CrudService<T, T> where T : Entity
+    {
         protected SimpleCrudService(DbContext context) : base(context)
         {
+        }
+
+        protected override IQueryable<T> Query(IQueryable<T> queryable)
+        {
+            return queryable;
         }
     }
 }
