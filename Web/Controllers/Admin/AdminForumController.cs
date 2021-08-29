@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Core.Model;
 using Core.Services;
 using DAL.Models.Forum;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace Web.Controllers.Admin
 {
     [ApiController]
     [Route("/api/admin/forums")]
-    public class AdminForumController : AbstractAdminController<Forum>
+    public class AdminForumController : AbstractAdminController<Forum, ForumView>
     {
         public AdminForumController(ForumService service) : base(service)
         {
