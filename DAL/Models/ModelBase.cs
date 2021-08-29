@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace DAL.Models
 {
     // Base entity model with default entity and comparison method
-    public abstract class Entity : IAuditable, IComparable, ISlugged
+    public abstract class Entity : IAuditable, IComparable, IIdentified
     {
         [JsonIgnore]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -48,8 +48,10 @@ namespace DAL.Models
 
     // This interface to mark entities that will be slugged when save of update
     // The RawSlug prop will determine which field to slug
-    public interface ISlugged
+    public interface IIdentified
     {
+        Guid Id { get; set; }
+
         string Slug { get; set; }
 
         string RawSlug { get; }
