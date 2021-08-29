@@ -7,7 +7,7 @@ using DAL.Models.Topic;
 
 namespace DAL.Models.Forum
 {
-    public class Thread : Entity
+    public class Thread : Entity, ITracked
     {
         [NotMapped]
         [JsonIgnore]
@@ -40,5 +40,7 @@ namespace DAL.Models.Forum
         public virtual Post OriginPost { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
+
+        public DateTime LastActivityAt { get; set; }
     }
 }

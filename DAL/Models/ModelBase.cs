@@ -40,6 +40,12 @@ namespace DAL.Models
         DateTime UpdatedAt { get; set; }
     }
 
+    // This interface to mark entities last modification or interaction by user
+    public interface ITracked
+    {
+        DateTime LastActivityAt { get; set; }
+    }
+
     // This interface to mark entities that will be slugged when save of update
     // The RawSlug prop will determine which field to slug
     public interface ISlugged

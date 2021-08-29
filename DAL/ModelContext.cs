@@ -64,21 +64,44 @@ namespace DAL
         {
             foreach (var entity in ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
             {
-                if (entity.Entity is not IAuditable created) continue;
-                created.CreatedAt = DateTime.Now;
-                created.UpdatedAt = DateTime.Now;
+                if (entity.Entity is IAuditable created)
+                {
+                    created.CreatedAt = DateTime.Now;
+                    created.UpdatedAt = DateTime.Now;
+                }
 
-                if (entity.Entity is not ISlugged slugged) continue;
-                slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
+
+                if (entity.Entity is ITracked tracked)
+                {
+                    tracked.LastActivityAt = DateTime.Now;
+                }
+
+                if (entity.Entity is ISlugged slugged)
+                {
+                    slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
+                }
             }
 
             foreach (var entity in ChangeTracker.Entries().Where(p => p.State == EntityState.Modified))
             {
-                if (entity.Entity is not IAuditable updated) continue;
-                updated.UpdatedAt = DateTime.Now;
+                var isNotTracking = true;
 
-                if (entity.Entity is not ISlugged slugged) continue;
-                slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
+                if (entity.Entity is ITracked)
+                {
+                    var trackingProp = entity.Property("LastActivityAt");
+                    isNotTracking = trackingProp.CurrentValue == trackingProp.OriginalValue;
+                }
+
+                if (entity.Entity is IAuditable created && isNotTracking)
+                {
+                    created.UpdatedAt = DateTime.Now;
+                }
+
+
+                if (entity.Entity is ISlugged slugged)
+                {
+                    slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
+                }
             }
         }
     }

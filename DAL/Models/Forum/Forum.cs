@@ -7,7 +7,7 @@ using DAL.Models.Topic;
 
 namespace DAL.Models.Forum
 {
-    public class Forum : Entity
+    public class Forum : Entity, ITracked
     {
         [NotMapped]
         [JsonIgnore]
@@ -55,5 +55,7 @@ namespace DAL.Models.Forum
         // Internal: For future usage. now its treated as Protected
         // Private: Only admin (and moderators if we had that feature) can access the forum
         public AccessMode ForumAccess { get; set; } = AccessMode.Public;
+
+        public DateTime LastActivityAt { get; set; }
     }
 }
