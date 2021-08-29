@@ -131,8 +131,14 @@
       </v-row>
     </template>
 
+    <template #table.title="{ item }">
+      <div style="max-width: 300px" class="text-truncate">
+        {{ item.title }}
+      </div>
+    </template>
+
     <template #table.subTitle="{ item }">
-      <div style="max-width: 400px" class="text-truncate">
+      <div style="max-width: 350px" class="text-truncate">
         {{ item.subTitle }}
       </div>
     </template>
@@ -192,11 +198,6 @@ export default defineComponent({
   components: { EditorInput, AccessSelect, CategorySelect, CrudEditForm, CrudTable },
   setup() {
     const table = [
-      {
-        text: 'Id',
-        sortable: false,
-        value: 'slug',
-      },
       { text: 'Title', value: 'title' },
       { text: 'Subtitle', value: 'subTitle' },
       { text: 'Category', value: 'category' },
