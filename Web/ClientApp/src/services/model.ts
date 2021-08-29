@@ -8,6 +8,10 @@ export interface FlatDictionary {
   [key: string]: Primitive | Primitive[];
 }
 
+export interface SingularDictionary<T> {
+  [key: string]: T;
+}
+
 export interface PageMeta {
   currentPage: number;
   perPage: number;
@@ -48,4 +52,6 @@ export interface Forum extends ModelBase {
   categoryId: number;
   category: Category;
   priority: number;
+  threadCounts: number;
+  postCounts: number;
 }

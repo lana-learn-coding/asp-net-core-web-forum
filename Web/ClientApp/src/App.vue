@@ -38,8 +38,22 @@ export default defineComponent({
 }
 </style>
 
-<style>
+<style lang="scss">
 body, main, #app {
   min-height: 100vh;
+}
+
+.v-application a.text-link {
+  &:hover {
+    color: rgba(0, 0, 0, .6);
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
 }
 </style>
