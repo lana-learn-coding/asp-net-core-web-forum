@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Core.Model;
 using DAL;
+using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto.Home;
 
@@ -19,7 +20,7 @@ namespace Web.Controllers.Public
         private readonly ModelContext _context;
 
         private readonly IConfigurationProvider _mapperConfig;
-        
+
         public TrackingController(ModelContext context, IConfigurationProvider mapperConfig)
         {
             _context = context;
@@ -57,13 +58,18 @@ namespace Web.Controllers.Public
         public JsonResult ActiveForums([FromQuery(Name = "categories[]")] List<string> categories)
         {
             // get 8 of each categories
-            var forums = _context.Forums
-                .Where(x => categories.Contains(x.Category.Slug))
-                .GroupBy(c => c.CategoryId)
-                .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
-                .Include("Category")
-                .ProjectTo<ForumView>(_mapperConfig);
-            return new JsonResult(forums);
+            var query = _context.Forums
+                .Where(x => categories.Contains(x.Category.Slug));
+
+            if (!HttpContext.User.IsInRole("Admin"))
+                query = query.Where(x => (short)x.ForumAccess < (short)AccessMode.Internal);
+
+            return new JsonResult(
+                query.GroupBy(c => c.CategoryId)
+                    .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
+                    .Include("Category")
+                    .ProjectTo<ForumView>(_mapperConfig)
+            );
         }
 
         [Route("logs")]
