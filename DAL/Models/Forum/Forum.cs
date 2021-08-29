@@ -21,7 +21,6 @@ namespace DAL.Models.Forum
 
         [Column(TypeName = "NVARCHAR")]
         [StringLength(300)]
-        [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify a sub title")]
         public string SubTitle { get; set; }
 

@@ -23,7 +23,7 @@ namespace DAL.Models.Topic
         public string Icon { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [StringLength(100)]
+        [StringLength(200)]
         public string Description { get; set; }
 
         // Control order of categories

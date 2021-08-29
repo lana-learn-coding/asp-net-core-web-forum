@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using Bogus;
+using DAL.Models;
 using DAL.Models.Auth;
+using DAL.Models.Forum;
 using DAL.Models.Topic;
 
 namespace DAL.Database
@@ -13,8 +16,10 @@ namespace DAL.Database
         {
             base.Seed(context);
             SeedUsers(context);
-
             SeedTopic(context);
+            context.SaveChanges();
+
+            SeedForums(context);
             context.SaveChanges();
         }
 
@@ -39,6 +44,8 @@ namespace DAL.Database
             );
 
             for (var i = 1; i <= 20; i++)
+            {
+                faker = new Faker();
                 context.Users.Add(new User
                     {
                         Avatar = faker.Person.Avatar,
@@ -47,16 +54,27 @@ namespace DAL.Database
                         Email = faker.Person.Email + i,
                     }
                 );
+            }
         }
 
         private static void SeedTopic(ModelContext context)
         {
             context.Categories.AddRange(new[]
             {
-                new Category { Name = "General Discussion" },
-                new Category { Name = "Question & Answer" },
-                new Category { Name = "Feedback" },
-                new Category { Name = "Uncategorized", Id = Guid.Empty }
+                new Category { Name = "General Discussion", Priority = (short)Priority.High },
+                new Category { Name = "Question & Answer", Priority = (short)Priority.High },
+                new Category
+                {
+                    Name = "Announcements & FeedBack",
+                    Description = "All major announcements and news can be found in here. Keep up to date with regards to the development of the doctors community!",
+                    Priority = (short)Priority.VeryHigh
+                },
+                new Category
+                {
+                    Name = "Uncategorized",
+                    Description = "Uncategorized forums",
+                    Id = Guid.Empty, Priority = (short)Priority.Low
+                }
             });
 
             context.Tags.AddRange(new[]
@@ -70,6 +88,24 @@ namespace DAL.Database
                 new Tag { Name = "Endocrinology & Diabetes" },
                 new Tag { Name = "Gastroenterology & Liver Diseases" }
             });
+        }
+
+        private static void SeedForums(ModelContext context)
+        {
+            var categories = context.Categories.ToList();
+            for (var i = 0; i < 30; i++)
+            {
+                var faker = new Faker();
+                context.Forums.Add(new Forum
+                    {
+                        Title = $"{faker.Company.CatchPhrase()} {i}",
+                        SubTitle = $"{faker.Name.JobDescriptor()} {faker.Name.JobTitle()}",
+                        Description = faker.Lorem.Sentence(10, 10),
+                        Priority = faker.Random.Short((short)Priority.Normal, (short)Priority.VeryHigh),
+                        CategoryId = categories[faker.Random.Int(0, 3)].Id
+                    }
+                );
+            }
         }
     }
 }
