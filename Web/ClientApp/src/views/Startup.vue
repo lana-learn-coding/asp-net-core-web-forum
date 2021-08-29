@@ -20,6 +20,7 @@ import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import { useUser } from '@/services/auth';
 import { useCategories } from '@/composable/form';
 import { noop } from '@/composable/compat';
+import { useHttp } from '@/services/http';
 
 export default defineComponent({
   emits: ['loaded'],
@@ -34,16 +35,28 @@ export default defineComponent({
       }
     });
 
+    const http = useHttp();
+
     async function prepareStartup() {
       if (user.isAuthenticated) {
         user.loading = true;
         try {
           await refresh().catch(noop);
           await useCategories().fetch().catch(noop);
+
+          // tracking user. must called after refresh to correctly track if user logged in
+          await tracking().catch(noop);
         } finally {
           user.loading = false;
         }
       }
+    }
+
+    async function tracking() {
+      await http.post('/tracking/logs');
+      // rerun tracking after x sec
+      setTimeout(() => http.post('/tracking/logs'),
+        Number(process.env.VUE_APP_API_TRACKING_REFRESH || '1000') * 1000);
     }
 
     // only show loading if startup take long time

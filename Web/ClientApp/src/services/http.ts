@@ -12,7 +12,7 @@ import { noop, useRoute, useRouter } from '@/composable/compat';
 import { Dictionary, FlatDictionary, Page, PageMeta, Primitive } from '@/services/model';
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URI || '/api',
+  baseURL: process.env.VUE_APP_BASE_API_URL || '/api',
   withCredentials: true,
 });
 
