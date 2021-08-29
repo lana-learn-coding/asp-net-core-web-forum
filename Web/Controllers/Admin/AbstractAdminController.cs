@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers.Admin
 {
-    public abstract class AbstractAdminController<T> : AbstractQueryableCrudController<T> where T : Entity
+    public abstract class AbstractAdminController<W, R> : AbstractQueryableCrudController<W, R>
+        where W : Entity where R : IIdentified
     {
-        protected AbstractAdminController(CrudService<T, T> service) : base(service)
+        protected AbstractAdminController(CrudService<W, R> service) : base(service)
         {
         }
 
@@ -34,6 +35,13 @@ namespace Web.Controllers.Admin
         public override IActionResult Show(string slug)
         {
             return base.Show(slug);
+        }
+    }
+
+    public abstract class AbstractAdminController<T> : AbstractAdminController<T, T> where T : Entity
+    {
+        protected AbstractAdminController(CrudService<T, T> service) : base(service)
+        {
         }
     }
 }

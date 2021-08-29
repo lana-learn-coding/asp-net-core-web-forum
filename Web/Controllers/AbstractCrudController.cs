@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    public abstract class AbstractCrudController<T> : Controller where T : Entity
+    public abstract class AbstractCrudController<W, R> : Controller where W : Entity where R : IIdentified
     {
-        protected readonly CrudService<T, T> Service;
+        protected readonly CrudService<W, R> Service;
 
-        protected AbstractCrudController(CrudService<T, T> service)
+        protected AbstractCrudController(CrudService<W, R> service)
         {
             Service = service;
         }
@@ -37,7 +37,7 @@ namespace Web.Controllers
             return new JsonResult(Service.Page(pageQuery, Query));
         }
 
-        protected abstract IQueryable<T> Query(IQueryable<T> query);
+        protected abstract IQueryable<W> Query(IQueryable<W> query);
 
         [HttpGet]
         [Route("{slug}")]
@@ -50,7 +50,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Store([FromBody] T entity)
+        public IActionResult Store([FromBody] W entity)
         {
             return new JsonResult(Service.Create(entity));
         }
@@ -58,7 +58,7 @@ namespace Web.Controllers
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [Route("{slug}")]
-        public IActionResult Update(string slug, [FromBody] T entity)
+        public IActionResult Update(string slug, [FromBody] W entity)
         {
             return new JsonResult(Service.Update(slug, entity));
         }
@@ -70,19 +70,6 @@ namespace Web.Controllers
         {
             Service.Delete(slug);
             return new OkResult();
-        }
-    }
-
-    public class SimpleCrudController<T> : AbstractCrudController<T> where T : Entity
-    {
-        public SimpleCrudController(CrudService<T, T> service) : base(service)
-        {
-        }
-
-        // No filter
-        protected override IQueryable<T> Query(IQueryable<T> query)
-        {
-            return query;
         }
     }
 }

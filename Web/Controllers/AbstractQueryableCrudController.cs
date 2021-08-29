@@ -3,9 +3,10 @@ using DAL.Models;
 
 namespace Web.Controllers
 {
-    public abstract class AbstractQueryableCrudController<T> : AbstractCrudController<T> where T : Entity
+    public abstract class AbstractQueryableCrudController<W, R> : AbstractCrudController<W, R>
+        where W : Entity where R : IIdentified
     {
-        protected AbstractQueryableCrudController(CrudService<T, T> service) : base(service)
+        protected AbstractQueryableCrudController(CrudService<W, R> service) : base(service)
         {
         }
 
@@ -15,6 +16,13 @@ namespace Web.Controllers
             if (HttpContext == null) return "";
             var stringValues = HttpContext.Request.Query[name];
             return stringValues.Count == 0 ? "" : stringValues[0];
+        }
+    }
+
+    public abstract class AbstractQueryableCrudController<T> : AbstractQueryableCrudController<T, T> where T : Entity
+    {
+        protected AbstractQueryableCrudController(CrudService<T, T> service) : base(service)
+        {
         }
     }
 }
