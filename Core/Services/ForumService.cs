@@ -11,25 +11,18 @@ namespace Core.Services
 {
     public class ForumService : CrudService<Forum, ForumView>
     {
-        private static readonly MapperConfiguration Configuration = new(cfg =>
-        {
-            cfg.CreateMap<Forum, ForumView>()
-                .ForMember(
-                    m => m.ThreadCounts,
-                    opt => opt.MapFrom(x => x.Threads.Count)
-                );
-        });
-
-        public ForumService(DbContext context) : base(context)
+        private readonly IConfigurationProvider _mapperConfig;
+        public ForumService(DbContext context, IConfigurationProvider mapperConfig) : base(context)
         {
             DefaultSort = new List<string> { "Priority", "CreatedAt" };
+            _mapperConfig = mapperConfig;
         }
 
         protected override IQueryable<ForumView> Query(IQueryable<Forum> queryable)
         {
             return queryable
                 .Include("Category")
-                .ProjectTo<ForumView>(Configuration);
+                .ProjectTo<ForumView>(_mapperConfig);
         }
     }
 }

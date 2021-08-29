@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Core.Model;
 using DAL;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto.Home;
@@ -15,9 +18,12 @@ namespace Web.Controllers.Public
 
         private readonly ModelContext _context;
 
-        public TrackingController(ModelContext context)
+        private readonly IConfigurationProvider _mapperConfig;
+        
+        public TrackingController(ModelContext context, IConfigurationProvider mapperConfig)
         {
             _context = context;
+            _mapperConfig = mapperConfig;
         }
 
         [Route("statistics")]
@@ -55,7 +61,8 @@ namespace Web.Controllers.Public
                 .Where(x => categories.Contains(x.Category.Slug))
                 .GroupBy(c => c.CategoryId)
                 .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
-                .Include("Category");
+                .Include("Category")
+                .ProjectTo<ForumView>(_mapperConfig);
             return new JsonResult(forums);
         }
 

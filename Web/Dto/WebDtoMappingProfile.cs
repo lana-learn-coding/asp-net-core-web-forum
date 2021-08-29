@@ -4,9 +4,9 @@ using Web.Dto.Auth;
 
 namespace Web.Dto
 {
-    public class AutoMapperProfile : Profile
+    public class WebDtoMappingProfile : Profile
     {
-        public AutoMapperProfile()
+        public WebDtoMappingProfile()
         {
             CreateMap<User, AuthUser>();
             CreateMap<Role, string>().ConvertUsing(r => r.Name);

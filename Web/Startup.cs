@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Model;
 using Core.Services.Base;
 using DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -84,7 +85,11 @@ namespace Web
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
             services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
             services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
-            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddAutoMapper(c =>
+            {
+                c.AddProfile<WebDtoMappingProfile>();
+                c.AddProfile<ServiceModelMappingProfile>();
+            });
 
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
