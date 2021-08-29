@@ -69,8 +69,19 @@ export function useCategories(): UseListResult<Category> {
     try {
       loading.value = true;
       const res = await client.get<Category[]>('/categories/all');
-      categoriesCache = res;
-      data.value = [...res];
+      categoriesCache = res.sort((a, b) => a.priority - b.priority);
+      data.value = [...categoriesCache];
+    } catch {
+      if (!data.value.length) {
+        data.value = [{
+          uid: '00000000-0000-0000-0000-000000000000',
+          slug: 'uncategorized',
+          name: 'Uncategorized',
+          priority: 9999,
+          createdAt: '2021-08-30 00:00:00',
+          updatedAt: '2021-08-30 00:00:00',
+        }];
+      }
     } finally {
       loading.value = false;
     }
