@@ -30,6 +30,8 @@ export interface ModelBase {
 export interface Category extends ModelBase {
   name: string;
   icon?: string;
+  description?: string;
+  priority: number;
 }
 
 export interface Tag extends ModelBase {
@@ -37,12 +39,13 @@ export interface Tag extends ModelBase {
 }
 
 export interface Forum extends ModelBase {
-  title: string,
-  icon: string,
-  subTitle: string,
-  description: string,
-  threadAccess: number | string,
-  forumAccess: number | string,
-  categoryId: number,
-  category: Category,
+  title: string;
+  icon?: string;
+  subTitle: string;
+  description?: string;
+  threadAccess: number | string;
+  forumAccess: number | string;
+  categoryId: number;
+  category: Category;
+  priority: number;
 }

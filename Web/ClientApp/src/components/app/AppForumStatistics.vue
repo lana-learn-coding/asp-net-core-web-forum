@@ -86,14 +86,14 @@ export default defineComponent({
     onMounted(() => {
       http
         .get('/tracking/statistics')
-        .then((val) => Object.assign(statistics, val))
-        .finally(() => {
+        .then((val) => {
+          Object.assign(statistics, val);
           loading.statistics = false;
         });
 
       http
         .get('/tracking/active-threads')
-        .finally(() => {
+        .then(() => {
           loading.threads = false;
         });
     });
