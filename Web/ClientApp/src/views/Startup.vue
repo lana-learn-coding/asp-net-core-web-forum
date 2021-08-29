@@ -40,16 +40,13 @@ export default defineComponent({
     async function prepareStartup() {
       if (user.isAuthenticated) {
         user.loading = true;
-        try {
-          await refresh().catch(noop);
-          await useCategories().fetch().catch(noop);
-
-          // tracking user. must called after refresh to correctly track if user logged in
-          await tracking().catch(noop);
-        } finally {
-          user.loading = false;
-        }
+        await refresh().catch(noop);
+        // tracking user. must called after refresh to correctly track if user logged in
+        await tracking().catch(noop);
+        user.loading = false;
       }
+
+      await useCategories().fetch().catch(noop);
     }
 
     async function tracking() {
