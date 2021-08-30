@@ -2,8 +2,7 @@
   <v-card flat>
     <v-hover #default="{ hover }">
       <div
-        @click="$router.push({ name: 'Category', params: { slug: category.slug } })"
-        v-ripple
+        @click="$router.push({ name: 'Forums', query: { category: category.slug } })"
         style="cursor: pointer"
       >
         <v-card-title :class="{ 'text--secondary': hover }">{{ category.name }}</v-card-title>
@@ -11,7 +10,8 @@
       </div>
     </v-hover>
 
-    <v-card-text>
+    <v-card-text class="pt-0">
+      <slot name="action"></slot>
       <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line@5">
       </v-skeleton-loader>
       <div v-else-if="!forums.length">
@@ -91,6 +91,7 @@
           </v-col>
         </v-row>
       </div>
+      <slot name="footer"></slot>
     </v-card-text>
   </v-card>
 </template>
@@ -109,6 +110,7 @@ export default defineComponent({
     },
     forums: {
       type: Array as PropType<Forum[]>,
+      default: () => [],
     },
     loading: {
       type: Boolean,

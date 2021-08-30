@@ -6,6 +6,7 @@ import home from '@/router/home';
 import user from '@/router/user';
 import { useAlert } from '@/composable/message';
 import { isAuthorized, useUser } from '@/services/auth';
+import forum from '@/router/forum';
 
 Vue.use(VueRouter);
 
@@ -14,6 +15,7 @@ const routes: Array<RouteConfig> = [
   home,
   error,
   user,
+  forum,
 ];
 
 const router = new VueRouter({
