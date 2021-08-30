@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-const alertDialog = Vue.observable<AlertOptions>({
+export const alertDialog = Vue.observable<AlertOptions>({
   text: 'Please confirm',
   show: false,
 });
@@ -17,8 +17,6 @@ export interface AlertOptions {
 
 export interface useAlertResult {
   show(opt: AlertOptions);
-
-  dialog: AlertOptions;
 }
 
 export function useAlert(): useAlertResult {
@@ -29,7 +27,6 @@ export function useAlert(): useAlertResult {
   }
 
   return {
-    dialog: alertDialog,
     show,
   };
 }

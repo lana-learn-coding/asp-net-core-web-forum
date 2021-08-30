@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, watch } from '@vue/composition-api';
-import { AlertOptions, useAlert } from '@/composable/message';
+import { alertDialog, AlertOptions } from '@/composable/message';
 import { noop } from '@/composable/compat';
 
 export default defineComponent({
@@ -43,15 +43,14 @@ export default defineComponent({
       show: false,
     };
     const options = reactive({ ...defaultOptions });
-    const { dialog } = useAlert();
 
-    watch(() => dialog.show, (val) => {
+    watch(() => alertDialog.show, (val) => {
       if (!val) {
         if (options.show) cb(false);
         return;
       }
       Object.assign(options, defaultOptions);
-      Object.assign(options, dialog);
+      Object.assign(options, alertDialog);
     });
 
     async function cb(accept: boolean) {
@@ -61,7 +60,7 @@ export default defineComponent({
         }
       } finally {
         options.show = false;
-        dialog.show = false;
+        alertDialog.show = false;
       }
     }
 
