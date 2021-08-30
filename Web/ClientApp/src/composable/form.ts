@@ -1,6 +1,6 @@
 import { reactive, Ref, ref, UnwrapRef } from '@vue/composition-api';
 import { Category, Dictionary } from '@/services/model';
-import { useHttp } from '@/services/http';
+import { useCoreHttp} from '@/services/http';
 
 export interface UseFormResult<T> {
   form: UnwrapRef<T>;
@@ -63,7 +63,7 @@ let categoriesCache: Category[] = [];
 export function useCategories(): UseListResult<Category> {
   const data = ref([...categoriesCache]);
   const loading = ref(false);
-  const client = useHttp();
+  const client = useCoreHttp();
 
   async function fetch() {
     try {
