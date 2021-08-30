@@ -152,6 +152,9 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
       meta.loading = true;
       try {
         const newParams = { ...query, ...queryParams };
+        if (newParams.page && newParams.page === meta.currentPage) {
+          newParams.page = 1;
+        }
         const res = await client.get<Page<T>>(url, { params: newParams });
 
         data.value = res.data as UnwrapRefSimple<T>[];
