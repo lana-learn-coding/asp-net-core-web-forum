@@ -47,12 +47,14 @@
 
 <script lang="ts">
 import { defineComponent, reactive, watch } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 import ForumList from '@/components/forum/ForumList.vue';
 import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { useCategories } from '@/composable/form';
 import { useRoute, useRouter } from '@/composable/compat';
 import { useQuery } from '@/services/http';
 import { Dictionary } from '@/services/model';
+import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default defineComponent({
   name: 'ForumIndex',
@@ -70,6 +72,13 @@ export default defineComponent({
     const router = useRouter();
     const category = reactive({ ...useCategories().data.value.find((x) => x.slug === route.query.category) });
 
+    useTitle(`${category.name} Forums`);
+    useBreadcrumbs([
+      { text: 'Home', name: 'Home' },
+      { text: 'Forums', name: 'Home' },
+      { text: category.name, disabled: true },
+    ]);
+
     watch(() => route.query.category, (val) => {
       const newCategory = useCategories().data.value.find((x) => x.slug === val);
       if (!newCategory) {
@@ -77,6 +86,12 @@ export default defineComponent({
         return;
       }
       Object.assign(category, newCategory);
+      useTitle(`${category.name} Forums`);
+      useBreadcrumbs([
+        { text: 'Home', name: 'Home' },
+        { text: 'Forums', name: 'Home' },
+        { text: category.name, disabled: true },
+      ]);
     });
 
     const { query, data, meta } = useQuery<Dictionary>('forums')({

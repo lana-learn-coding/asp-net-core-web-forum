@@ -150,6 +150,7 @@
 
     <v-main class="grey lighten-2">
       <v-container class="mt-2 mt-md-3 mt-lg-4 mt-xl-5">
+        <app-breadcrumbs class="mb-2 mb-md-3 mb-lg-4"></app-breadcrumbs>
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -159,12 +160,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 import { useUser } from '@/services/auth';
 import { useCategories } from '@/composable/form';
+import AppBreadcrumbs from '@/components/app/AppBreadcrumbs.vue';
 
 export default defineComponent({
   name: 'Layout',
+  components: { AppBreadcrumbs },
   setup() {
+    useTitle('Dr. Forums');
     const focus = ref(false);
     const navs = ref<NavLink[]>([
       {
@@ -207,6 +212,23 @@ export default defineComponent({
       keyword,
       focus,
       logout,
+      items: [
+        {
+          text: 'Dashboard',
+          disabled: false,
+          href: 'breadcrumbs_dashboard',
+        },
+        {
+          text: 'Link 1',
+          disabled: false,
+          href: 'breadcrumbs_link_1',
+        },
+        {
+          text: 'Link 2',
+          disabled: true,
+          href: 'breadcrumbs_link_2',
+        },
+      ],
     };
   },
 });

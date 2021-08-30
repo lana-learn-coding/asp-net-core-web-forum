@@ -27,16 +27,21 @@
 <script lang="ts">
 import Vue from 'vue';
 import { onMounted, reactive, ref } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { useCategories } from '@/composable/form';
 import { Category, Forum, SingularDictionary } from '@/services/model';
 import { useHttp } from '@/services/http';
 import ForumList from '@/components/forum/ForumList.vue';
+import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default Vue.extend({
   name: 'Home',
   components: { ForumList, AppForumStatistics },
   setup() {
+    useTitle('Home');
+    useBreadcrumbs([{ text: 'Home', name: 'Home' }]);
+
     const { data: allCategories } = useCategories();
     const loading = ref(true);
     const categories: Category[] = allCategories.value.slice(0, 3);

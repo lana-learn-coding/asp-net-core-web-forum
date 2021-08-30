@@ -49,6 +49,8 @@ import { Location, Route } from 'vue-router';
 import { useForm } from '@/composable/form';
 import { useRouter } from '@/composable/compat';
 import { useUser } from '@/services/auth';
+import { useTitle } from '@vueuse/core';
+import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default defineComponent({
   name: 'Login',
@@ -64,6 +66,9 @@ export default defineComponent({
     });
   },
   setup(props) {
+    useTitle('Login');
+    useBreadcrumbs([]);
+
     const { form, errors, setErrors } = useForm({
       username: '',
       password: '',
