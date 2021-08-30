@@ -36,6 +36,7 @@ export default defineComponent({
     });
 
     const http = useHttp();
+    const categories = useCategories();
 
     async function prepareStartup() {
       if (user.isAuthenticated) {
@@ -46,7 +47,7 @@ export default defineComponent({
         user.loading = false;
       }
 
-      await useCategories().fetch().catch(noop);
+      await categories.fetch().catch(noop);
     }
 
     async function tracking() {
