@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Core.Model;
 using DAL;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Web.Dto.Auth;
 using Web.Dto.Home;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace Web.Controllers.Public
 {
@@ -18,13 +22,20 @@ namespace Web.Controllers.Public
         private const int TrackPeriod = 1000;
 
         private readonly ModelContext _context;
-
         private readonly IConfigurationProvider _mapperConfig;
+        private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _authCache;
 
-        public TrackingController(ModelContext context, IConfigurationProvider mapperConfig)
+        private IDictionary<string, DateTime> _onlineMembers = new Dictionary<string, DateTime>();
+        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
+
+        public TrackingController(ModelContext context, IConfigurationProvider mapperConfig,
+            IConfiguration configuration, IMemoryCache cache)
         {
             _context = context;
             _mapperConfig = mapperConfig;
+            _configuration = configuration;
+            _authCache = cache;
         }
 
         [Route("statistics")]
@@ -54,7 +65,6 @@ namespace Web.Controllers.Public
 
         [Route("active-forums")]
         [HttpGet]
-        [ResponseCache(Duration = 300)]
         public JsonResult ActiveForums([FromQuery(Name = "categories[]")] List<string> categories)
         {
             // get 8 of each categories
@@ -72,11 +82,44 @@ namespace Web.Controllers.Public
             );
         }
 
+
+        // Handle tracking user by open logging api. user
+        // For a forum application, real time is not a critical requirement (~15 mins delay is okay)
+        // We will migrate to SignalR later on (if we have enough time)
         [Route("logs")]
         [HttpPost]
         public ActionResult Track()
         {
+            var cookies = Request.Cookies[_configuration["JwtConfig:Refresh:Cookies"]];
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            if (string.IsNullOrWhiteSpace(cookies))
+            {
+                _onlineAnons[ip] = DateTime.Now;
+                RemoveInactiveEntry();
+                return new OkResult();
+            }
+
+            if (!_authCache.TryGetValue(cookies, out JwtToken value))
+            {
+                _onlineAnons[ip] = DateTime.Now;
+                RemoveInactiveEntry();
+                return new OkResult();
+            }
+
+            _onlineMembers[value.User.Username] = DateTime.Now;
+            _onlineAnons.Remove(ip);
+            RemoveInactiveEntry();
             return new OkResult();
+        }
+
+        private void RemoveInactiveEntry()
+        {
+            var expireTime = DateTime.Now.AddSeconds(-100 - TrackPeriod);
+            _onlineMembers = _onlineMembers.Where(kv => kv.Value < expireTime)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+            _onlineAnons = _onlineAnons.Where(kv => kv.Value < expireTime)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
     }
 }
