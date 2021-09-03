@@ -18,12 +18,13 @@ namespace DAL.Models.Auth
 
         [Unique]
         [Column(TypeName = "VARCHAR")]
-        [MinLength(5)]
-        [StringLength(80)]
+        [MinLength(4, ErrorMessage = "Username too short!")]
+        [StringLength(80, ErrorMessage = "Username too long!")]
         [Index(IsUnique = true)]
         [Required]
         public string Username { get; set; }
 
+        [EmailAddress]
         [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(200)]
@@ -32,7 +33,7 @@ namespace DAL.Models.Auth
         public string Email { get; set; }
 
         [Column(TypeName = "VARCHAR")]
-        [MinLength(8)]
+        [Password]
         [StringLength(120)]
         public string Password { get; set; }
 
