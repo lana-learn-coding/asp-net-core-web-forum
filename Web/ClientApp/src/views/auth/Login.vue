@@ -82,6 +82,9 @@ export default defineComponent({
     async function submit() {
       try {
         await login(form);
+        if (props.redirect.name === 'SignUp') {
+          await router.push({ name: 'Home' });
+        }
         await router.push({ ...props.redirect } as Location);
       } catch (e) {
         if (e.response?.data) {

@@ -8,6 +8,7 @@
       :timeout="snack.timeout"
       @input="(x) => x || close(snack)"
       :color="snack.type"
+      transition="fade-transition"
       right
       rounded
       text
@@ -27,7 +28,7 @@ export default defineComponent({
   setup() {
     const defaultOptions: Notify = {
       text: 'Operation completed',
-      timeout: 2500,
+      timeout: 3500,
       type: 'info',
     };
 
