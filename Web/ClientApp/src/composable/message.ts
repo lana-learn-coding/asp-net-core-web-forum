@@ -41,3 +41,34 @@ export function useAlert(): UseAlertResult {
     confirm,
   };
 }
+
+export const notifies = Vue.observable<{ value: NotifyOptions[] }>({
+  value: [],
+});
+
+export interface NotifyOptions {
+  text: string;
+  timeout?: number;
+  type?: string;
+}
+
+export interface UseNotifyResult {
+  notify(opt: NotifyOptions);
+}
+
+export function useNotify(): UseNotifyResult {
+  function notify(opt: NotifyOptions) {
+    notifies.value = [...notifies.value, opt];
+  }
+
+  return {
+    notify,
+  };
+}
+
+export function useMessage(): UseAlertResult & UseNotifyResult {
+  return {
+    ...useNotify(),
+    ...useAlert(),
+  };
+}

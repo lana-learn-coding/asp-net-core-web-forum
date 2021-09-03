@@ -3,8 +3,9 @@
     <startup v-if="preload" @loaded="() => preload = false"></startup>
     <transition name="load">
       <router-view></router-view>
-      <the-app-alert></the-app-alert>
     </transition>
+    <the-app-alert></the-app-alert>
+    <the-app-notify></the-app-notify>
   </v-app>
 </template>
 

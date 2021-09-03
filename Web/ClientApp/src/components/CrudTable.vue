@@ -92,12 +92,12 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import { DataTableHeader } from 'vuetify';
 import { useTitle } from '@vueuse/core';
+import { singular } from 'pluralize';
 import { useHttp, useQuery, useRouteQuery } from '@/services/http';
 import { Dictionary, FlatDictionary } from '@/services/model';
 import { useSetters } from '@/composable/compat';
 import CrudEditForm from '@/components/CrudEditForm.vue';
-import { useAlert } from '@/composable/message';
-import { singular } from 'pluralize';
+import { useMessage } from '@/composable/message';
 
 export default defineComponent({
   name: 'CrudTable',
@@ -135,7 +135,7 @@ export default defineComponent({
     const slug = useRouteQuery<string>('_slug');
 
     const http = useHttp();
-    const { confirm } = useAlert();
+    const { confirm, notify } = useMessage();
 
     async function remove(id: string) {
       const ok = await confirm({
@@ -147,6 +147,7 @@ export default defineComponent({
       if (!ok) return;
       await http.delete(`${props.url}/${id}`);
       data.value = data.value.filter((item) => item.slug !== id);
+      notify({ text: `${singular(props.title)} deleted` });
     }
 
     function update(id: string) {

@@ -52,6 +52,7 @@ import { singular } from 'pluralize';
 import { useHttp } from '@/services/http';
 import { useForm } from '@/composable/form';
 import { useSetters } from '@/composable/compat';
+import { useMessage } from '@/composable/message';
 
 export default defineComponent({
   name: 'CrudEditForm',
@@ -94,6 +95,7 @@ export default defineComponent({
     const loading = ref(false);
     const http = useHttp();
     const formTitle = computed(() => singular(props.title || 'item'));
+    const { notify } = useMessage();
 
     async function submit() {
       if (!formRef.value.validate()) {
@@ -105,13 +107,19 @@ export default defineComponent({
           const data = await http.put(`${props.url}/${slug.value}`, form);
           Object.assign(form, data);
           emit('change');
+          notify({ text: `${formTitle.value} updated successfully`, type: 'success' });
           return;
         }
         await http.post(props.url, form);
         emit('change');
         close();
+        notify({ text: `${formTitle.value} created successfully`, type: 'success' });
       } catch (e) {
-        setErrors(e.response.data);
+        if (e.response.data) {
+          setErrors(e.response.data);
+          notify({ text: 'Please check the input values', type: 'warning' });
+          return;
+        }
       } finally {
         loading.value = false;
       }
