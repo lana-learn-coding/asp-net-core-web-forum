@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DAL.Validation;
 
 namespace DAL.Models.Auth
 {
@@ -11,6 +12,7 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Name;
 
+        [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(20)]
         [Index(IsUnique = true)]

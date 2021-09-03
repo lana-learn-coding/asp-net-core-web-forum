@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using DAL.Models.Topic;
+using DAL.Validation;
 
 namespace DAL.Models.Forum
 {
@@ -13,6 +14,7 @@ namespace DAL.Models.Forum
         [JsonIgnore]
         public override string RawSlug => Title;
 
+        [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(150)]
         [Index(IsUnique = true)]

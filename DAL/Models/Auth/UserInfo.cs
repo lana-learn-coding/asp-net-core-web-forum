@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DAL.Validation;
 
 namespace DAL.Models.Auth
 {
@@ -14,6 +15,7 @@ namespace DAL.Models.Auth
         [StringLength(150)]
         public string FullName { get; set; }
 
+        [Unique]
         [Column(TypeName = "VARCHAR")]
         [StringLength(30)]
         [Index(IsUnique = true)]

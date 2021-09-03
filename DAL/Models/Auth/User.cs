@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DAL.Validation;
 
 namespace DAL.Models.Auth
 {
@@ -15,6 +16,7 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
+        [Unique]
         [Column(TypeName = "VARCHAR")]
         [MinLength(5)]
         [StringLength(80)]
@@ -22,6 +24,7 @@ namespace DAL.Models.Auth
         [Required]
         public string Username { get; set; }
 
+        [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(200)]
         [Index(IsUnique = true)]
