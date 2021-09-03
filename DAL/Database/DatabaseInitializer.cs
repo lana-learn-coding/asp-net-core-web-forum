@@ -38,8 +38,16 @@ namespace DAL.Database
                     Avatar = faker.Person.Avatar,
                     Username = "Admin",
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
-                    Email = faker.Person.Email,
+                    Email = "admin@admin.com",
                     Roles = new List<Role> { admin }
+                }
+            );
+            context.Users.Add(new User
+                {
+                    Avatar = faker.Person.Avatar,
+                    Username = "Test",
+                    Password = BCrypt.Net.BCrypt.HashPassword("1"),
+                    Email = "test@test.com"
                 }
             );
 
@@ -93,6 +101,17 @@ namespace DAL.Database
         private static void SeedForums(ModelContext context)
         {
             var categories = context.Categories.ToList();
+            context.Forums.Add(new Forum
+                {
+                    Id = Guid.Empty,
+                    Title = "Deleted",
+                    SubTitle = "Forums contains thread of all deleted forums",
+                    Priority = (short)Priority.Low,
+                    CategoryId = Guid.Empty,
+                    ForumAccess = AccessMode.Private,
+                    ThreadAccess = AccessMode.Private
+                }
+            );
             for (var i = 0; i < 30; i++)
             {
                 var faker = new Faker();
@@ -102,7 +121,9 @@ namespace DAL.Database
                         SubTitle = $"{faker.Name.JobDescriptor()} {faker.Name.JobTitle()}",
                         Description = faker.Lorem.Sentence(10, 10),
                         Priority = faker.Random.Short((short)Priority.Normal, (short)Priority.VeryHigh),
-                        CategoryId = categories[faker.Random.Int(0, 3)].Id
+                        CategoryId = categories[faker.Random.Int(0, 3)].Id,
+                        ForumAccess = AccessMode.Public,
+                        ThreadAccess = AccessMode.Public
                     }
                 );
             }
