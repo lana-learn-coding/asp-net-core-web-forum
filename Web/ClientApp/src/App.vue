@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <startup v-if="preload" @loaded="() => preload = false"></startup>
-    <transition name="load">
+    <transition name="load" v-if="!preload">
       <router-view></router-view>
     </transition>
     <the-app-alert></the-app-alert>
