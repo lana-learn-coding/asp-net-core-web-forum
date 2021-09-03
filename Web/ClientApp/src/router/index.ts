@@ -7,6 +7,7 @@ import user from '@/router/user';
 import { useAlert } from '@/composable/message';
 import { isAuthorized, useUser } from '@/services/auth';
 import forum from '@/router/forum';
+import { noop } from '@/composable/compat';
 
 Vue.use(VueRouter);
 
@@ -24,18 +25,16 @@ const router = new VueRouter({
   routes,
 });
 
-const { show } = useAlert();
+const { confirm } = useAlert();
 const { user: currentUser } = useUser();
 router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
   if (!to.meta?.roles) return next();
 
   if (!currentUser.isAuthenticated) {
-    show({
-      text: 'Please login to continue',
-      cb: async (ok) => {
-        if (ok) router.push({ name: 'Login' });
-      },
-    });
+    confirm({ text: 'Please login to continue' })
+      .then((ok) => {
+        if (ok) router.push({ name: 'Login' }).catch(noop);
+      });
     return next(false);
   }
   if (!isAuthorized(to.meta.roles)) return next({ name: 'Unauthorized' });

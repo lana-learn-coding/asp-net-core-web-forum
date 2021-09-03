@@ -1,73 +1,80 @@
 <template>
-  <v-dialog
-    v-model="options.show"
-    width="unset"
-    @click:outside="cb(false)"
-  >
-    <v-card
-      :width="options.width"
-      :max-width="$vuetify.breakpoint.lgAndUp ? '550px' : '400px'"
-      :min-width="$vuetify.breakpoint.lgAndUp ? '400px' : '300px'"
+  <div>
+    <alert-dialog
+      v-for="dialog of dialogs"
+      :key="dialog.id"
+      width="unset"
+      @close="cb(dialog, false)"
     >
-      <v-card-title>{{ options.title }}</v-card-title>
+      <template #default="{ on }">
+        <v-card
+          :width="dialog.width"
+          :max-width="$vuetify.breakpoint.lgAndUp ? '550px' : '400px'"
+          :min-width="$vuetify.breakpoint.lgAndUp ? '400px' : '300px'"
+        >
+          <v-card-title>{{ dialog.title }}</v-card-title>
+          <v-card-subtitle>{{ dialog.subtitle }}</v-card-subtitle>
 
-      <v-card-text>{{ options.text }}</v-card-text>
+          <v-card-text>{{ dialog.text }}</v-card-text>
 
-      <v-card-actions>
-        <v-btn color="primary" text @click="cb(true)">
-          {{ options.ok }}
-        </v-btn>
-        <v-btn v-if="options.cancel" text @click="cb(false)">
-          {{ options.cancel }}
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+          <v-card-actions>
+            <v-btn color="primary" text @click="on.close(true)">
+              {{ dialog.ok }}
+            </v-btn>
+            <v-btn v-if="dialog.cancel" text @click="on.close(false)">
+              {{ dialog.cancel }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </alert-dialog>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from '@vue/composition-api';
-import { alertDialog, AlertOptions } from '@/composable/message';
-import { noop } from '@/composable/compat';
+import { computed, defineComponent } from '@vue/composition-api';
+import { AlertOptions, alerts } from '@/composable/message';
+import { useLocalId } from '@/composable/compat';
+import AlertDialog from '@/components/app/AlertDialog.vue';
 
 export default defineComponent({
   name: 'TheAppAlert',
+  components: { AlertDialog },
   setup() {
-    const defaultOptions: AlertOptions = {
-      cb: noop as () => Promise<void>,
+    const defaultOptions: Alert = {
+      cb: (bool) => bool,
       ok: 'OK',
       text: 'Please confirm',
+      subtitle: '',
       title: 'Alert',
       cancel: 'Cancel',
       width: 'unset',
-      show: false,
     };
-    const options = reactive({ ...defaultOptions });
 
-    watch(() => alertDialog.show, (val) => {
-      if (!val) {
-        if (options.show) cb(false);
-        return;
-      }
-      Object.assign(options, defaultOptions);
-      Object.assign(options, alertDialog);
-    });
+    const dialogs = computed(() => alerts.value.map((d) => {
+      const dialog = { ...defaultOptions, ...d };
+      if (!dialog.id) dialog.id = useLocalId('dialog');
+      (d as Alert).id = dialog.id;
+      return dialog;
+    })) as unknown as Alert[];
 
-    async function cb(accept: boolean) {
-      try {
-        if (options.cb) {
-          await options.cb(accept);
-        }
-      } finally {
-        options.show = false;
-        alertDialog.show = false;
-      }
+    function cb(opt: Alert, accept: boolean) {
+      opt.cb(accept);
+      setTimeout(() => {
+        alerts.value = alerts.value.filter((a) => (a as Alert).id === opt.id);
+      });
     }
 
     return {
-      options,
+      dialogs,
       cb,
     };
   },
 });
+
+interface Alert extends AlertOptions {
+  id?: string;
+
+  cb(val: boolean): void;
+}
 </script>

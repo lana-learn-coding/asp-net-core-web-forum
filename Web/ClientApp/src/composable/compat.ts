@@ -52,3 +52,11 @@ export function useSetters<T>(obj: UnwrapRef<T>): { [K in keyof T]: (val: K) => 
 export function useVuetify(): Vuetify {
   return useVM().$vuetify;
 }
+
+const localIds = { '': 0 };
+
+export function useLocalId(type = 'global'): string {
+  if (!localIds[type]) localIds[type] = 0;
+  localIds[type] += 1;
+  return `${type}_${localIds[type]}`;
+}

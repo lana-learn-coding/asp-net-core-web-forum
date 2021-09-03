@@ -1,32 +1,42 @@
 import Vue from 'vue';
 
-export const alertDialog = Vue.observable<AlertOptions>({
-  text: 'Please confirm',
-  show: false,
+export const alerts = Vue.observable<{ value: AlertOptions[] }>({
+  value: [],
 });
 
 export interface AlertOptions {
-  cb?: (accept: boolean) => Promise<void>;
   width?: string;
   ok?: string;
   title?: string;
+  subtitle?: string;
   text: string;
   cancel?: string | boolean;
-  show?: boolean;
 }
 
-export interface useAlertResult {
-  show(opt: AlertOptions);
+export interface UseAlertResult {
+  alert(opt: AlertOptions): Promise<void>;
+
+  confirm(opt: AlertOptions): Promise<boolean>;
 }
 
-export function useAlert(): useAlertResult {
-  function show(opt: AlertOptions) {
-    alertDialog.show = false;
-    opt.show = true;
-    Object.assign(alertDialog, opt);
+export function useAlert(): UseAlertResult {
+  function alert(opt: AlertOptions): Promise<void> {
+    opt.cancel = false;
+    alerts.value = [...alerts.value, opt];
+    return new Promise<void>((resolve) => {
+      (opt as unknown as { cb: () => void }).cb = resolve;
+    });
+  }
+
+  function confirm(opt: AlertOptions): Promise<boolean> {
+    alerts.value = [...alerts.value, opt];
+    return new Promise<boolean>((resolve) => {
+      (opt as unknown as { cb: (val: boolean) => void }).cb = resolve;
+    });
   }
 
   return {
-    show,
+    alert,
+    confirm,
   };
 }
