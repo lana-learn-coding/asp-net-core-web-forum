@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 export interface BreadcrumbItem {
-  name: string,
+  name?: string,
   text: string,
   disabled?: boolean,
   extract?: boolean,

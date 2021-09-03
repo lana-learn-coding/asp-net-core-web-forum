@@ -53,7 +53,7 @@ import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { useCategories } from '@/composable/form';
 import { useRoute, useRouter } from '@/composable/compat';
 import { useQuery } from '@/services/http';
-import { Dictionary } from '@/services/model';
+import { Category, Dictionary } from '@/services/model';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default defineComponent({
@@ -70,7 +70,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const category = reactive({ ...useCategories().data.value.find((x) => x.slug === route.query.category) });
+    const category = reactive({ ...(useCategories().data.value.find((x) => x.slug === route.query.category) as Category) });
 
     useTitle(`${category.name} Forums`);
     useBreadcrumbs([

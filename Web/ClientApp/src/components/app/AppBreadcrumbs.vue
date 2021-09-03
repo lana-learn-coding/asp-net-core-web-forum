@@ -11,7 +11,7 @@ import { breadcrumbs } from '@/composable/breadcrumbs';
 export default defineComponent({
   name: 'AppBreadcrumbs',
   setup() {
-    const items = computed(() => breadcrumbs.items.map(x => ({
+    const items = computed(() => breadcrumbs.items.map((x) => ({
       to: { name: x.name },
       text: x.text,
       exact: x.extract ?? true,
