@@ -15,7 +15,12 @@
           <v-card-title>{{ dialog.title }}</v-card-title>
           <v-card-subtitle>{{ dialog.subtitle }}</v-card-subtitle>
 
-          <v-card-text>{{ dialog.text }}</v-card-text>
+          <v-card-text class="body-1">
+            <div v-if="dialog.type === 'text'">{{ dialog.text }}</div>
+            <v-alert v-else :type="dialog.type" class="mb-0 body-2" text>
+              {{ dialog.text }}
+            </v-alert>
+          </v-card-text>
 
           <v-card-actions>
             <v-btn color="primary" text @click="on.close(true)">
@@ -49,6 +54,7 @@ export default defineComponent({
       title: 'Alert',
       cancel: 'Cancel',
       width: 'unset',
+      type: 'info',
     };
 
     const dialogs = computed(() => alerts.value.map((d) => {

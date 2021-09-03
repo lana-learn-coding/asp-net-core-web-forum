@@ -96,6 +96,8 @@ import { useHttp, useQuery, useRouteQuery } from '@/services/http';
 import { Dictionary, FlatDictionary } from '@/services/model';
 import { useSetters } from '@/composable/compat';
 import CrudEditForm from '@/components/CrudEditForm.vue';
+import { useAlert } from '@/composable/message';
+import { singular } from 'pluralize';
 
 export default defineComponent({
   name: 'CrudTable',
@@ -133,8 +135,16 @@ export default defineComponent({
     const slug = useRouteQuery<string>('_slug');
 
     const http = useHttp();
+    const { confirm } = useAlert();
 
     async function remove(id: string) {
+      const ok = await confirm({
+        title: 'Confirm delete',
+        subtitle: `id: ${id}`,
+        type: 'warning',
+        text: `You are about to delete ${singular(props.title)}`,
+      });
+      if (!ok) return;
       await http.delete(`${props.url}/${id}`);
       data.value = data.value.filter((item) => item.slug !== id);
     }

@@ -11,6 +11,7 @@ export interface AlertOptions {
   subtitle?: string;
   text: string;
   cancel?: string | boolean;
+  type?: string;
 }
 
 export interface UseAlertResult {
