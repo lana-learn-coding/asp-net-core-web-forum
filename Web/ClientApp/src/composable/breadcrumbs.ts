@@ -7,11 +7,11 @@ export interface BreadcrumbItem {
   extract?: boolean,
 }
 
-export const breadcrumbs = Vue.observable<{ items: BreadcrumbItem[] }>({
-  items: [],
+export const breadcrumbs = Vue.observable<{ value: BreadcrumbItem[] }>({
+  value: [],
 });
 
-export function useBreadcrumbs(items: BreadcrumbItem[]): { items: BreadcrumbItem[] } {
-  breadcrumbs.items = items;
+export function useBreadcrumbs(items: BreadcrumbItem[]): { value: BreadcrumbItem[] } {
+  breadcrumbs.value = items;
   return breadcrumbs;
 }
