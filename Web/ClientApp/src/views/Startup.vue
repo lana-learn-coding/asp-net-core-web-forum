@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div id="app">
     <v-main class="d-flex align-center">
       <transition name="fade">
         <div class="text-center" v-show="show">
@@ -12,7 +12,7 @@
         </div>
       </transition>
     </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script lang="ts">

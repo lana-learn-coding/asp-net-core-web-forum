@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div id="app">
     <v-app-bar app flat>
       <v-container class="py-0 fill-height">
         <v-toolbar-title class="ml-1">Dr. Forum</v-toolbar-title>
@@ -154,8 +154,7 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-  </v-app>
-
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,23 +1,22 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <startup v-if="preload" @loaded="() => preload = false"></startup>
     <transition name="load">
-      <component v-if="!preload" :is="$route.meta.layout || 'main'">
-        <router-view></router-view>
-        <the-app-alert></the-app-alert>
-      </component>
+      <router-view></router-view>
+      <the-app-alert></the-app-alert>
     </transition>
-  </div>
+  </v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import Startup from '@/views/Startup.vue';
 import TheAppAlert from '@/components/app/TheAppAlert.vue';
+import TheAppNotify from '@/components/app/TheAppNotify.vue';
 
 export default defineComponent({
   name: 'App',
-  components: { TheAppAlert, Startup },
+  components: { TheAppNotify, TheAppAlert, Startup },
   setup() {
     const preload = ref(true);
     return {
