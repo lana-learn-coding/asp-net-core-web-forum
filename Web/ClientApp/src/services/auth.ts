@@ -56,7 +56,7 @@ export function useUser(): UseUserResult {
   // register auto-token refresh interceptor
   client.interceptors.response.use(next, async (error: AxiosError) => {
     if (!error.response?.status || error.response.status !== 401) throw error;
-    if (error.request.headers.RefreshToken) throw error;
+    if (error.request.headers?.RefreshToken) throw error;
     if (!await refresh()) throw error; // cannot refresh
 
     error.config.headers.Authorization = client.defaults.headers.Authorization;
