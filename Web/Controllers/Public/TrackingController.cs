@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using AutoMapper.QueryableExtensions;
 using Core.Model;
 using DAL;
@@ -20,14 +21,14 @@ namespace Web.Controllers.Public
     public class TrackingController : Controller
     {
         private const int TrackPeriod = 1000;
+        private readonly IMemoryCache _authCache;
+        private readonly IConfiguration _configuration;
 
         private readonly ModelContext _context;
         private readonly IConfigurationProvider _mapperConfig;
-        private readonly IConfiguration _configuration;
-        private readonly IMemoryCache _authCache;
+        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
 
         private IDictionary<string, DateTime> _onlineMembers = new Dictionary<string, DateTime>();
-        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
 
         public TrackingController(ModelContext context, IConfigurationProvider mapperConfig,
             IConfiguration configuration, IMemoryCache cache)
@@ -44,11 +45,13 @@ namespace Web.Controllers.Public
         public JsonResult Statistic()
         {
             var totalUsers = _context.Users.Count();
+            var totalPosts = _context.Posts.Count();
+            var totalThreads = _context.Threads.Count();
             return new JsonResult(new ForumStatistic
                 {
                     TotalMembers = totalUsers,
-                    TotalPosts = 27694,
-                    TotalThreads = 5528,
+                    TotalPosts = totalPosts,
+                    TotalThreads = totalThreads,
                     OnlineMembers = 5,
                     OnlineAnonymous = 122
                 }
@@ -60,7 +63,11 @@ namespace Web.Controllers.Public
         [ResponseCache(Duration = TrackPeriod)]
         public JsonResult ActiveThreads()
         {
-            return new JsonResult(new List<string>());
+            var query = _context.Threads
+                .ProjectTo<ThreadView>(_mapperConfig)
+                .OrderBy("LastActivityAt desc, Priority")
+                .Take(10);
+            return new JsonResult(query);
         }
 
         [Route("active-forums")]

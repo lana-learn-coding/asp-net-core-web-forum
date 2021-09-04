@@ -2,10 +2,10 @@
 
 namespace Core.Model
 {
-    public class ForumView : Forum
+    public class ThreadView : Thread
     {
-        public int ThreadCounts { get; set; }
-
         public int PostCounts { get; set; }
+
+        public PostView Post { get; set; }
     }
 }
