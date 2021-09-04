@@ -15,11 +15,6 @@ namespace Core.Services
 
         protected override void Delete(Category entity)
         {
-            if (entity.Id.Equals(Guid.Empty))
-            {
-                throw new ConflictException("Cannot delete base category: Uncategorized");
-            }
-
             // set deleted forum category to Uncategorized
             foreach (var forum in entity.Forums)
             {

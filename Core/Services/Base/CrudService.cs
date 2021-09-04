@@ -32,8 +32,8 @@ namespace Core.Services.Base
     public abstract class CrudService<W, R> : ICrudService<W, R> where W : Entity where R : IIdentified
     {
         private static readonly Func<IQueryable<W>, IQueryable<W>> NoQuery = query => query;
-        protected readonly DbSet<W> DbSet;
         protected readonly DbContext Context;
+        protected readonly DbSet<W> DbSet;
         protected List<string> DefaultSort = new() { "CreatedAt" };
 
         protected CrudService(DbContext context)
@@ -45,6 +45,8 @@ namespace Core.Services.Base
         /// Save new Entity. Overrideable 
         public virtual R Create(W entity)
         {
+            if (entity.Id.Equals(Guid.Empty))
+                throw new ConflictException($"Cannot create {typeof(W).Name} with default id");
             DbSet.Add(entity);
             try
             {
@@ -58,44 +60,6 @@ namespace Core.Services.Base
 
             return Get(entity.Id.ToString());
         }
-
-        /// Delete entity. Overrideable
-        /// This one is base delete method. others delete method depends on this
-        protected virtual void Delete(W entity)
-        {
-            DbSet.Remove(entity);
-            try
-            {
-                Context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                DbSet.Attach(entity);
-                throw new ServiceException(e);
-            }
-        }
-
-        /// Update entity. Overrideable
-        /// This one is base update method. others update method depends on this
-        protected virtual void Update(W current, W entity)
-        {
-            var entry = Context.Entry(current);
-            entity.Id = current.Id;
-            entry.CurrentValues.SetValues(entity);
-            try
-            {
-                Context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                entry.Reload();
-                throw new ServiceException(e);
-            }
-        }
-
-        /// Custom query processing. This help us to add eager loading into all query
-        /// and CRUD methods
-        protected abstract IQueryable<R> Query(IQueryable<W> queryable);
 
         /// Find one entity, custom query can be passed
         public virtual R Find(Func<IQueryable<W>, IQueryable<W>> query, bool optional = false)
@@ -179,6 +143,55 @@ namespace Core.Services.Base
             return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
         }
 
+        public List<R> List()
+        {
+            return List(NoQuery);
+        }
+
+        public Page<R> Page(PageQuery pageQuery)
+        {
+            return Page(pageQuery, NoQuery);
+        }
+
+        /// Delete entity. Overrideable
+        /// This one is base delete method. others delete method depends on this
+        protected virtual void Delete(W entity)
+        {
+            if (entity.Id.Equals(Guid.Empty)) throw new ConflictException($"Cannot delete default {typeof(W).Name}");
+            DbSet.Remove(entity);
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                DbSet.Attach(entity);
+                throw new ServiceException(e);
+            }
+        }
+
+        /// Update entity. Overrideable
+        /// This one is base update method. others update method depends on this
+        protected virtual void Update(W current, W entity)
+        {
+            var entry = Context.Entry(current);
+            entity.Id = current.Id;
+            entry.CurrentValues.SetValues(entity);
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                entry.Reload();
+                throw new ServiceException(e);
+            }
+        }
+
+        /// Custom query processing. This help us to add eager loading into all query
+        /// and CRUD methods
+        protected abstract IQueryable<R> Query(IQueryable<W> queryable);
+
         private W GetForWrite(string slug)
         {
             if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
@@ -191,16 +204,6 @@ namespace Core.Services.Base
 
             var found = DbSet.FirstOrDefault(e => e.Slug == slug);
             return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
-        }
-
-        public List<R> List()
-        {
-            return List(NoQuery);
-        }
-
-        public Page<R> Page(PageQuery pageQuery)
-        {
-            return Page(pageQuery, NoQuery);
         }
     }
 
