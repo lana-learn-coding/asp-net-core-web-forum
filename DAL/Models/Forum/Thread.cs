@@ -31,9 +31,9 @@ namespace DAL.Models.Forum
         public bool Pinned => Priority > (ushort)Models.Priority.High;
 
         [JsonIgnore]
-        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
         public DateTime LastActivityAt { get; set; }
     }

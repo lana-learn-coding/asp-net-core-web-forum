@@ -40,7 +40,7 @@ namespace DAL.Models.Forum
         public Category Category { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Thread> Threads { get; set; }
+        public virtual ICollection<Thread> Threads { get; set; } = new List<Thread>();
 
         // Control order of forums
         // Top important forums are show on front page

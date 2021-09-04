@@ -24,6 +24,6 @@ namespace DAL.Models.Auth
         public string Icon { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; } = new List<User>();
     }
 }

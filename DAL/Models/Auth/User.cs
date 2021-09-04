@@ -39,6 +39,6 @@ namespace DAL.Models.Auth
 
         public virtual UserInfo UserInfo { get; set; }
 
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }

@@ -30,6 +30,6 @@ namespace DAL.Models.Forum
         public virtual Thread Thread { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     }
 }

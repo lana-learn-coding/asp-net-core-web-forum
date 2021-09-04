@@ -33,6 +33,6 @@ namespace DAL.Models.Topic
         public short Priority { get; set; } = (short)Models.Priority.Normal;
 
         [JsonIgnore]
-        public virtual ICollection<Forum.Forum> Forums { get; set; }
+        public virtual ICollection<Forum.Forum> Forums { get; set; } = new List<Forum.Forum>();
     }
 }

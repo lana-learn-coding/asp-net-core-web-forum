@@ -22,6 +22,6 @@ namespace DAL.Models.Topic
         public string Name { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Thread> Threads { get; set; }
+        public virtual ICollection<Thread> Threads { get; set; } = new List<Thread>();
     }
 }
