@@ -80,7 +80,7 @@ export function useUser(): UseUserResult {
     try {
       delete client.defaults.headers.Authorization;
       Object.assign(user, { ...defaultUser });
-      await client.post('auth/login', null, config).catch(noop);
+      await client.post('auth/logout', null, config).catch(noop);
     } finally {
       user.loading = false;
     }
