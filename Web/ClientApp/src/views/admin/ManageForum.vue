@@ -167,6 +167,10 @@
       </v-chip>
     </template>
 
+    <template #table.counts="{ item }">
+      {{ item.threadCounts }} / {{ item.postCounts }}
+    </template>
+
     <template #table.priority="{ item }">
       <v-chip :color="getPriority(item.priority).color" dark label small>
         {{ getPriority(item.priority).name }} : {{ item.priority }}
@@ -204,6 +208,7 @@ export default defineComponent({
       { text: 'Priority', value: 'priority' },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Forum/Thread Access', value: 'access' },
+      { text: 'Thread/Post Count', value: 'counts' },
       { text: 'Action', value: 'action', sortable: false },
     ];
 
