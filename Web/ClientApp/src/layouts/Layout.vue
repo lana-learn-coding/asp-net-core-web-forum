@@ -18,6 +18,8 @@
             :solo="focus"
             :solo-inverted="!focus"
             prepend-inner-icon="search"
+            placeholder="Search for forums..."
+            @change="search"
           >
           </v-text-field>
         </v-responsive>
@@ -163,6 +165,8 @@ import { useTitle } from '@vueuse/core';
 import { useUser } from '@/services/auth';
 import { useCategories } from '@/composable/form';
 import AppBreadcrumbs from '@/components/app/AppBreadcrumbs.vue';
+import { useRouter } from '@/composable/compat';
+import { useMessage } from '@/composable/message';
 
 export default defineComponent({
   name: 'Layout',
@@ -205,7 +209,19 @@ export default defineComponent({
       navs.value = [...navs.value];
     });
 
+    const router = useRouter();
+    const { notify } = useMessage();
+
+    function search() {
+      if (keyword.value.trim() === '') {
+        notify({ text: 'Please enter something to search' });
+        return;
+      }
+      router.push({ name: 'Search', query: { search: keyword.value } });
+    }
+
     return {
+      search,
       user,
       navs,
       keyword,
