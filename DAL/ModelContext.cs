@@ -18,19 +18,24 @@ namespace DAL
     public class ModelContext : DbContext
     {
         private static readonly Slugity Slugity = new();
+
+        public ModelContext(string connection) : base(connection)
+        {
+            System.Data.Entity.Database.SetInitializer(new FakeDataDatabaseInitializer());
+        }
+
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
 
         public DbSet<Forum> Forums { get; set; }
 
+        public DbSet<Thread> Threads { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
-
-        public ModelContext(string connection) : base(connection)
-        {
-            System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
-        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
