@@ -30,7 +30,7 @@
               :prepend-icon="item.icon"
             >
               <template v-slot:activator>
-                <v-list-item-title>Topic</v-list-item-title>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
               </template>
               <v-list-item
                 v-for="link in item.links"
