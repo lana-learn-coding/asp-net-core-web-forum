@@ -81,7 +81,7 @@ namespace DAL
                     tracked.LastActivityAt = DateTime.Now;
                 }
 
-                if (entity.Entity is IIdentified slugged)
+                if (entity.Entity is ISlugged slugged)
                 {
                     slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
                 }
@@ -103,7 +103,7 @@ namespace DAL
                 }
 
 
-                if (entity.Entity is IIdentified slugged)
+                if (entity.Entity is ISlugged slugged)
                 {
                     slugged.Slug = Slugity.GenerateSlug(slugged.RawSlug);
                 }

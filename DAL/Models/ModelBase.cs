@@ -5,17 +5,22 @@ using System.Text.Json.Serialization;
 namespace DAL.Models
 {
     // Base entity model with default entity and comparison method
-    public abstract class Entity : IAuditable, IComparable, IIdentified
+    public abstract class Entity : IAuditable, IComparable, IIdentified, ISlugged
     {
-        [JsonIgnore]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [NotMapped]
         public Guid Uid => Id;
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return obj is null ? 1 : string.CompareOrdinal(ToString(), obj.ToString());
+        }
+
+        [JsonIgnore]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Column(TypeName = "VARCHAR")]
         [Index(IsUnique = true)]
@@ -24,11 +29,6 @@ namespace DAL.Models
         [NotMapped]
         [JsonIgnore]
         public virtual string RawSlug => Id.ToString();
-
-        public int CompareTo(object obj)
-        {
-            return obj is null ? 1 : string.CompareOrdinal(ToString(), obj.ToString());
-        }
     }
 
     // This interface to mark entities which Creation and Modification date 
@@ -53,7 +53,11 @@ namespace DAL.Models
         Guid Id { get; set; }
 
         string Slug { get; set; }
+    }
 
+    public interface ISlugged
+    {
+        string Slug { get; set; }
         string RawSlug { get; }
     }
 

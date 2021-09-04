@@ -5,7 +5,7 @@ using DAL.Models;
 
 namespace Core.Model
 {
-    public class ViewBase : IIdentified
+    public class ViewBase : IIdentified, IAuditable
     {
         [NotMapped]
         public Guid Uid => Id;
@@ -16,9 +16,6 @@ namespace Core.Model
 
         [JsonIgnore]
         public Guid Id { get; set; }
-
-        [NotMapped]
-        public string RawSlug => Id.ToString();
 
         public string Slug { get; set; }
     }
