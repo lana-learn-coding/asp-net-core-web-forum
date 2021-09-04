@@ -2,7 +2,9 @@
   <div id="app">
     <v-app-bar app flat>
       <v-container class="py-0 fill-height">
-        <v-toolbar-title class="ml-1">Dr. Forum</v-toolbar-title>
+        <v-toolbar-title class="ml-1">
+          <app-icon></app-icon>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
 
@@ -167,10 +169,11 @@ import { useCategories } from '@/composable/form';
 import AppBreadcrumbs from '@/components/app/AppBreadcrumbs.vue';
 import { useRouter } from '@/composable/compat';
 import { useMessage } from '@/composable/message';
+import AppIcon from '@/components/app/AppIcon.vue';
 
 export default defineComponent({
   name: 'Layout',
-  components: { AppBreadcrumbs },
+  components: { AppIcon, AppBreadcrumbs },
   setup() {
     useTitle('Dr. Forums');
     const focus = ref(false);

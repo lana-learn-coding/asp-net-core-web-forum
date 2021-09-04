@@ -7,7 +7,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Dr.Forum
+            <app-icon></app-icon>
           </v-list-item-title>
           <v-list-item-subtitle>
             Doctors Forums
@@ -87,9 +87,11 @@
 import { defineComponent, ref } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { useVuetify } from '@/composable/compat';
+import AppIcon from '@/components/app/AppIcon.vue';
 
 export default defineComponent({
   name: 'Admin',
+  components: { AppIcon },
   setup() {
     const title = useTitle('Admin', { observe: true });
     const drawer = ref(useVuetify().breakpoint.lgAndUp);
