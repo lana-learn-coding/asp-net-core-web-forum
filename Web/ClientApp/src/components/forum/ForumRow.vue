@@ -17,14 +17,14 @@
       </v-col>
     </v-hover>
 
-    <v-col>
+    <v-col cols="10" md="9">
       <router-link
-        class="body-1 text-truncate text-decoration-none font-weight-medium text-link"
+        class="body-1 text-decoration-none font-weight-medium text-link text-truncate d-block"
         :to="{ name: 'Forum', params: { slug: forum.slug }, meta: { roles: checkRole(forum) } }"
       >
         {{ forum.title }}
       </router-link>
-      <div class="body-2">{{ forum.subTitle }}</div>
+      <div class="body-2 text-truncate">{{ forum.subTitle }}</div>
       <div>
         <v-tooltip bottom v-if="forum.forumAccess > 0">
           <template v-slot:activator="{ on, attrs }">
@@ -58,15 +58,15 @@
         </v-tooltip>
       </div>
     </v-col>
-    <v-col cols="2">
-      <div class="body-2">
+    <v-col md="2">
+      <span class="body-2 d-md-block mr-2">
         <number-counter from="0" :to="forum.threadCounts || 0" :duration="1"></number-counter>
         Threads
-      </div>
-      <div class="body-2">
+      </span>
+      <span class="body-2 d-md-block">
         <number-counter from="0" :to="forum.postCounts || 0" :duration="1"></number-counter>
         Posts
-      </div>
+      </span>
     </v-col>
   </v-row>
 </template>
