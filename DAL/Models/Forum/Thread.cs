@@ -33,12 +33,6 @@ namespace DAL.Models.Forum
         [JsonIgnore]
         public virtual ICollection<Post> Posts { get; set; }
 
-        [JsonIgnore]
-        public Guid OriginPostId { get; set; }
-
-        // The origin (first) post of thread
-        public virtual Post OriginPost { get; set; }
-
         public virtual ICollection<Tag> Tags { get; set; }
 
         public DateTime LastActivityAt { get; set; }

@@ -9,6 +9,12 @@ namespace DAL.Models.Forum
 {
     public class Post : Entity
     {
+        // The origin (first) post of thread
+        // Note that the origin post will have same id with thread
+        [JsonIgnore]
+        [Index]
+        public bool IsOrigin { get; set; }
+
         [Required(ErrorMessage = "Only user can perform this action")]
         public Guid UserId { get; set; }
 
@@ -18,18 +24,12 @@ namespace DAL.Models.Forum
         [MinLength(2, ErrorMessage = "Your content is too short (Require at least 2 character)")]
         public string Content { get; set; }
 
-        [JsonIgnore]
-        public bool IsOrigin = false;
-
         [Required(ErrorMessage = "Post must belong to some thread")]
-        public Guid ThreadId;
+        public Guid ThreadId { get; set; }
 
         public virtual Thread Thread { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Vote> Votes { get; set; }
-
-        // Sum of Votes. for fast accessing
-        public int Vote { get; set; }
     }
 }
