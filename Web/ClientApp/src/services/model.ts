@@ -54,4 +54,9 @@ export interface Forum extends ModelBase {
   priority: number;
   threadCounts: number;
   postCounts: number;
+  lastThread: ModelBase & {
+    user: ModelBase & { avatar: string, username: string },
+    title: string,
+    lastActivityAt: string,
+  };
 }

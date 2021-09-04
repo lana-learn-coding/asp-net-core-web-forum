@@ -17,7 +17,7 @@
       </v-col>
     </v-hover>
 
-    <v-col cols="10" md="9">
+    <v-col cols="10" md="9" lg="5">
       <router-link
         class="body-1 text-decoration-none font-weight-medium text-link text-truncate d-block"
         :to="{ name: 'Forum', params: { slug: forum.slug }, meta: { roles: checkRole(forum) } }"
@@ -25,6 +25,7 @@
         {{ forum.title }}
       </router-link>
       <div class="body-2 text-truncate">{{ forum.subTitle }}</div>
+      <span class="d-lg-none">{{ formatDateTime(forum.lastThread.lastActivityAt) }}</span>
       <div>
         <v-tooltip bottom v-if="forum.forumAccess > 0">
           <template v-slot:activator="{ on, attrs }">
@@ -58,12 +59,36 @@
         </v-tooltip>
       </div>
     </v-col>
+    <v-col class="d-none d-lg-block" md="4">
+      <div v-if="forum.lastThread">
+        <v-row>
+          <v-col cols="2">
+            <v-avatar size="36">
+              <v-img
+                :src="forum.lastThread.user.avatar || '@/assets/anon.png'"
+                lazy-src="@/assets/anon_thumbnail.png"
+                :alt="forum.lastThread.user.username"
+              ></v-img>
+            </v-avatar>
+          </v-col>
+          <v-col cols="9">
+            <router-link
+              class="body-2 text-decoration-none font-weight-medium text-truncate d-block text--secondary"
+              :to="{ name: 'Thread', params: { slug: forum.lastThread.slug }, meta: { roles: checkRole(forum) } }"
+            >
+              {{ forum.lastThread.title }}
+            </router-link>
+            <span>{{ formatDateTime(forum.lastThread.lastActivityAt) }}</span>
+          </v-col>
+        </v-row>
+      </div>
+    </v-col>
     <v-col md="2">
-      <span class="body-2 d-md-block mr-2">
+      <span class="body-2 d-md-block mr-3">
         <number-counter from="0" :to="forum.threadCounts || 0" :duration="1"></number-counter>
         Threads
       </span>
-      <span class="body-2 d-md-block">
+      <span class="body-2 d-md-block mr-3">
         <number-counter from="0" :to="forum.postCounts || 0" :duration="1"></number-counter>
         Posts
       </span>
@@ -75,6 +100,7 @@
 import { defineComponent, PropType } from '@vue/composition-api';
 import NumberCounter from '@/components/NumberCounter.vue';
 import { Forum } from '@/services/model';
+import { formatDateTime } from '@/composable/date';
 
 export default defineComponent({
   name: 'ForumRow',
@@ -92,11 +118,8 @@ export default defineComponent({
 
     return {
       checkRole,
+      formatDateTime,
     };
   },
 });
 </script>
-
-<style scoped>
-
-</style>
