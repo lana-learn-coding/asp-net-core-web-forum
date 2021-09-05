@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using Core.Services.Base;
 using DAL.Models.Auth;
@@ -52,6 +53,19 @@ namespace Core.Services
         protected override IQueryable<User> Query(IQueryable<User> queryable)
         {
             return queryable.Include("Roles");
+        }
+
+        protected override void Delete(User entity)
+        {
+            var defaultUser = GetForWrite(Guid.Empty.ToString());
+            var votes = entity.Votes;
+
+            foreach (var vote in votes)
+            {
+                vote.User = defaultUser;
+            }
+
+            base.Delete(entity);
         }
     }
 }
