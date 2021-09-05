@@ -5,6 +5,7 @@
       :key="dialog.id"
       width="unset"
       @close="(accept) => cb(dialog, accept)"
+      :persistent="dialog.persistent"
     >
       <template #default="{ on }">
         <v-card
@@ -55,6 +56,7 @@ export default defineComponent({
       cancel: 'Cancel',
       width: 'unset',
       type: 'info',
+      persistent: false,
     };
 
     const dialogs = computed(() => alerts.value.map((d) => {

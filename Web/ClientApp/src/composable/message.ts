@@ -12,6 +12,7 @@ export interface AlertOptions {
   text: string;
   cancel?: string | boolean;
   type?: string;
+  persistent?: boolean;
 }
 
 export interface UseAlertResult {

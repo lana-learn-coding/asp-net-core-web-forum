@@ -2,7 +2,8 @@
   <v-dialog
     v-model="dialog"
     width="unset"
-    @click:outside="close(false)"
+    @click:outside="persistent || close(false) "
+    :persistent="persistent"
   >
     <v-card
       :width="width"
@@ -26,6 +27,7 @@ export default defineComponent({
       default: true,
     },
     width: { type: String, default: 'unset' },
+    persistent: Boolean,
   },
   setup(props, { emit }) {
     // Not map computed-emit to props, as TheAppAlert component can't make the value reactive

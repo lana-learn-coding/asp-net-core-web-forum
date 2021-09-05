@@ -65,7 +65,12 @@ export class HookedHttpClient extends HttpClient {
     } catch (e) {
       console.log(e.response.status);
       if (e.response.status === 401) {
-        this.confirm({ text: 'Please login to continue', cancel: 'Home' })
+        this.confirm({
+          title: 'Login',
+          text: 'Please login to continue',
+          cancel: 'Home',
+          persistent: true,
+        })
           .then((ok) => {
             if (ok) {
               this.router.push({ name: 'Login' }).catch(noop);

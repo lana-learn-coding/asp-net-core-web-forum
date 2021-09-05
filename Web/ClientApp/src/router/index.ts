@@ -41,7 +41,12 @@ router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
   if (!to.meta?.roles) return next();
 
   if (!currentUser.isAuthenticated) {
-    confirm({ text: 'Please login to continue' })
+    confirm({
+      text: 'Please login to continue',
+      persistent: true,
+      cancel: 'Home',
+      title: 'Login',
+    })
       .then((ok) => {
         if (ok) router.push({ name: 'Login' }).catch(noop);
       });
