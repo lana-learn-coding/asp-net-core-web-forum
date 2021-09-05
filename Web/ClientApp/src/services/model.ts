@@ -60,6 +60,7 @@ export interface Forum extends ModelBase {
   priority: number;
   threadsCount: number;
   postsCount: number;
+  viewsCount: number;
   lastThread: ModelBase & {
     user: UserBase,
     title: string,

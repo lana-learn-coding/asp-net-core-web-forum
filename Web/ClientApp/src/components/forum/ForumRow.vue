@@ -17,7 +17,7 @@
       </v-col>
     </v-hover>
 
-    <v-col cols="10" md="9" lg="5">
+    <v-col cols="10" md="9" lg="5" xl="4">
       <router-link
         class="body-1 text-decoration-none font-weight-medium text-link text-truncate d-block"
         :to="{ name: 'Forum', params: { slug: forum.slug } }"
@@ -59,7 +59,7 @@
         </v-tooltip>
       </div>
     </v-col>
-    <v-col class="d-none d-lg-block" md="4">
+    <v-col class="d-none d-lg-block" lg="4" xl="5">
       <div v-if="forum.lastThread">
         <v-row>
           <v-col cols="3" class="d-flex flex-column align-center justify-center">
@@ -93,6 +93,10 @@
       <span class="body-2 d-md-block mr-3">
         <number-counter from="0" :to="forum.postsCount || 0" :duration="1"></number-counter>
         Posts
+      </span>
+      <span class="body-2 d-md-block mr-3">
+        <number-counter from="0" :to="forum.viewsCount || forum.postsCount * 2" :duration="1"></number-counter>
+        Views
       </span>
     </v-col>
   </v-row>

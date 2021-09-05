@@ -18,10 +18,12 @@
         <v-divider></v-divider>
         <div class="body-1 text-center pa-8">Nothing here :(</div>
       </div>
-      <div v-else v-for="forum in forums" :key="forum.uid">
-        <v-divider></v-divider>
-        <forum-row :forum="forum"></forum-row>
-      </div>
+      <template v-else>
+        <div v-for="forum in forums" :key="forum.uid">
+          <v-divider></v-divider>
+          <forum-row :forum="forum"></forum-row>
+        </div>
+      </template>
       <slot name="footer"></slot>
     </v-card-text>
   </v-card>
