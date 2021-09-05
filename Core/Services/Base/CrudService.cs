@@ -110,7 +110,7 @@ namespace Core.Services.Base
                     }
                 };
 
-            var sort = string.Join(",", pageQuery.IsSorted ? pageQuery.Sort : DefaultSort);
+            var sort = string.Join(",", pageQuery.IsSorted ? pageQuery.Sorts : DefaultSort);
 
             var items = baseQuery
                 .OrderBy(sort)

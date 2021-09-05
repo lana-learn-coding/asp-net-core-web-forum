@@ -8,7 +8,7 @@ namespace Core.Dto
     {
         private int _page = 1;
         private int _size = 15;
-        private List<string> _sort = new();
+        private List<string> _sorts = new();
 
         public int Page
         {
@@ -22,18 +22,33 @@ namespace Core.Dto
             set => _size = value > 0 ? value : 15;
         }
 
-        public List<string> Sort
+        public string Sort
         {
-            get => _sort;
+            get => IsSorted ? _sorts[0] : "";
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    Sorts = new List<string>();
+                    return;
+                }
+
+                Sorts = new List<string> { value };
+            }
+        }
+
+        public List<string> Sorts
+        {
+            get => _sorts;
             set
             {
                 if (value == null || value.Count == 0)
                 {
-                    _sort = new List<string> { "CreatedAt" };
+                    _sorts = new List<string>();
                     return;
                 }
 
-                _sort = value
+                _sorts = value
                     .Select(s =>
                     {
                         var direction = "asc";
@@ -58,6 +73,6 @@ namespace Core.Dto
 
 
         [JsonIgnore]
-        public bool IsSorted => _sort.Count > 0;
+        public bool IsSorted => _sorts.Count > 0;
     }
 }
