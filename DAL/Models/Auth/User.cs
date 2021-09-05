@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DAL.Models.Forum;
 using DAL.Validation;
 
 namespace DAL.Models.Auth
@@ -41,5 +42,8 @@ namespace DAL.Models.Auth
         public virtual UserInfo UserInfo { get; set; }
 
         public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+
+        [JsonIgnore]
+        public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     }
 }

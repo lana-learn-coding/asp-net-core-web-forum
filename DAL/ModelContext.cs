@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,8 +38,6 @@ namespace DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-
             modelBuilder.Entity<Role>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
