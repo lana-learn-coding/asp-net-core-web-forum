@@ -203,15 +203,20 @@ namespace Core.Services.Base
 
         protected W GetForWrite(string slug)
         {
+            return GetForWrite(slug, NoQuery);
+        }
+
+        protected W GetForWrite(string slug, Func<IQueryable<W>, IQueryable<W>> query)
+        {
             if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
 
             if (Guid.TryParse(slug, out var id))
             {
-                var foundById = DbSet.FirstOrDefault(e => e.Id == id);
+                var foundById = query.Invoke(DbSet.Where(e => e.Id == id)).FirstOrDefault();
                 return foundById ?? throw new DataNotFoundException($"{typeof(W).Name} with id {slug} not found!");
             }
 
-            var found = DbSet.FirstOrDefault(e => e.Slug == slug);
+            var found = query.Invoke(DbSet.Where(e => e.Slug == slug)).FirstOrDefault();
             return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
         }
     }

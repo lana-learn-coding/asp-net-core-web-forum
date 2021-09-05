@@ -112,15 +112,15 @@ namespace Core.Services
 
         public override ThreadView Get(string slug)
         {
-            var thread = base.Get(slug);
+            var thread = GetForWrite(slug, q => q.Include("Forum"));
             if (thread.Forum.ForumAccess > AccessMode.Internal && !_httpContext.User.IsAdmin())
                 throw new ForbiddenException();
-            if (thread.Forum.ForumAccess > AccessMode.Protected && !_httpContext.User.IsUser())
+            if (thread.Forum.ForumAccess >= AccessMode.Protected && !_httpContext.User.IsUser())
                 throw new UnauthorizedException();
 
             thread.ViewsCount += 1;
-            Context.SaveChangesAsync();
-            return thread;
+            Context.SaveChanges();
+            return base.Get(slug);
         }
     }
 }
