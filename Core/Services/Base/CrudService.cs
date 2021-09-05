@@ -61,6 +61,21 @@ namespace Core.Services.Base
             return Get(entity.Id.ToString());
         }
 
+        /// Find one entity by id or slug
+        public virtual R Get(string slug)
+        {
+            if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
+
+            if (Guid.TryParse(slug, out var id))
+            {
+                var foundById = Query(DbSet.Where(e => e.Id == id)).FirstOrDefault();
+                return foundById ?? throw new DataNotFoundException($"{typeof(W).Name} with id {slug} not found!");
+            }
+
+            var found = Query(DbSet.Where(e => e.Slug == slug)).FirstOrDefault();
+            return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
+        }
+
         /// Find one entity, custom query can be passed
         public virtual R Find(Func<IQueryable<W>, IQueryable<W>> query, bool optional = false)
         {
@@ -129,20 +144,6 @@ namespace Core.Services.Base
             Delete(current);
         }
 
-        public R Get(string slug)
-        {
-            if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
-
-            if (Guid.TryParse(slug, out var id))
-            {
-                var foundById = Query(DbSet.Where(e => e.Id == id)).FirstOrDefault();
-                return foundById ?? throw new DataNotFoundException($"{typeof(W).Name} with id {slug} not found!");
-            }
-
-            var found = Query(DbSet.Where(e => e.Slug == slug)).FirstOrDefault();
-            return found ?? throw new DataNotFoundException($"{typeof(W).Name} with slug {slug} not found!");
-        }
-
         public List<R> List()
         {
             return List(NoQuery);
@@ -151,6 +152,14 @@ namespace Core.Services.Base
         public Page<R> Page(PageQuery pageQuery)
         {
             return Page(pageQuery, NoQuery);
+        }
+
+
+        /// Query entities, return IQueryable for further extend
+        /// Note that this method return READ queryable, not like List and Page which accept WRITE queryable
+        public virtual IQueryable<R> Query()
+        {
+            return Query(DbSet.AsQueryable());
         }
 
         /// Delete entity. Overrideable

@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Dynamic.Core;
-using AutoMapper.QueryableExtensions;
-using Core.Model;
+using Core.Services;
 using DAL;
-using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Web.Dto.Auth;
 using Web.Dto.Home;
-using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace Web.Controllers.Public
 {
@@ -25,16 +20,18 @@ namespace Web.Controllers.Public
         private readonly IConfiguration _configuration;
 
         private readonly ModelContext _context;
-        private readonly IConfigurationProvider _mapperConfig;
-        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
+        private readonly ForumService _forumService;
+        private readonly ThreadService _threadService;
 
+        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
         private IDictionary<string, DateTime> _onlineMembers = new Dictionary<string, DateTime>();
 
-        public TrackingController(ModelContext context, IConfigurationProvider mapperConfig,
-            IConfiguration configuration, IMemoryCache cache)
+        public TrackingController(ModelContext context, ThreadService threadService,
+            ForumService forumService, IConfiguration configuration, IMemoryCache cache)
         {
             _context = context;
-            _mapperConfig = mapperConfig;
+            _forumService = forumService;
+            _threadService = threadService;
             _configuration = configuration;
             _authCache = cache;
         }
@@ -63,18 +60,8 @@ namespace Web.Controllers.Public
         [ResponseCache(Duration = TrackPeriod)]
         public JsonResult ActiveThreads()
         {
-            var query = _context.Threads.AsQueryable();
-
-            if (!HttpContext.User.Identity?.IsAuthenticated ?? true)
-                query = query.Where(x => (short)x.Forum.ForumAccess == (short)AccessMode.Public);
-            else if (!HttpContext.User.IsInRole("Admin"))
-                query = query.Where(x => (short)x.Forum.ForumAccess < (short)AccessMode.Internal);
-
-            return new JsonResult(query
-                .ProjectTo<ThreadView>(_mapperConfig)
-                .OrderBy("LastActivityAt desc, Priority")
-                .Take(8)
-            );
+            var query = _threadService.List(q => q.Take(8));
+            return new JsonResult(query);
         }
 
         [Route("active-forums")]
@@ -82,18 +69,12 @@ namespace Web.Controllers.Public
         public JsonResult ActiveForums([FromQuery(Name = "categories[]")] List<string> categories)
         {
             // get 8 of each categories
-            var query = _context.Forums
-                .Where(x => categories.Contains(x.Category.Slug));
-
-            if (!HttpContext.User.IsInRole("Admin"))
-                query = query.Where(x => (short)x.ForumAccess < (short)AccessMode.Internal);
-
-            return new JsonResult(
-                query.GroupBy(c => c.CategoryId)
-                    .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
-                    .Include("Category")
-                    .ProjectTo<ForumView>(_mapperConfig)
+            var query = _forumService.List(q => q
+                .Where(x => categories.Contains(x.Category.Slug))
+                .GroupBy(c => c.CategoryId)
+                .SelectMany(g => g.OrderByDescending(x => x.Priority).Take(5))
             );
+            return new JsonResult(query);
         }
 
 
