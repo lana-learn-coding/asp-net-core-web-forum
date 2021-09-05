@@ -61,8 +61,9 @@ export class HookedHttpClient extends HttpClient {
 
   protected async intercept<T>(promise: Promise<AxiosPromise<T>>): Promise<T> {
     try {
-      return super.intercept(promise);
+      return await super.intercept(promise);
     } catch (e) {
+      console.log(e.response.status);
       if (e.response.status === 401) {
         this.confirm({ text: 'Please login to continue', cancel: 'Home' })
           .then((ok) => {
@@ -75,10 +76,12 @@ export class HookedHttpClient extends HttpClient {
       } else if (e.response.status === 403) {
         await this.router.push({ name: 'Forbidden' });
         this.notify({ text: 'You don\'t have enough permission', type: 'warning' });
-      } else if (e.response.status === 403) {
+      } else if (e.response.status === 409) {
         if (e.response.data.message) {
           this.notify({ text: e.response.data.message, type: 'error' });
         }
+      } else if (e.response.status === 404) {
+        await this.router.push({ name: 'NotFound' });
       } else if (e.response.status.toString().startsWith('5')) {
         this.notify({ text: 'Operation failed', type: 'error' });
       }
