@@ -11,10 +11,10 @@ namespace Core.Model
         {
             CreateMap<Forum, ForumView>()
                 .ForMember(
-                    m => m.ThreadCounts,
+                    m => m.ThreadsCount,
                     opt => opt.MapFrom(x => x.Threads.Count)
                 )
-                .ForMember(m => m.PostCounts,
+                .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Threads.Sum(t => t.Posts.Count)))
                 .ForMember(m => m.LastThread,
                     opt => opt.MapFrom(x => x.Threads.OrderByDescending(t => t.LastActivityAt).FirstOrDefault()));

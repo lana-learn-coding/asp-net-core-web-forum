@@ -5,9 +5,9 @@ namespace Core.Model
 {
     public class ForumView : Forum
     {
-        public int ThreadCounts { get; set; }
+        public int ThreadsCount { get; set; }
 
-        public int PostCounts { get; set; }
+        public int PostsCount { get; set; }
 
         public LastThread LastThread { get; set; }
     }
