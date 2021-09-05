@@ -104,7 +104,7 @@ export default defineComponent({
       loading.value = true;
       try {
         if (isEdit.value) {
-          const data = await http.put(`${props.url}/${slug.value}`, form);
+          const data = await http.put(`${props.url}/${form.uid}`, form);
           Object.assign(form, data);
           emit('change');
           notify({ text: `${formTitle.value} updated successfully`, type: 'success' });
@@ -147,7 +147,9 @@ export default defineComponent({
         } finally {
           loading.value = false;
         }
+        return;
       }
+      clearForm();
     }, { immediate: true });
 
     const formBinding = computed(() => ({

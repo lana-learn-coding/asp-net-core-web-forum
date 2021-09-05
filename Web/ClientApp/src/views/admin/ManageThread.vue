@@ -43,7 +43,84 @@
       </thread-status-select>
     </template>
 
-    <template #form>
+    <template #form="{values, inputs, errors}">
+      <v-row>
+        <v-col cols="12">
+          <v-text-field
+            :value="values.title"
+            :error-messages="errors.title"
+            @input="inputs.title"
+            label="Title"
+            persistent-placeholder
+            required
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <auto-complete-select
+            label="Forums"
+            uri="forums/all"
+            :value="values.forumId"
+            @input="inputs.forumId"
+            item-text="title"
+            item-value="uid"
+            persistent-placeholder
+            required
+          >
+          </auto-complete-select>
+        </v-col>
+
+        <v-col cols="12">
+          <auto-complete-select
+            label="Tags"
+            uri="tags/all"
+            :value="values.tagIds"
+            @input="inputs.tagIds"
+            :error-messages="errors.tagIds"
+            item-text="name"
+            item-value="uid"
+            multiple
+            persistent-placeholder
+          >
+          </auto-complete-select>
+        </v-col>
+
+        <v-col>
+          <thread-status-select
+            :value="values.status"
+            @input="inputs.status"
+            :error-messages="errors.status"
+            persistent-placeholder
+            required
+          >
+          </thread-status-select>
+        </v-col>
+
+        <v-col>
+          <v-text-field
+            :value="values.priority"
+            :error-messages="errors.priority"
+            @input="inputs.priority"
+            label="Priority"
+            persistent-placeholder
+            type="number"
+            min="0"
+            step="1"
+            :hint="getPriority(values.priority).name"
+          >
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="12">
+          <editor-input
+            :value="values.content"
+            :error-messages="errors.content"
+            @input="inputs.content"
+          >
+          </editor-input>
+        </v-col>
+      </v-row>
     </template>
 
     <template #table.user="{ item }">
@@ -116,7 +193,6 @@ import CategorySelect from '@/components/form/CategorySelect.vue';
 import AccessSelect from '@/components/form/AccessSelect.vue';
 import { usePriority, useThreadStatus } from '@/composable/form';
 import EditorInput from '@/components/form/EditorInput.vue';
-import { useUser } from '@/services/auth';
 import ThreadStatusSelect from '@/components/form/ThreadStatusSelect.vue';
 import ForumSelect from '@/components/form/ForumSelect.vue';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
@@ -152,13 +228,12 @@ export default defineComponent({
       forum: '',
     });
 
-    const { user } = useUser();
     const form = reactive({
       title: '',
       content: '',
       forumId: '',
       tagIds: [],
-      userId: user.uid,
+      priority: 20,
       status: 0,
     });
 

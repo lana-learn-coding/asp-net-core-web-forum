@@ -1,12 +1,13 @@
 <template>
   <v-autocomplete
     :value="value"
-    @input="x => $emit('input', x)"
+    @input="input"
     :items="data"
     :loading="loading"
     :search-input.sync="search"
     :error-messages="errorMessages"
     :item-value="itemValue"
+    :multiple="multiple"
     hide-no-data
     :item-text="itemText"
     :label="label"
@@ -16,7 +17,7 @@
     :hide-details="hideDetails"
     :clearable="!required"
     :rules="required ? [ruleRequired] : []"
-    @click:clear="$emit('input', '')"
+    @click:clear="input(multiple ? [] : '')"
   >
   </v-autocomplete>
 </template>
@@ -29,7 +30,7 @@ import { useHttp } from '@/services/http';
 export default defineComponent({
   name: 'AutoCompleteSelect',
   props: {
-    value: String,
+    value: [String, Array],
     uri: {
       type: String,
       required: true,
@@ -42,6 +43,7 @@ export default defineComponent({
       type: String,
       default: 'text',
     },
+    multiple: Boolean,
     errorMessages: [String, Array],
     label: String,
     required: Boolean,
@@ -49,13 +51,16 @@ export default defineComponent({
     singleLine: Boolean,
     hideDetails: Boolean,
   },
-  setup(props) {
+  setup(props, { emit }) {
     const search = ref('');
     const data = ref([]);
     const loading = ref(false);
 
-    function ruleRequired(val: string): boolean | string {
-      return !!val.trim() || 'Please select a value';
+    function ruleRequired(val: string | string[]): boolean | string {
+      if (typeof val === 'string') {
+        return !!val.trim() || 'Please select a value';
+      }
+      return !!val?.length || 'Please pick a value';
     }
 
     const http = useHttp();
@@ -67,11 +72,16 @@ export default defineComponent({
       }
     }, 350));
 
+    function input(val: string | string[]) {
+      emit('input', val);
+    }
+
     return {
       data,
       loading,
       search,
       ruleRequired,
+      input,
     };
   },
 });
