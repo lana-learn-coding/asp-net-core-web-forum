@@ -16,6 +16,7 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
+        [CodeId]
         [Unique]
         [Column(TypeName = "VARCHAR")]
         [MinLength(4, ErrorMessage = "Username too short!")]

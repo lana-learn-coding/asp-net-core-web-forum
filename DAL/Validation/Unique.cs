@@ -14,7 +14,7 @@ namespace DAL.Validation
 
             var type = validationContext.ObjectType;
             var exist = context.Set(type)
-                .Any($"!Id.Equals(@0) && {validationContext.MemberName}.Equals(@1)", identified.Id, value);
+                .Any($"!Slug.Equals(@0) && {validationContext.MemberName}.Equals(@1)", identified.Slug, value);
             return exist
                 ? new ValidationResult($"The {validationContext.DisplayName} has already been taken")
                 : ValidationResult.Success;
