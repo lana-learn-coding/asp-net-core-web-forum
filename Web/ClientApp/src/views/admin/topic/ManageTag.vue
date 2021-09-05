@@ -29,6 +29,18 @@
         required
       >
       </v-text-field>
+      <v-text-field
+        :value="values.color"
+        :error-messages="errors.color"
+        @input="inputs.color"
+        label="Color"
+        persistent-placeholder
+      >
+      </v-text-field>
+    </template>
+
+    <template #table.color="{ item }">
+      <v-chip label small :color="item.color"></v-chip>
     </template>
 
     <template #table.createdAt="{ item }">
@@ -57,6 +69,7 @@ export default defineComponent({
         sortable: false,
         value: 'slug',
       },
+      { text: 'Color', value: 'color' },
       { text: 'Name', value: 'name' },
       { text: 'Created At', value: 'createdAt' },
       { text: 'Action', value: 'action' },
@@ -68,6 +81,7 @@ export default defineComponent({
 
     const form = reactive({
       name: '',
+      color: '',
     });
 
     return {

@@ -40,6 +40,7 @@ export interface Category extends ModelBase {
 
 export interface Tag extends ModelBase {
   name: string;
+  color?: string;
 }
 
 export interface UserBase extends ModelBase {
