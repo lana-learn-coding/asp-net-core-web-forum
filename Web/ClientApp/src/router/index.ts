@@ -8,6 +8,7 @@ import { useAlert } from '@/composable/message';
 import { isAuthorized, useUser } from '@/services/auth';
 import forum from '@/router/forum';
 import { noop } from '@/composable/compat';
+import Error from '@/views/Error.vue';
 
 Vue.use(VueRouter);
 
@@ -17,6 +18,15 @@ const routes: Array<RouteConfig> = [
   error,
   user,
   forum,
+  {
+    path: '*',
+    component: Error,
+    name: 'NotFound',
+    props: {
+      code: '404',
+      text: 'We can\'t find the page you\'re looking-for',
+    },
+  },
 ];
 
 const router = new VueRouter({
