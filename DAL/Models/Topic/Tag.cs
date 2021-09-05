@@ -21,6 +21,10 @@ namespace DAL.Models.Topic
         [Required(ErrorMessage = "Please specify a name")]
         public string Name { get; set; }
 
+        [Column(TypeName = "NVARCHAR")]
+        [StringLength(50)]
+        public string Color { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Thread> Threads { get; set; } = new List<Thread>();
     }

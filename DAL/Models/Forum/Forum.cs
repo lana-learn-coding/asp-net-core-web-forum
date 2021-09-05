@@ -48,13 +48,13 @@ namespace DAL.Models.Forum
 
         // Public: Anyone can create a thread
         // Protected: Anyone can create a thread, but require admin approval to display
-        // Internal: For future usage. now its treated as Protected 
+        // Internal: For future usage. now its treated as Private 
         // Private: Only Admin can create a thread
         public AccessMode ThreadAccess { get; set; } = AccessMode.Public;
 
         // Public: Anyone can access the forum
         // Protected: Anyone who logged in can access the forum
-        // Internal: For future usage. now its treated as Protected
+        // Internal: For future usage. now its treated as Private
         // Private: Only admin (and moderators if we had that feature) can access the forum
         public AccessMode ForumAccess { get; set; } = AccessMode.Public;
 

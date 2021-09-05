@@ -35,6 +35,20 @@ namespace DAL.Models.Forum
 
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
+        [JsonIgnore]
+        public int ViewsCount { get; set; }
+
+        public ThreadStatus Status { get; set; } = ThreadStatus.Approved;
+
+        [JsonIgnore]
         public DateTime LastActivityAt { get; set; }
+    }
+
+    public enum ThreadStatus
+    {
+        Approved = 0,
+        Pending = 1,
+        Rejected = 2,
+        Closed = 3
     }
 }
