@@ -78,3 +78,9 @@ export interface Thread extends ModelBase {
   tags: Tag[],
   viewsCount: number;
 }
+
+export interface Post extends ModelBase {
+  content: string;
+  user: UserBase,
+  vote: number;
+}
