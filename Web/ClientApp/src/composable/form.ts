@@ -1,6 +1,6 @@
 import { reactive, Ref, ref, UnwrapRef } from '@vue/composition-api';
 import { Category, Dictionary } from '@/services/model';
-import { useCoreHttp} from '@/services/http';
+import { useCoreHttp } from '@/services/http';
 
 export interface UseFormResult<T> {
   form: UnwrapRef<T>;
@@ -119,4 +119,13 @@ export function usePriority(priority: number): { name: string, color: string } {
     return priorities[3];
   }
   return priorities.find((x) => x.max + 10 > priority) ?? priorities[3];
+}
+
+export function useThreadStatus(): { name: string, color: string }[] {
+  return [
+    { name: 'Approved', color: 'green' },
+    { name: 'Pending', color: 'yellow darken-2' },
+    { name: 'Rejected', color: 'orange' },
+    { name: 'Closed', color: 'deep-orange' },
+  ];
 }

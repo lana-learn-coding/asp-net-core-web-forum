@@ -107,7 +107,8 @@ export default defineComponent({
           { title: 'Tag', icon: 'local_offer', name: 'ManageTag' },
         ],
       },
-      { title: 'Forum', icon: 'forum', name: 'ManageForum' },
+      { title: 'Forum', icon: 'folder', name: 'ManageForum' },
+      { title: 'Thread', icon: 'forum', name: 'ManageThread' },
       { title: 'Users', icon: 'person', name: 'ManageUser' },
       { title: 'Home', icon: 'home', name: 'Home' },
     ];

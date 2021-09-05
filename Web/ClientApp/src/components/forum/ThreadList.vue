@@ -34,7 +34,7 @@
       <v-divider class="mb-3"></v-divider>
       <slot name="action"></slot>
       <v-skeleton-loader
-        v-if="itemsLoading"
+        v-if="loading"
         type="list-item-avatar-three-line@4"
       >
       </v-skeleton-loader>
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import { defineComponent, PropType } from '@vue/composition-api';
 import { Forum, Thread } from '@/services/model';
 import ThreadRow from '@/components/forum/ThreadRow.vue';
 
@@ -71,12 +71,6 @@ export default defineComponent({
     loading: {
       type: Boolean,
     },
-  },
-  setup(props) {
-    const itemsLoading = computed(() => props.loading || !props.forum?.uid);
-    return {
-      itemsLoading,
-    };
   },
 });
 </script>
