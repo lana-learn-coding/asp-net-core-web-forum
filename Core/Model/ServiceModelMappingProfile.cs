@@ -9,16 +9,20 @@ namespace Core.Model
     {
         public ServiceModelMappingProfile()
         {
+            // Forums
             CreateMap<Forum, ForumView>()
-                .ForMember(
-                    m => m.ThreadsCount,
-                    opt => opt.MapFrom(x => x.Threads.Count)
-                )
+                .ForMember(m => m.ViewsCount,
+                    opt => opt.MapFrom(x => x.Threads.Sum(t => t.ViewsCount)))
+                .ForMember(m => m.ThreadsCount,
+                    opt => opt.MapFrom(x => x.Threads.Count))
                 .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Threads.Sum(t => t.Posts.Count)))
                 .ForMember(m => m.LastThread,
                     opt => opt.MapFrom(x => x.Threads.OrderByDescending(t => t.LastActivityAt).FirstOrDefault()));
+            CreateMap<Thread, LastThread>().ForMember(m => m.User,
+                opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)).User));
 
+            // Threads
             CreateMap<Thread, ThreadView>()
                 .ForMember(m => m.Post,
                     opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)))
