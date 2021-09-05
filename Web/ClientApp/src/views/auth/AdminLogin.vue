@@ -2,7 +2,7 @@
   <div class="mt-10 d-flex justify-center">
     <v-card style="width: 500px">
       <v-card-title>Login</v-card-title>
-      <v-card-subtitle>Login to your account</v-card-subtitle>
+      <v-card-subtitle>Login to admin account</v-card-subtitle>
       <v-card-text class="pb-0">
         <v-form>
           <v-text-field
@@ -30,44 +30,24 @@
         <v-btn color="primary" @click="submit" :loading="user.loading" text>
           Login
         </v-btn>
-        <v-btn
-          :disabled="user.loading"
-          color="success"
-          :to="{ name: 'SignUp'}"
-          text
-        >
-          Sign Up
-        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
-import { Location, Route } from 'vue-router';
+import { defineComponent } from '@vue/composition-api';
+import { Location } from 'vue-router';
 import { useTitle } from '@vueuse/core';
 import { useForm } from '@/composable/form';
 import { useRouter } from '@/composable/compat';
-import { useUser } from '@/services/auth';
-import { useBreadcrumbs } from '@/composable/breadcrumbs';
+import { JwtToken, useUser } from '@/services/auth';
+import { useCoreHttp } from '@/services/http';
 
 export default defineComponent({
-  name: 'Login',
-  props: {
-    redirect: {
-      type: Object as PropType<Location>,
-      default: null,
-    },
-  },
-  beforeRouteEnter(to: Route, from: Route, next) {
-    next((vm) => {
-      (vm as unknown as { redirect: Location }).redirect = from as Location;
-    });
-  },
-  setup(props) {
-    useTitle('Login');
-    useBreadcrumbs([]);
+  name: 'AdminLogin',
+  setup() {
+    useTitle('Admin Login');
 
     const { form, errors, setErrors } = useForm({
       username: '',
@@ -75,17 +55,27 @@ export default defineComponent({
       rememberMe: true,
     });
 
-    const { user, login } = useUser();
+    const { user } = useUser();
+    const { client } = useCoreHttp();
+
+    async function login(form: { username: string, password: string, rememberMe: boolean }) {
+      user.loading = true;
+      try {
+        const res = await client.post<JwtToken>('auth/login/admin', form);
+        Object.assign(user, res.data.user);
+        client.defaults.headers.Authorization = `Bearer ${res.data.token}`;
+        user.isAuthenticated = true;
+      } finally {
+        user.loading = false;
+      }
+    }
 
     const router = useRouter();
 
     async function submit() {
       try {
         await login(form);
-        if (props.redirect.name === 'SignUp') {
-          await router.push({ name: 'Home' });
-        }
-        await router.push({ ...props.redirect } as Location);
+        await router.push({ name: 'Admin' } as Location);
       } catch (e) {
         if (e.response?.data) {
           setErrors(e.response.data);

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-navigation-drawer
+      v-auth="'Admin'"
       v-model="drawer"
       app
     >
@@ -70,8 +71,7 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="primary" dark>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+      <v-app-bar-nav-icon @click="drawer = !drawer" v-auth="'Admin'"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-app-bar>
 
@@ -88,13 +88,14 @@ import { defineComponent, ref } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { useVuetify } from '@/composable/compat';
 import AppIcon from '@/components/app/AppIcon.vue';
+import { useUser } from '@/services/auth';
 
 export default defineComponent({
   name: 'Admin',
   components: { AppIcon },
   setup() {
     const title = useTitle('Admin', { observe: true });
-    const drawer = ref(useVuetify().breakpoint.lgAndUp);
+    const drawer = ref(useVuetify().breakpoint.lgAndUp && useUser().user.isAuthenticated);
 
     const links = [
       { title: 'Dashboard', icon: 'bar_chart', name: 'Dashboard' },

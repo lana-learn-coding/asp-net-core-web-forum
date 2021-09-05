@@ -5,11 +5,17 @@ import ManageCategory from '@/views/admin/topic/ManageCategory.vue';
 import ManageTag from '@/views/admin/topic/ManageTag.vue';
 import ManageForum from '@/views/admin/ManageForum.vue';
 import ManageUser from '@/views/admin/ManageUser.vue';
+import AdminLogin from '@/views/auth/AdminLogin.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
   component: Admin,
   children: [
+    {
+      path: 'login',
+      component: AdminLogin,
+      name: 'AdminLogin',
+    },
     {
       path: '/',
       redirect: () => ({ name: 'Dashboard' }),
