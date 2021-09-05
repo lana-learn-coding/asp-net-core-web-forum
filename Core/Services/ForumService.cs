@@ -26,10 +26,20 @@ namespace Core.Services
             _mapperConfig = mapperConfig;
         }
 
+        public override ForumView Get(string slug)
+        {
+            var forum = base.Get(slug);
+            if (forum.ForumAccess >= AccessMode.Internal && !_httpContext.User.IsAdmin())
+                throw new ForbiddenException();
+            if (forum.ForumAccess >= AccessMode.Protected && !_httpContext.User.IsUser())
+                throw new ForbiddenException();
+            return forum;
+        }
+
         protected override IQueryable<ForumView> Query(IQueryable<Forum> queryable)
         {
             if (!_httpContext.User.IsAdmin())
-                queryable = queryable.Where(x => (short)x.ForumAccess < (short)AccessMode.Internal);
+                queryable = queryable.Where(x => x.ForumAccess < AccessMode.Internal);
 
             return queryable
                 .Include("Category")

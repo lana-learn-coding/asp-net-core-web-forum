@@ -25,24 +25,15 @@ namespace Core.Model
             // Threads
             CreateMap<Thread, ThreadView>()
                 .ForMember(m => m.Post,
-                    opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)))
-                )
-                .ForMember(
-                    m => m.PostsCount,
-                    opt => opt.MapFrom(x => x.Posts.Count)
-                );
-            CreateMap<Thread, LastThread>()
-                .ForMember(
-                    m => m.User,
-                    opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)).User)
-                );
+                    opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id))))
+                .ForMember(m => m.PostsCount,
+                    opt => opt.MapFrom(x => x.Posts.Count));
+            CreateMap<Forum, ThreadForumView>();
 
+            //Misc
             CreateMap<Post, PostView>()
-                .ForMember(
-                    m => m.Vote,
-                    opt => opt.MapFrom(x => x.Votes.Sum(v => (int?)v.Value) ?? 0)
-                );
-
+                .ForMember(m => m.Vote,
+                    opt => opt.MapFrom(x => x.Votes.Sum(v => (int?)v.Value) ?? 0));
             CreateMap<User, UserView>();
         }
     }
