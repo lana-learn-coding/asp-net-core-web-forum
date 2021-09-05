@@ -21,13 +21,12 @@ namespace Web.Controllers.Public
     [Route("/api/auth")]
     public class AuthController : Controller
     {
-        private readonly UserService _service;
-        private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
-
         // Keep refresh token in cache instead of database
         // The token will disappear after x days, or after server restart
         private readonly IMemoryCache _cache;
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly UserService _service;
 
 
         public AuthController(IMapper mapper, UserService service, IConfiguration configuration, IMemoryCache cache)
@@ -68,19 +67,7 @@ namespace Web.Controllers.Public
             try
             {
                 var user = _service.Verify(authPayload.Username, authPayload.Password);
-                var token = GenerateToken(user, authPayload.RememberMe);
-                if (!authPayload.RememberMe) return new JsonResult(token);
-
-                // set refresh token cookies if remember me = true
-                var options = new CookieOptions
-                {
-                    Secure = _configuration.GetValue<bool>("Https"),
-                    HttpOnly = true,
-                    Expires = token.RefreshExpires,
-                    SameSite = SameSiteMode.Strict
-                };
-                Response.Cookies.Append(_configuration["JwtConfig:Refresh:Cookies"], token.RefreshToken, options);
-                return new JsonResult(token);
+                return Login(user, authPayload);
             }
             catch (UnauthorizedException)
             {
@@ -90,6 +77,45 @@ namespace Web.Controllers.Public
                     ["Password"] = new[] { "Wrong user name or password" }
                 };
             }
+        }
+
+        [HttpPost]
+        [Route("login/admin")]
+        public IActionResult LoginAdmin([FromBody] AuthPayload authPayload)
+        {
+            try
+            {
+                var user = _service.Verify(authPayload.Username, authPayload.Password);
+                var isAdmin = user.Roles.Any(role => role.Name.Equals("Admin"));
+                if (!isAdmin) throw new UnauthorizedException();
+                return Login(user, authPayload);
+            }
+            catch (UnauthorizedException)
+            {
+                throw new InvalidDataException
+                {
+                    ["Username"] = new[] { "Wrong user name or password" },
+                    ["Password"] = new[] { "Wrong user name or password" }
+                };
+            }
+        }
+
+
+        private IActionResult Login(User user, AuthPayload authPayload)
+        {
+            var token = GenerateToken(user, authPayload.RememberMe);
+            if (!authPayload.RememberMe) return new JsonResult(token);
+
+            // set refresh token cookies if remember me = true
+            var options = new CookieOptions
+            {
+                Secure = _configuration.GetValue<bool>("Https"),
+                HttpOnly = true,
+                Expires = token.RefreshExpires,
+                SameSite = SameSiteMode.Strict
+            };
+            Response.Cookies.Append(_configuration["JwtConfig:Refresh:Cookies"], token.RefreshToken, options);
+            return new JsonResult(token);
         }
 
         [HttpPost]
