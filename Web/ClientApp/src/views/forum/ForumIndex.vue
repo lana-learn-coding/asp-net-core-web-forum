@@ -11,8 +11,9 @@
         class="mb-4"
       >
         <template #action>
-          <div class="d-flex mb-3 mb-lg-5">
+          <div class="d-flex mb-2 mb-lg-3 flex-column flex-md-row">
             <v-text-field
+              class="mb-2"
               v-debounce="(x) => query.search = x"
               :value="query.search"
               dense
@@ -23,6 +24,15 @@
             >
             </v-text-field>
             <v-spacer class="d-none d-md-block"></v-spacer>
+            <forum-sort-select
+              class="mb-2"
+              style="max-width: 200px"
+              v-model="query.sort"
+              dense
+              single-line
+              hide-details
+            >
+            </forum-sort-select>
           </div>
         </template>
 
@@ -55,10 +65,11 @@ import { useRoute, useRouter } from '@/composable/compat';
 import { useQuery } from '@/services/http';
 import { Category, Dictionary } from '@/services/model';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
+import ForumSortSelect from '@/components/form/ForumSortSelect.vue';
 
 export default defineComponent({
   name: 'ForumIndex',
-  components: { ForumList, AppForumStatistics },
+  components: { ForumSortSelect, ForumList, AppForumStatistics },
   async beforeRouteEnter(to, from, next) {
     if (!to.query.category) return next({ name: 'NotFound' });
     const category = Array.isArray(to.query.category) ? to.query.category[0] : to.query.category;
@@ -98,6 +109,7 @@ export default defineComponent({
     const { query, data, meta } = useQuery<Dictionary>('forums')({
       category: '',
       search: '',
+      sort: '',
     });
 
     return {

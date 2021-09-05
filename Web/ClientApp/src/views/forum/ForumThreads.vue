@@ -16,7 +16,7 @@
             >
             </v-text-field>
             <v-spacer class="d-none d-md-block"></v-spacer>
-            <v-select
+            <thread-sort-select
               class="mb-2"
               style="max-width: 200px"
               v-model="query.sort"
@@ -25,7 +25,7 @@
               single-line
               hide-details
             >
-            </v-select>
+            </thread-sort-select>
           </div>
         </template>
 
@@ -55,10 +55,11 @@ import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { formatDateTime } from '@/composable/date';
 import ThreadList from '@/components/forum/ThreadList.vue';
+import ThreadSortSelect from '@/components/form/ThreadSortSelect.vue';
 
 export default defineComponent({
   name: 'ForumThreads',
-  components: { ThreadList, AppForumStatistics },
+  components: { ThreadSortSelect, ThreadList, AppForumStatistics },
   props: {
     slug: {
       required: true,
