@@ -165,7 +165,8 @@ namespace Web.Controllers.Public
             var claims = new List<Claim>
             {
                 new("username", user.Username),
-                new("email", user.Email)
+                new("email", user.Email),
+                new("uid", user.Uid.ToString())
             };
 
             claims.AddRange(user.Roles.Select(role => new Claim(ClaimTypes.Role, role.Name)));

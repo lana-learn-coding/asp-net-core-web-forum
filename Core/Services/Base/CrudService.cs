@@ -201,7 +201,7 @@ namespace Core.Services.Base
         /// and CRUD methods
         protected abstract IQueryable<R> Query(IQueryable<W> queryable);
 
-        private W GetForWrite(string slug)
+        protected W GetForWrite(string slug)
         {
             if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using DAL.Models;
+using DAL.Models.Forum;
 using DAL.Models.Topic;
 
 namespace Core.Model
@@ -32,6 +34,10 @@ namespace Core.Model
         public int ViewsCount { get; set; }
 
         public short Priority { get; set; }
+
+        public ThreadStatus Status { get; set; }
+
+        public List<Guid> TagIds => Tags.Select(x => x.Id).ToList();
     }
 
     public class ThreadForumView : ViewBase

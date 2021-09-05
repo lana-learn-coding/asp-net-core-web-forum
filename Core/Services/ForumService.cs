@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -32,7 +33,7 @@ namespace Core.Services
             if (forum.ForumAccess >= AccessMode.Internal && !_httpContext.User.IsAdmin())
                 throw new ForbiddenException();
             if (forum.ForumAccess >= AccessMode.Protected && !_httpContext.User.IsUser())
-                throw new ForbiddenException();
+                throw new UnauthorizedException();
             return forum;
         }
 
@@ -44,6 +45,16 @@ namespace Core.Services
             return queryable
                 .Include("Category")
                 .ProjectTo<ForumView>(_mapperConfig);
+        }
+
+        protected override void Delete(Forum entity)
+        {
+            foreach (var thread in entity.Threads)
+            {
+                thread.ForumId = Guid.Empty;
+            }
+
+            base.Delete(entity);
         }
     }
 }
