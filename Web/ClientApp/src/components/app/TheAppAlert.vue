@@ -4,7 +4,7 @@
       v-for="dialog of dialogs"
       :key="dialog.id"
       width="unset"
-      @close="cb(dialog, false)"
+      @close="(accept) => cb(dialog, accept)"
     >
       <template #default="{ on }">
         <v-card
