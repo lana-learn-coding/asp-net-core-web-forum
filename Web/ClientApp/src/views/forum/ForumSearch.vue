@@ -6,7 +6,15 @@
         <v-card-subtitle>Keyword "{{ query.search }}"</v-card-subtitle>
 
         <v-card-text class="pt-0">
-          <slot name="action"></slot>
+          <forum-sort-select
+            class="mb-3"
+            style="max-width: 200px"
+            v-model="query.sort"
+            dense
+            single-line
+            hide-details
+          >
+          </forum-sort-select>
           <v-skeleton-loader v-if="meta.loading" type="list-item-avatar-three-line@4">
           </v-skeleton-loader>
           <div v-else-if="!data.length">
@@ -42,10 +50,11 @@ import { Dictionary } from '@/services/model';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import ForumRow from '@/components/forum/ForumRow.vue';
 import { useRoute } from '@/composable/compat';
+import ForumSortSelect from '@/components/form/ForumSortSelect.vue';
 
 export default defineComponent({
   name: 'ForumSearch',
-  components: { ForumList, AppForumStatistics, ForumRow },
+  components: { ForumSortSelect, ForumList, AppForumStatistics, ForumRow },
   setup() {
     useTitle('Forums Search');
     useBreadcrumbs([
@@ -57,6 +66,7 @@ export default defineComponent({
     const { query, data, meta } = useQuery<Dictionary>('forums')({
       category: '_all',
       search: '',
+      sort: '',
     });
 
     const route = useRoute();
