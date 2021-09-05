@@ -63,11 +63,18 @@ namespace Web.Controllers.Public
         [ResponseCache(Duration = TrackPeriod)]
         public JsonResult ActiveThreads()
         {
-            var query = _context.Threads
+            var query = _context.Threads.AsQueryable();
+
+            if (!HttpContext.User.Identity?.IsAuthenticated ?? true)
+                query = query.Where(x => (short)x.Forum.ForumAccess == (short)AccessMode.Public);
+            else if (!HttpContext.User.IsInRole("Admin"))
+                query = query.Where(x => (short)x.Forum.ForumAccess < (short)AccessMode.Internal);
+
+            return new JsonResult(query
                 .ProjectTo<ThreadView>(_mapperConfig)
                 .OrderBy("LastActivityAt desc, Priority")
-                .Take(10);
-            return new JsonResult(query);
+                .Take(8)
+            );
         }
 
         [Route("active-forums")]

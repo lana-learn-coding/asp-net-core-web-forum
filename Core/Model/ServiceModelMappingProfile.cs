@@ -24,7 +24,7 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)))
                 )
                 .ForMember(
-                    m => m.PostCounts,
+                    m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Posts.Count)
                 );
             CreateMap<Thread, LastThread>()
