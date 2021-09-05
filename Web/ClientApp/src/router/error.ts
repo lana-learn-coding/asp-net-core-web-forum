@@ -1,11 +1,10 @@
 import { RouteConfig } from 'vue-router';
-import Error from '@/layouts/Error.vue';
-import NotFound from '@/views/error/NotFound.vue';
-import Unauthorized from '@/views/error/Unauthorized.vue';
+import Blank from '@/layouts/Blank.vue';
+import Error from '@/views/Error.vue';
 
 const error: RouteConfig = {
   path: '/errors',
-  component: Error,
+  component: Blank,
   children: [
     {
       path: '/',
@@ -14,13 +13,21 @@ const error: RouteConfig = {
     },
     {
       path: '404',
-      component: NotFound,
+      component: Error,
       name: 'NotFound',
+      props: {
+        code: '404',
+        text: 'Page not found',
+      },
     },
     {
-      path: '401',
-      component: Unauthorized,
-      name: 'Unauthorized',
+      path: '403',
+      component: Error,
+      name: 'Forbidden',
+      props: {
+        code: '403',
+        text: 'You don\'t have permission to access this resource',
+      },
     },
   ],
 };

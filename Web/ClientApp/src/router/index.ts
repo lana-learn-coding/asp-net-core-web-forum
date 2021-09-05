@@ -37,7 +37,7 @@ router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
       });
     return next(false);
   }
-  if (!isAuthorized(to.meta.roles)) return next({ name: 'Unauthorized' });
+  if (!isAuthorized(to.meta.roles)) return next({ name: 'Forbidden' });
   return next();
 });
 

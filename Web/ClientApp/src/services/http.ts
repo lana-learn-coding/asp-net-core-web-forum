@@ -10,7 +10,7 @@ import {
 } from '@vue/composition-api';
 import { noop, useRoute, useRouter } from '@/composable/compat';
 import { Dictionary, FlatDictionary, Page, PageMeta, Primitive } from '@/services/model';
-import { useNotify } from '@/composable/message';
+import { useMessage } from '@/composable/message';
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_BASE_API_URL || '/api',
@@ -46,20 +46,39 @@ export class HttpClient {
 }
 
 export class HookedHttpClient extends HttpClient {
-  private router = useRouter();
+  private readonly router = useRouter();
 
-  private notify = useNotify().notify;
+  private readonly notify;
+
+  private readonly confirm;
+
+  constructor() {
+    super();
+    const { notify, confirm } = useMessage();
+    this.notify = notify;
+    this.confirm = confirm;
+  }
 
   protected async intercept<T>(promise: Promise<AxiosPromise<T>>): Promise<T> {
     try {
       return super.intercept(promise);
     } catch (e) {
       if (e.response.status === 401) {
-        await this.router.push({ name: 'Unauthorized' });
-        this.notify({ text: 'Login required!' });
+        this.confirm({ text: 'Please login to continue', cancel: 'Home' })
+          .then((ok) => {
+            if (ok) {
+              this.router.push({ name: 'Login' }).catch(noop);
+              return;
+            }
+            this.router.push({ name: 'Home' });
+          });
       } else if (e.response.status === 403) {
-        await this.router.push({ name: 'NotFound' });
+        await this.router.push({ name: 'Forbidden' });
         this.notify({ text: 'You don\'t have enough permission', type: 'warning' });
+      } else if (e.response.status === 403) {
+        if (e.response.data.message) {
+          this.notify({ text: e.response.data.message, type: 'error' });
+        }
       } else if (e.response.status.toString().startsWith('5')) {
         this.notify({ text: 'Operation failed', type: 'error' });
       }
