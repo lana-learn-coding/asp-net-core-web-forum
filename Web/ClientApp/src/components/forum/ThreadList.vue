@@ -73,7 +73,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const itemsLoading = computed(() => props.loading || !props.forum.uid);
+    const itemsLoading = computed(() => props.loading || !props.forum?.uid);
     return {
       itemsLoading,
     };
