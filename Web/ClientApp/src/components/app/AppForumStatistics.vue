@@ -43,27 +43,72 @@
       <v-card-title>Latest Threads</v-card-title>
       <v-card-text>
         <v-skeleton-loader v-if="loading.threads" type="paragraph@2, sentences"></v-skeleton-loader>
-        <v-skeleton-loader v-else type="paragraph@2"></v-skeleton-loader>
+        <template v-else>
+          <v-row v-for="thread of threads" :key="thread.uid">
+            <v-col>
+              <router-link
+                class="body-2 text-decoration-none font-weight-medium text-truncate d-block indigo--text text--accent-1"
+                :to="{ name: 'Thread', params: { slug: thread.slug } }"
+              >
+                {{ thread.title }}
+              </router-link>
+              <div class="caption font-italic text-truncate">
+                <span class="mr-1" v-for="tag of thread.tags" :key="tag.uid">{{ tag.name }},</span>
+              </div>
+              <div>{{ formatDateTime(thread.lastActivityAt) }}</div>
+              <div class="d-flex align-center justify-space-between">
+                <span class="font-weight-medium body-2">{{ thread.user.username }}</span>
+                <span class="d-md-none d-lg-inline caption">
+                <span class="mr-1"><v-icon small>chat_bubble_outline</v-icon>
+                  {{ thread.postsCount }}
+                </span>
+
+                <span class="mr-1">
+                  <v-icon class="material-icons-outlined" small>visibility</v-icon>
+                  {{ thread.viewsCount || thread.postsCount * 2 }}
+                </span>
+
+                <span class="mr-1">
+                  <v-icon class="material-icons-outlined" small>medication</v-icon>
+                  {{ thread.vote || 1 }}
+                </span>
+              </span>
+              </div>
+            </v-col>
+          </v-row>
+        </template>
       </v-card-text>
     </v-card>
     <v-card flat>
       <v-card-title>About us</v-card-title>
       <v-card-text>
+        <div class="mb-1">
+          <v-icon class="material-icons-outlined mr-2" small>email</v-icon>
+          support@drforummail.com
+        </div>
+        <div class="mb-1">
+          <v-icon class="material-icons-outlined mr-2" small>phone</v-icon>
+          0915212328, 0915 561 252
+        </div>
+        <div>
+          <v-icon class="material-icons-outlined mr-2" small>payment</v-icon>
+          <a href="#">Donate us</a>
+        </div>
+        <v-divider class="my-2"></v-divider>
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-        has
-        been the industry's standard dummy text ever since the 1500s, when an unknown printer
+        has been the industry's standard dummy text ever since the 1500s, when an unknown printer
         took
-        a galley of type and scrambled it to make a type specimen book. It has survived not only
-        five centuries, but also the leap into electronic typesetting, remaining essentially
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from '@vue/composition-api';
+import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api';
 import NumberCounter from '@/components/NumberCounter.vue';
 import { useHttp } from '@/services/http';
+import { Thread } from '@/services/model';
+import { formatDateTime } from '@/composable/date';
 
 export default defineComponent({
   name: 'AppForumStatistics',
@@ -77,6 +122,8 @@ export default defineComponent({
       onlineMembers: 0,
       onlineAnonymous: 0,
     });
+
+    const threads = ref<Thread[]>([]);
 
     const loading = reactive({
       statistics: true,
@@ -92,15 +139,18 @@ export default defineComponent({
         });
 
       http
-        .get('/tracking/active-threads')
-        .then(() => {
+        .get<Thread[]>('/tracking/active-threads')
+        .then((data) => {
           loading.threads = false;
+          threads.value = data;
         });
     });
 
     return {
+      threads,
       statistics,
       loading,
+      formatDateTime,
     };
   },
 });

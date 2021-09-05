@@ -65,3 +65,14 @@ export interface Forum extends ModelBase {
     lastActivityAt: string,
   };
 }
+
+export interface Thread extends ModelBase {
+  title: string;
+  content: string;
+  user: UserBase,
+  lastActivityAt?: string;
+  postsCount: number;
+  vote: number;
+  tags: Tag[],
+  viewsCount: number;
+}
