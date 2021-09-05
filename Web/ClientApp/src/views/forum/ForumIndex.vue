@@ -86,6 +86,7 @@ export default defineComponent({
         return;
       }
       Object.assign(category, newCategory);
+      query.search = '';
       useTitle(`${category.name} Forums`);
       useBreadcrumbs([
         { text: 'Home', name: 'Home' },

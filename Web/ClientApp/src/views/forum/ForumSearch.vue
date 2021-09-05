@@ -7,7 +7,7 @@
 
         <v-card-text class="pt-0">
           <slot name="action"></slot>
-          <v-skeleton-loader v-if="meta.loading" type="list-item-avatar-three-line@5">
+          <v-skeleton-loader v-if="meta.loading" type="list-item-avatar-three-line@4">
           </v-skeleton-loader>
           <div v-else-if="!data.length">
             <v-divider></v-divider>

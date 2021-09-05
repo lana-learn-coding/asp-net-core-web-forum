@@ -20,7 +20,7 @@
     <v-col cols="10" md="9" lg="5">
       <router-link
         class="body-1 text-decoration-none font-weight-medium text-link text-truncate d-block"
-        :to="{ name: 'Forum', params: { slug: forum.slug }, meta: { roles: checkRole(forum) } }"
+        :to="{ name: 'Forum', params: { slug: forum.slug } }"
       >
         {{ forum.title }}
       </router-link>
@@ -76,7 +76,7 @@
           <v-col cols="9">
             <router-link
               class="body-2 text-decoration-none font-weight-medium text-truncate d-block text--secondary"
-              :to="{ name: 'Thread', params: { slug: forum.lastThread.slug }, meta: { roles: checkRole(forum) } }"
+              :to="{ name: 'Thread', params: { slug: forum.lastThread.slug } }"
             >
               {{ forum.lastThread.title }}
             </router-link>
@@ -111,15 +111,7 @@ export default defineComponent({
     forum: Object as PropType<Forum>,
   },
   setup() {
-    function checkRole(forum: Forum): string[] | boolean {
-      if (forum.threadAccess < 1) {
-        return false;
-      }
-      return forum.threadAccess === 1 ? ['User'] : ['Admin'];
-    }
-
     return {
-      checkRole,
       formatDateTime,
     };
   },

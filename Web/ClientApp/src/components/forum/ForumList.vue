@@ -12,7 +12,7 @@
 
     <v-card-text class="pt-0">
       <slot name="action"></slot>
-      <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line@5">
+      <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line@4">
       </v-skeleton-loader>
       <div v-else-if="!forums.length">
         <v-divider></v-divider>
