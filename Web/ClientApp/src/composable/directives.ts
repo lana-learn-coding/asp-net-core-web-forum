@@ -9,12 +9,10 @@ Vue.directive('debounce', getDirective('2', {
   trim: true,
 }));
 
-Vue.directive('auth', {
-  bind(el, binding) {
-    const role = binding.expression?.replace(/['"]/g, '') || '';
+Vue.directive('auth', (el, binding) => {
+  const role = binding.expression?.replace(/['"]/g, '') || '';
 
-    if (!isAuthorized(role)) {
-      el.style.display = 'none';
-    }
-  },
+  if (!isAuthorized(role)) {
+    el.style.display = 'none';
+  }
 });

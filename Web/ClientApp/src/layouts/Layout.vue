@@ -134,7 +134,7 @@
                     Profiles
                   </v-btn>
 
-                  <template v-auth="'Admin'">
+                  <div v-auth="'Admin'">
                     <v-divider class="my-2"></v-divider>
                     <v-btn
                       depressed
@@ -144,7 +144,7 @@
                     >
                       Admin
                     </v-btn>
-                  </template>
+                  </div>
                   <v-divider class="my-2"></v-divider>
                   <v-btn
                     depressed
