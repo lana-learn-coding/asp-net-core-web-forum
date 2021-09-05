@@ -168,7 +168,7 @@
     </template>
 
     <template #table.counts="{ item }">
-      {{ item.threadCounts }} / {{ item.postCounts }}
+      {{ item.threadsCount }} / {{ item.postsCount }}
     </template>
 
     <template #table.priority="{ item }">

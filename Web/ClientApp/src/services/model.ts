@@ -42,6 +42,11 @@ export interface Tag extends ModelBase {
   name: string;
 }
 
+export interface UserBase extends ModelBase {
+  avatar: string;
+  username: string;
+}
+
 export interface Forum extends ModelBase {
   title: string;
   icon?: string;
@@ -52,10 +57,10 @@ export interface Forum extends ModelBase {
   categoryId: number;
   category: Category;
   priority: number;
-  threadCounts: number;
-  postCounts: number;
+  threadsCount: number;
+  postsCount: number;
   lastThread: ModelBase & {
-    user: ModelBase & { avatar: string, username: string },
+    user: UserBase,
     title: string,
     lastActivityAt: string,
   };
