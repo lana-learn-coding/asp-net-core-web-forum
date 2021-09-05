@@ -9,10 +9,10 @@ namespace DAL.Validation
         {
             var code = value?.ToString();
             if (code == null) return ValidationResult.Success;
-            if (!Regex.Match(code, "^[a-zA-Z1-9_]+$").Success)
+            if (!Regex.Match(code, "^[a-zA-Z0-9_.]+$").Success)
             {
                 return new ValidationResult(
-                    $"{validationContext.DisplayName} must only contain character, number, and underscore");
+                    $"{validationContext.DisplayName} must only contain character, number, dot and underscore");
             }
 
             return ValidationResult.Success;

@@ -78,13 +78,15 @@ namespace DAL.Database
             {
                 var id = Guid.NewGuid();
                 var faker = new Faker();
+                var postCount = faker.Random.Int(10, 50);
                 var thread = new Thread
                 {
                     Id = id,
                     ForumId = forums[faker.Random.Int(0, forums.Count - 1)].Id,
                     Title =
                         $"{faker.Music.Genre() + faker.Commerce.ProductMaterial() + faker.Name.JobTitle() + faker.Company.CompanyName()} {i}",
-                    Tags = tags.Skip(faker.Random.Int(3, 8)).ToList()
+                    Tags = tags.Skip(faker.Random.Int(3, 8)).ToList(),
+                    ViewsCount = faker.Random.Int(10, 10 * postCount)
                 };
                 var originPost = new Post
                 {
@@ -98,7 +100,6 @@ namespace DAL.Database
                 context.Threads.Add(thread);
                 Console.WriteLine($"Thread: {thread.Title}");
 
-                var postCount = faker.Random.Int(10, 50);
                 for (var j = 0; j < postCount; j++)
                 {
                     var post = new Post

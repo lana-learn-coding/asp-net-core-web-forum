@@ -97,6 +97,7 @@ namespace DAL
                     isNotTracking = trackingProp.CurrentValue == trackingProp.OriginalValue;
                 }
 
+                // not update audit if last active at changed
                 if (entity.Entity is IAuditable created && isNotTracking)
                 {
                     created.UpdatedAt = DateTime.Now;

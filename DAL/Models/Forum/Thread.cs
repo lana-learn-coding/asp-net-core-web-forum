@@ -38,6 +38,7 @@ namespace DAL.Models.Forum
         [JsonIgnore]
         public int ViewsCount { get; set; }
 
+        [Required(ErrorMessage = "Please select a status")]
         public ThreadStatus Status { get; set; } = ThreadStatus.Approved;
 
         [JsonIgnore]
