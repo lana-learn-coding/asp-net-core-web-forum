@@ -150,7 +150,7 @@
                     depressed
                     dense
                     text
-                    @click="logout"
+                    @click="askLogout"
                   >
                     Log out
                   </v-btn>
@@ -255,7 +255,7 @@
                 <v-list-item-title>Admin</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item @click="logout">
+            <v-list-item @click="askLogout">
               <v-list-item-content>
                 <v-list-item-title>Logout</v-list-item-title>
               </v-list-item-content>
@@ -322,7 +322,7 @@ export default defineComponent({
     }, { immediate: true });
 
     const router = useRouter();
-    const { notify } = useMessage();
+    const { notify, confirm } = useMessage();
 
     function search() {
       if (keyword.value.trim() === '') {
@@ -332,13 +332,21 @@ export default defineComponent({
       router.push({ name: 'Search', query: { search: keyword.value } });
     }
 
+    async function askLogout() {
+      const ok = await confirm({
+        title: 'Logout',
+        text: 'You are about to logout',
+      });
+      if (ok) await logout();
+    }
+
     return {
       search,
       user,
       navs,
       keyword,
       focus,
-      logout,
+      askLogout,
       drawer: ref(false),
     };
   },
