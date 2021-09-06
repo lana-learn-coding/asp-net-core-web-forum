@@ -18,7 +18,12 @@ namespace DAL.Validation
                 return new ValidationResult("Password too long! Maximum 120 character");
             }
 
-            if (!Regex.Match(password, ".*[1-9].*[a-zA-Z].*").Success)
+            if (!Regex.Match(password, "[0-9]").Success)
+            {
+                return new ValidationResult("Password must contain number and character");
+            }
+
+            if (!Regex.Match(password, "[a-zA-Z]").Success)
             {
                 return new ValidationResult("Password must contain number and character");
             }
