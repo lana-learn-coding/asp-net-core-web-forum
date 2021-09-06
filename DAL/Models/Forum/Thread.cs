@@ -28,8 +28,6 @@ namespace DAL.Models.Forum
         // If priority > High then thread will be pinned 
         public short Priority { get; set; } = (short)Models.Priority.Normal;
 
-        public bool Pinned => Priority > (ushort)Models.Priority.High;
-
         [JsonIgnore]
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 

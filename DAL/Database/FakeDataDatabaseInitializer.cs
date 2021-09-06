@@ -57,7 +57,6 @@ namespace DAL.Database
                     Title = $"{faker.Company.CatchPhrase()} {i}",
                     SubTitle = $"{faker.Name.JobDescriptor()} {faker.Name.JobTitle()}",
                     Description = faker.Lorem.Sentence(10, 10),
-                    Priority = faker.Random.Short((short)Priority.Normal, (short)Priority.VeryHigh),
                     CategoryId = categories[faker.Random.Int(0, 3)].Id,
                     ForumAccess = AccessMode.Public,
                     ThreadAccess = AccessMode.Public

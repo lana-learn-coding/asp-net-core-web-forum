@@ -31,7 +31,7 @@ namespace DAL.Database
                     Name = "Announcements & FeedBack",
                     Description =
                         "All major announcements and news can be found in here. Keep up to date with regards to the development of the doctors community!",
-                    Priority = (short)Priority.VeryHigh
+                    Priority = (short)Priority.Normal
                 },
                 // this forum act as default forum mapping when deleted
                 new Category
