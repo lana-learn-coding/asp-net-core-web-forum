@@ -47,6 +47,8 @@
       :query="query"
       :onUpdate="update"
       :onDelete="remove"
+      :sortBy="sortBy"
+      :sortDesc="sortDesc"
     >
       <v-data-table
         :headers="table"
@@ -55,6 +57,8 @@
         :items-per-page.sync="query.size"
         :page.sync="query.page"
         :loading="meta.loading"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
       >
         <template v-for="col of table" v-slot:[`item.${col.value}`]="{ item }">
           <slot :name="`table.${col.value}`" :item="item">{{ item[col.value] }}</slot>
@@ -89,7 +93,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import { computed, defineComponent, PropType } from '@vue/composition-api';
 import { DataTableHeader } from 'vuetify';
 import { useTitle } from '@vueuse/core';
 import { singular } from 'pluralize';
@@ -130,7 +134,10 @@ export default defineComponent({
   },
   setup(props) {
     useTitle(`Manage ${props.title}`);
-    const { query, data, meta, fetch } = useQuery<Dictionary>(props.url)({ ...props.filter });
+    const { query, data, meta, fetch } = useQuery<Dictionary>(props.url)({
+      ...props.filter,
+      sort: '',
+    });
     const dialog = useRouteQuery<boolean>('_dialog', false);
     const slug = useRouteQuery<string>('_slug');
 
@@ -177,7 +184,45 @@ export default defineComponent({
       fetch,
       onForm,
       onQuery: useSetters(query),
+      ...useTableSort(query),
     };
   },
 });
+
+function useTableSort(query) {
+  const desc = computed<boolean>(
+    {
+      get() {
+        return query.sort?.startsWith('-');
+      },
+      set(val) {
+        if (val && !query.sort.startsWith('-')) {
+          query.sort = `-${query.sort}`;
+        }
+
+        if (!val && query.sort.startsWith('-')) {
+          query.sort = query.sort.substring(1);
+        }
+      },
+    },
+  );
+
+  const by = computed<string>({
+    get() {
+      return query.sort?.startsWith('-') ? query.sort?.substring(1) : query.sort;
+    },
+    set(val) {
+      if (!val) {
+        query.sort = '';
+        return;
+      }
+      query.sort = val;
+    },
+  });
+
+  return {
+    sortDesc: desc,
+    sortBy: by,
+  };
+}
 </script>

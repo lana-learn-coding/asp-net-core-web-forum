@@ -8,39 +8,41 @@
     form-width="900px"
   >
     <template #filter="{bind, on}">
-      <v-text-field
-        class="mr-3"
-        v-debounce="on.search"
-        :value="bind.search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      >
-      </v-text-field>
-      <v-spacer class="d-none d-md-block"></v-spacer>
-      <auto-complete-select
-        class="mr-3"
-        label="Forums"
-        uri="forums/all"
-        style="max-width: 400px"
-        item-text="title"
-        :value="bind.forum"
-        @input="on.forum"
-        item-value="slug"
-        single-line
-        hide-details
-      >
-      </auto-complete-select>
-      <v-spacer class="d-none d-md-block"></v-spacer>
-      <thread-status-select
-        style="max-width: 200px"
-        :value="bind.status"
-        @input="on.status"
-        single-line
-        hide-details
-      >
-      </thread-status-select>
+      <div class="d-flex flex-column flex-grow-1 flex-md-row">
+        <v-text-field
+          class="mr-3"
+          v-debounce="on.search"
+          :value="bind.search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        >
+        </v-text-field>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <auto-complete-select
+          class="mr-3"
+          label="Forums"
+          uri="forums/all"
+          style="max-width: 400px"
+          item-text="title"
+          :value="bind.forum"
+          @input="on.forum"
+          item-value="slug"
+          single-line
+          hide-details
+        >
+        </auto-complete-select>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <thread-status-select
+          style="max-width: 200px"
+          :value="bind.status"
+          @input="on.status"
+          single-line
+          hide-details
+        >
+        </thread-status-select>
+      </div>
     </template>
 
     <template #form="{values, inputs, errors}">
@@ -123,7 +125,7 @@
       </v-row>
     </template>
 
-    <template #table.user="{ item }">
+    <template #table.user.username="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="30">
@@ -140,19 +142,19 @@
     </template>
 
     <template #table.title="{ item }">
-      <div style="max-width: 350px" class="text-truncate">
+      <div style="max-width: 250px" class="text-truncate">
         {{ item.title }}
       </div>
     </template>
 
-    <template #table.forum="{ item }">
-      <div style="max-width: 200px" class="text-truncate">
+    <template #table.forum.title="{ item }">
+      <div style="max-width: 150px" class="text-truncate">
         {{ item.forum.title }}
       </div>
     </template>
 
     <template #table.tags="{ item }">
-      <div style="max-width: 300px">
+      <div style="max-width: 200px">
         <v-chip
           v-for="tag of item.tags"
           class="mr-1"
@@ -178,15 +180,19 @@
       </v-chip>
     </template>
 
+    <template #table.lastActivityAt="{ item }">
+      {{ formatDateTime(item.lastActivityAt) }}
+    </template>
+
     <template #table.updatedAt="{ item }">
-      {{ formatDate(item.updatedAt) }}
+      {{ formatDateTime(item.updatedAt) }}
     </template>
   </crud-table>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from '@vue/composition-api';
-import { formatDate } from '@/composable/date';
+import { formatDateTime } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
 import CategorySelect from '@/components/form/CategorySelect.vue';
@@ -211,12 +217,14 @@ export default defineComponent({
   },
   setup() {
     const table = [
-      { text: 'User', value: 'user' },
-      { text: 'Forum', value: 'forum' },
+      { text: 'User', value: 'user.username' },
+      { text: 'Forum', value: 'forum.title' },
       { text: 'Title', value: 'title' },
-      { text: 'Tags', value: 'tags' },
+      { text: 'Tags', value: 'tags', sortable: false },
       { text: 'Posts', value: 'postsCount' },
+      { text: 'View', value: 'viewsCount' },
       { text: 'Status', value: 'status' },
+      { text: 'Last Activity', value: 'lastActivityAt' },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action', sortable: false },
     ];
@@ -239,7 +247,7 @@ export default defineComponent({
     return {
       table,
       filter,
-      formatDate,
+      formatDateTime,
       form,
       status: useThreadStatus(),
       getPriority: usePriority,

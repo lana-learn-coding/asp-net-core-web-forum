@@ -8,30 +8,32 @@
     form-width="900px"
   >
     <template #filter="{bind, on}">
-      <v-text-field
-        class="mr-3"
-        v-debounce="on.search"
-        :value="bind.search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      >
-      </v-text-field>
-      <v-spacer class="d-none d-md-block"></v-spacer>
-      <auto-complete-select
-        class="mr-3"
-        label="Thread"
-        uri="threads/all"
-        style="max-width: 400px"
-        item-text="title"
-        :value="bind.thread"
-        @input="on.thread"
-        item-value="slug"
-        single-line
-        hide-details
-      >
-      </auto-complete-select>
+      <div class="d-flex flex-column flex-grow-1 flex-md-row">
+        <v-text-field
+          class="mr-3"
+          v-debounce="on.search"
+          :value="bind.search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        >
+        </v-text-field>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <auto-complete-select
+          class="mr-3"
+          label="Thread"
+          uri="threads/all"
+          style="max-width: 400px"
+          item-text="title"
+          :value="bind.thread"
+          @input="on.thread"
+          item-value="slug"
+          single-line
+          hide-details
+        >
+        </auto-complete-select>
+      </div>
     </template>
 
     <template #form="{values, errors, inputs}">
@@ -61,7 +63,7 @@
       </v-row>
     </template>
 
-    <template #table.user="{ item }">
+    <template #table.user.username="{ item }">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar size="30">
@@ -77,7 +79,7 @@
       </v-tooltip>
     </template>
 
-    <template #table.thread="{ item }">
+    <template #table.threadTitle="{ item }">
       <div style="max-width: 200px" class="text-truncate">
         {{ item.threadTitle }}
       </div>
@@ -88,14 +90,14 @@
     </template>
 
     <template #table.updatedAt="{ item }">
-      {{ formatDate(item.updatedAt) }}
+      {{ formatDateTime(item.updatedAt) }}
     </template>
   </crud-table>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from '@vue/composition-api';
-import { formatDate } from '@/composable/date';
+import { formatDateTime } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
 import CategorySelect from '@/components/form/CategorySelect.vue';
@@ -119,9 +121,9 @@ export default defineComponent({
   },
   setup() {
     const table = [
-      { text: 'User', value: 'user' },
-      { text: 'Thread', value: 'thread' },
-      { text: 'Content', value: 'content' },
+      { text: 'User', value: 'user.username' },
+      { text: 'Thread', value: 'threadTitle' },
+      { text: 'Content', value: 'content', sortable: false },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action', sortable: false },
     ];
@@ -139,7 +141,7 @@ export default defineComponent({
     return {
       table,
       filter,
-      formatDate,
+      formatDateTime,
       form,
     };
   },

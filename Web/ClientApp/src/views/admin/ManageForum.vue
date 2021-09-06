@@ -8,27 +8,47 @@
     form-width="900px"
   >
     <template #filter="{bind, on}">
-      <v-text-field
-        class="mr-3"
-        v-debounce="on.search"
-        :value="bind.search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      >
-      </v-text-field>
-      <v-spacer class="d-none d-md-block"></v-spacer>
-      <category-select
-        style="max-width: 400px"
-        :value="bind.category"
-        @input="on.category"
-        item-value="slug"
-        single-line
-        hide-details
-      >
-      </category-select>
-      <v-spacer class="d-none d-md-block"></v-spacer>
+      <div class="d-flex flex-column flex-grow-1 flex-md-row">
+        <v-text-field
+          class="mr-3"
+          v-debounce="on.search"
+          :value="bind.search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        >
+        </v-text-field>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <category-select
+          :value="bind.category"
+          @input="on.category"
+          item-value="slug"
+          single-line
+          hide-details
+        >
+        </category-select>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <div class="d-flex">
+          <access-select
+            :value="bind.forumAccess"
+            @input="on.forumAccess"
+            label="Forum Access"
+            class="mr-3"
+            single-line
+            hide-details
+          >
+          </access-select>
+          <access-select
+            :value="bind.threadAccess"
+            @input="on.threadAccess"
+            label="Thread Access"
+            single-line
+            hide-details
+          >
+          </access-select>
+        </div>
+      </div>
     </template>
 
     <template #form="{values, inputs, errors}">
@@ -132,22 +152,18 @@
     </template>
 
     <template #table.title="{ item }">
-      <div style="max-width: 300px" class="text-truncate">
+      <div style="max-width: 200px" class="text-truncate">
         {{ item.title }}
       </div>
     </template>
 
-    <template #table.subTitle="{ item }">
-      <div style="max-width: 350px" class="text-truncate">
-        {{ item.subTitle }}
+    <template #table.category.name="{ item }">
+      <div style="max-width: 150px" class="text-truncate">
+        {{ item.category.name }}
       </div>
     </template>
 
-    <template #table.category="{ item }">
-      {{ item.category.name }}
-    </template>
-
-    <template #table.access="{ item }">
+    <template #table.forumAccess="{ item }">
       <v-chip
         :color="access[item.forumAccess].color"
         label
@@ -167,29 +183,25 @@
       </v-chip>
     </template>
 
-    <template #table.counts="{ item }">
-      {{ item.threadsCount }} / {{ item.postsCount }}
-    </template>
-
     <template #table.priority="{ item }">
       <v-chip :color="getPriority(item.priority).color" dark label small>
         {{ getPriority(item.priority).name }} : {{ item.priority }}
       </v-chip>
     </template>
 
-    <template #table.createdAt="{ item }">
-      {{ formatDate(item.createdAt) }}
+    <template #table.lastActivityAt="{ item }">
+      {{ formatDateTime(item.createdAt) }}
     </template>
 
     <template #table.updatedAt="{ item }">
-      {{ formatDate(item.updatedAt) }}
+      {{ formatDateTime(item.updatedAt) }}
     </template>
   </crud-table>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from '@vue/composition-api';
-import { formatDate } from '@/composable/date';
+import { formatDateTime } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
 import CategorySelect from '@/components/form/CategorySelect.vue';
@@ -203,18 +215,22 @@ export default defineComponent({
   setup() {
     const table = [
       { text: 'Title', value: 'title' },
-      { text: 'Subtitle', value: 'subTitle' },
-      { text: 'Category', value: 'category' },
+      { text: 'Category', value: 'category.name' },
       { text: 'Priority', value: 'priority' },
+      { text: 'Forum/Thread Access', value: 'forumAccess' },
+      { text: 'Threads', value: 'threadsCount' },
+      { text: 'Posts', value: 'postsCount' },
+      { text: 'Views', value: 'viewsCount' },
+      { text: 'Last activity', value: 'lastActivityAt' },
       { text: 'Updated At', value: 'updatedAt' },
-      { text: 'Forum/Thread Access', value: 'access' },
-      { text: 'Thread/Post Count', value: 'counts' },
       { text: 'Action', value: 'action', sortable: false },
     ];
 
     const filter = reactive({
       search: '',
       category: '',
+      forumAccess: '',
+      threadAccess: '',
     });
 
     const form = reactive({
@@ -231,7 +247,7 @@ export default defineComponent({
     return {
       table,
       filter,
-      formatDate,
+      formatDateTime,
       form,
       access: useAccessType(),
       getPriority: usePriority,

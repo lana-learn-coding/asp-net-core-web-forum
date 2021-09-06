@@ -71,7 +71,7 @@ export default defineComponent({
       },
       { text: 'Color', value: 'color' },
       { text: 'Name', value: 'name' },
-      { text: 'Created At', value: 'createdAt' },
+      { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action' },
     ];
 

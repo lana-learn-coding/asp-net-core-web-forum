@@ -84,14 +84,14 @@
     </template>
 
     <template #table.updatedAt="{ item }">
-      {{ formatDate(item.updatedAt) }}
+      {{ formatDateTime(item.updatedAt) }}
     </template>
   </crud-table>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from '@vue/composition-api';
-import { formatDate } from '@/composable/date';
+import { formatDateTime } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
 import CategorySelect from '@/components/form/CategorySelect.vue';
@@ -112,9 +112,7 @@ export default defineComponent({
       { text: 'Avatar', value: 'avatar' },
       { text: 'Username', value: 'username' },
       { text: 'Email', value: 'email' },
-      { text: 'Name', value: 'fullName' },
-      { text: 'Phone', value: 'phone' },
-      { text: 'Roles', value: 'roles' },
+      { text: 'Roles', value: 'roles', sortable: false },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action', sortable: false },
     ];
@@ -133,7 +131,7 @@ export default defineComponent({
     return {
       table,
       filter,
-      formatDate,
+      formatDateTime,
       form,
       access: useAccessType(),
       getPriority: usePriority,

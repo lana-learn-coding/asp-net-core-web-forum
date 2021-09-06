@@ -77,6 +77,10 @@
       <v-icon>{{ item.icon || 'folder' }}</v-icon>
     </template>
 
+    <template #table.description="{ item }">
+      <div style="max-width: 500px" class="text-truncate">{{ item.description }}</div>
+    </template>
+
     <template #table.priority="{ item }">
       <v-chip :color="getPriority(item.priority).color" dark label small>
         {{ getPriority(item.priority).name }} : {{ item.priority }}
