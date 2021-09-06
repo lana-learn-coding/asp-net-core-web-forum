@@ -29,7 +29,13 @@
             <span>{{ thread.postsCount }}</span>
           </div>
         </div>
-        <div class="mt-2">
+        <router-link
+          :to="{ name: 'Forum', params: { slug: thread.forum.slug }}"
+          class="text-decoration-none"
+        >
+          In: {{ thread.forum.title }}
+        </router-link>
+        <div class="mt-2" v-if="thread.tags.length">
           Tags:
           <v-chip
             v-for="tag of thread.tags"

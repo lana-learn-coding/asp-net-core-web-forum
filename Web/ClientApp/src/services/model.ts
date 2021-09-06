@@ -72,6 +72,7 @@ export interface Thread extends ModelBase {
   title: string;
   content: string;
   user: UserBase,
+  forum: Forum,
   lastActivityAt?: string;
   postsCount: number;
   tags: Tag[],
