@@ -28,7 +28,7 @@
               >
               </thread-sort-select>
               <v-spacer></v-spacer>
-              <thread-form :forum="forum" class="mb-2 ml-2"> </thread-form>
+              <thread-form :forum="forum" class="mb-2 ml-2" @change="fetch"></thread-form>
             </div>
           </div>
         </template>
@@ -106,7 +106,7 @@ export default defineComponent({
       }
     }, { immediate: true });
 
-    const { query, data, meta } = useQuery<Dictionary>('threads')({
+    const { query, data, meta, fetch } = useQuery<Dictionary>('threads')({
       search: '',
       tag: '',
       sort: '',
@@ -114,6 +114,7 @@ export default defineComponent({
     });
 
     return {
+      fetch,
       query,
       data,
       meta,

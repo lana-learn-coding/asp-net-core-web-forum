@@ -125,7 +125,6 @@ export function useThreadStatus(): { name: string, color: string }[] {
   return [
     { name: 'Approved', color: 'green' },
     { name: 'Pending', color: 'yellow darken-2' },
-    { name: 'Rejected', color: 'orange' },
     { name: 'Closed', color: 'deep-orange' },
   ];
 }

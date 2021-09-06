@@ -49,6 +49,7 @@ router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
     })
       .then((ok) => {
         if (ok) router.push({ name: 'Login' }).catch(noop);
+        else router.push({ name: 'Home' }).catch(noop);
       });
     return next(false);
   }

@@ -84,3 +84,10 @@ export interface Post extends ModelBase {
   threadTitle: string;
   threadId: string;
 }
+
+export enum AccessMode {
+  Public = 0,
+  Protected = 1,
+  Internal = 2,
+  Private = 3
+}
