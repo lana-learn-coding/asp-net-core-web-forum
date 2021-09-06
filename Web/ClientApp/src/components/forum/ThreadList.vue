@@ -11,20 +11,43 @@
       <v-card-subtitle class="pb-2">{{ forum.subTitle }}</v-card-subtitle>
       <v-card-text class="pb-0">
         <div v-html="forum.description"></div>
-        <div class="mt-2">
-          <div class="mr-1 d-inline">
-            <v-icon small>chat_bubble_outline</v-icon>
-            {{ forum.postsCount }}
+        <div class="mt-2 d-flex">
+          <div>
+            <div class="mr-1 d-inline">
+              <v-icon small>chat_bubble_outline</v-icon>
+              {{ forum.postsCount }}
+            </div>
+
+            <div class="mr-1 d-inline">
+              <v-icon class="material-icons-outlined" small>question_answer</v-icon>
+              {{ forum.threadsCount || 1 }}
+            </div>
+
+            <div class="mr-1 d-inline">
+              <v-icon class="material-icons-outlined" small>visibility</v-icon>
+              {{ forum.viewsCount || forum.postsCount * 2 }}
+            </div>
           </div>
 
-          <div class="mr-1 d-inline">
-            <v-icon class="material-icons-outlined" small>question_answer</v-icon>
-            {{ forum.threadsCount || 1 }}
-          </div>
+          <v-spacer></v-spacer>
 
-          <div class="mr-1 d-inline">
-            <v-icon class="material-icons-outlined" small>visibility</v-icon>
-            {{ forum.viewsCount || forum.postsCount * 2 }}
+          <div>
+            <v-tooltip bottom v-if="forum.threadAccess === 1">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on" class="material-icons-outlined">beenhere
+                </v-icon>
+              </template>
+              <span>Require approval when creating thread here</span>
+            </v-tooltip>
+
+            <v-tooltip bottom v-if="forum.threadAccess > 1">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on" class="material-icons-outlined">
+                  admin_panel_settings
+                </v-icon>
+              </template>
+              <span>Only admin can create a thread here</span>
+            </v-tooltip>
           </div>
         </div>
       </v-card-text>
