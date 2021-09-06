@@ -81,6 +81,8 @@ export interface Thread extends ModelBase {
 
 export interface Post extends ModelBase {
   content: string;
-  user: UserBase,
+  user: UserBase;
   vote: number;
+  threadTitle: string;
+  threadId: string;
 }

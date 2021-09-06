@@ -7,6 +7,7 @@ import ManageForum from '@/views/admin/ManageForum.vue';
 import ManageUser from '@/views/admin/ManageUser.vue';
 import AdminLogin from '@/views/auth/AdminLogin.vue';
 import ManageThread from '@/views/admin/ManageThread.vue';
+import ManagePost from '@/views/admin/ManagePost.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -61,6 +62,14 @@ const admin: RouteConfig = {
       path: 'threads',
       component: ManageThread,
       name: 'ManageThread',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'posts',
+      component: ManagePost,
+      name: 'ManagePost',
       meta: {
         roles: ['Admin'],
       },

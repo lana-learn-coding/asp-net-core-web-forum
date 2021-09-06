@@ -109,6 +109,7 @@ export default defineComponent({
       },
       { title: 'Forum', icon: 'folder', name: 'ManageForum' },
       { title: 'Thread', icon: 'forum', name: 'ManageThread' },
+      { title: 'Post', icon: 'chat_bubble', name: 'ManagePost' },
       { title: 'Users', icon: 'person', name: 'ManageUser' },
       { title: 'Home', icon: 'home', name: 'Home' },
     ];
