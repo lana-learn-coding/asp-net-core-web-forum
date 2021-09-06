@@ -49,7 +49,6 @@ namespace DAL.Models.Forum
     {
         Approved = 0,
         Pending = 1,
-        Rejected = 2,
-        Closed = 3
+        Closed = 2
     }
 }
