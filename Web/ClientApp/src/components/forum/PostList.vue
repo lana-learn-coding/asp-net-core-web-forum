@@ -49,6 +49,9 @@
             {{ tag.name }}
           </v-chip>
         </div>
+        <div class="mt-2" v-if="thread.status !== 0">
+          This thread was closed
+        </div>
       </v-card-subtitle>
     </template>
 
