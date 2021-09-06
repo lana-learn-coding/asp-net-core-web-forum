@@ -68,7 +68,7 @@ namespace Core.Services
                 UserId = userId
             });
             Context.SaveChanges();
-            return Get(thread.Id.ToString());
+            return GetRaw(thread.Id.ToString());
         }
 
         public ThreadView Update(string slug, CreateThreadAdmin entity)
@@ -93,7 +93,7 @@ namespace Core.Services
             var post = Context.Set<Post>().First(x => x.Id.Equals(thread.Id));
             post.Content = entity.Content;
             Context.SaveChanges();
-            return Get(thread.Id.ToString());
+            return GetRaw(thread.Id.ToString());
         }
 
         private void ValidateForumAccess(CreateThreadAdmin entity)
@@ -108,6 +108,25 @@ namespace Core.Services
                 entity.Status = ThreadStatus.Pending;
                 entity.Priority = (short)Priority.Normal;
             }
+        }
+
+        private ThreadView GetRaw(string slug)
+        {
+            if (slug == null) throw new DataNotFoundException("Thread without id/slug not found");
+
+            if (Guid.TryParse(slug, out var id))
+            {
+                var foundById = DbSet.Where(e => e.Id == id)
+                    .Include("Forum")
+                    .ProjectTo<ThreadView>(_mapperConfig)
+                    .FirstOrDefault();
+                return foundById ?? throw new DataNotFoundException($"Thread with id {slug} not found!");
+            }
+
+            var found = DbSet.Where(e => e.Slug == slug).Include("Forum")
+                .ProjectTo<ThreadView>(_mapperConfig)
+                .FirstOrDefault();
+            return found ?? throw new DataNotFoundException($"Thread with slug {slug} not found!");
         }
 
         public override ThreadView Get(string slug)
