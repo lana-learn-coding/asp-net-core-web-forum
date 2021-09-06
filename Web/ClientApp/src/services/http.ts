@@ -147,7 +147,7 @@ export interface UseQueryResult<T, Q extends FlatDictionary> {
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
   query: UnwrapRef<PagedQueryParam<Q>>;
 
-  fetch(): Promise<void>;
+  fetch(queryParams?: FlatDictionary): Promise<void>;
 }
 
 type PagedQueryParam<Q> = Q & { page: number; size: number }
@@ -175,18 +175,19 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
 
     watch(
       query,
-      (val) => fetch(val as Q),
+      (val) => fetch(val as FlatDictionary),
       { deep: true },
     );
 
     const router = useRouter();
     const client = useHttp();
 
-    async function fetch(queryParams?: Q) {
+    async function fetch(queryParams?: FlatDictionary) {
       meta.loading = true;
       try {
         const newParams = { ...query, ...queryParams };
-        if (newParams.page && newParams.page === meta.currentPage) {
+        const changed = Object.keys(newParams).some((key) => newParams[key] !== query[key]);
+        if (changed && newParams.page && newParams.page === meta.currentPage) {
           newParams.page = 1;
         }
         const res = await client.get<Page<T>>(url, { params: newParams });

@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from '@vue/composition-api';
+import { defineComponent, nextTick, reactive, watch } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { Dictionary, Thread } from '@/services/model';
 import { useRouter } from '@/composable/compat';
@@ -115,11 +115,13 @@ export default defineComponent({
       thread: props.slug,
     });
 
-    function fetchLast() {
-      query.sort = '';
-      query.search = '';
-      query.page = meta.totalPages + 1;
-      fetch();
+    async function fetchLast() {
+      await fetch({
+        sort: '',
+        search: '',
+        page: meta.totalPages + 1,
+      });
+      nextTick(() => window.scrollTo(0, document.body.scrollHeight));
     }
 
     return {

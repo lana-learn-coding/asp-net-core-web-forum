@@ -28,7 +28,7 @@
               >
               </thread-sort-select>
               <v-spacer></v-spacer>
-              <thread-form :forum="forum" class="mb-2 ml-2" @change="fetch"></thread-form>
+              <thread-form :forum="forum" class="mb-2 ml-2" @change="fetchLast"></thread-form>
             </div>
           </div>
         </template>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from '@vue/composition-api';
+import { defineComponent, nextTick, reactive, watch } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { Dictionary, Forum } from '@/services/model';
 import { useRouter } from '@/composable/compat';
@@ -108,13 +108,21 @@ export default defineComponent({
 
     const { query, data, meta, fetch } = useQuery<Dictionary>('threads')({
       search: '',
-      tag: '',
       sort: '',
       forum: props.slug,
     });
 
+    async function fetchLast() {
+      await fetch({
+        sort: '',
+        search: '',
+        page: 1,
+      });
+      nextTick(() => window.scrollTo(0, 50));
+    }
+
     return {
-      fetch,
+      fetchLast,
       query,
       data,
       meta,
