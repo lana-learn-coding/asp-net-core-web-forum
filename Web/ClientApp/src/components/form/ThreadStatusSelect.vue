@@ -36,8 +36,7 @@ export default defineComponent({
     const data = [
       { text: 'Approved', id: 0 },
       { text: 'Pending', id: 1 },
-      { text: 'Rejected', id: 2 },
-      { text: 'Closed', id: 3 },
+      { text: 'Closed', id: 2 },
     ];
 
     function input(val: string) {
