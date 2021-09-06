@@ -31,9 +31,10 @@ namespace Core.Services
 
         protected override IQueryable<ThreadView> Query(IQueryable<Thread> queryable)
         {
-            if (!_httpContext.User.Identity?.IsAuthenticated ?? true)
+            if (!_httpContext.User.IsUser())
                 queryable = queryable.Where(x => x.Forum.ForumAccess == AccessMode.Public);
-            else if (!_httpContext.User.IsInRole("Admin"))
+
+            if (!_httpContext.User.IsAdmin())
                 queryable = queryable.Where(x => x.Forum.ForumAccess < AccessMode.Internal)
                     .Where(x => x.Status == ThreadStatus.Approved);
 

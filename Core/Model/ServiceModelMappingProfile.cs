@@ -19,7 +19,9 @@ namespace Core.Model
                 .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Threads.Sum(t => t.Posts.Count)))
                 .ForMember(m => m.LastThread,
-                    opt => opt.MapFrom(x => x.Threads.OrderByDescending(t => t.LastActivityAt).FirstOrDefault()));
+                    opt => opt.MapFrom(x =>
+                        x.Threads.OrderByDescending(t => t.LastActivityAt)
+                            .FirstOrDefault(t => t.Status == ThreadStatus.Approved)));
             CreateMap<Thread, LastThread>().ForMember(m => m.User,
                 opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id)).User));
 
