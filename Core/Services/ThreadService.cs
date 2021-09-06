@@ -24,7 +24,7 @@ namespace Core.Services
         public ThreadService(DbContext context, IHttpContextAccessor httpContextAccessor,
             IConfigurationProvider mapperConfig) : base(context)
         {
-            DefaultSort = new List<string> { "Priority", "LastActivityAt" };
+            DefaultSort = new List<string> { "Priority", "LastActivityAt desc" };
             _httpContext = httpContextAccessor.HttpContext;
             _mapperConfig = mapperConfig;
         }
