@@ -35,11 +35,6 @@
           <v-icon class="material-icons-outlined" small>visibility</v-icon>
           {{ thread.viewsCount || thread.postsCount * 2 }}
         </div>
-
-        <div class="mr-1 d-inline">
-          <v-icon class="material-icons-outlined" small>medication</v-icon>
-          {{ thread.vote || 1 }}
-        </div>
       </div>
       <div>
         <v-chip
@@ -73,15 +68,6 @@
         >
         </number-counter>
         Views
-      </div>
-      <div class="body-2 d-md-block mr-3">
-        <number-counter
-          from="0"
-          :to="thread.vote || 1"
-          :duration="1"
-        >
-        </number-counter>
-        Vote
       </div>
     </v-col>
   </v-row>

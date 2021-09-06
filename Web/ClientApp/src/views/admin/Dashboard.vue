@@ -67,11 +67,6 @@
                   <v-icon class="material-icons-outlined" small>visibility</v-icon>
                   {{ thread.viewsCount || thread.postsCount * 2 }}
                 </span>
-
-                <span class="mr-1">
-                  <v-icon class="material-icons-outlined" small>medication</v-icon>
-                  {{ thread.vote || 1 }}
-                </span>
               </span>
               </div>
             </v-col>

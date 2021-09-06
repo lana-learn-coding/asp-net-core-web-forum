@@ -74,7 +74,6 @@ export interface Thread extends ModelBase {
   user: UserBase,
   lastActivityAt?: string;
   postsCount: number;
-  vote: number;
   tags: Tag[],
   viewsCount: number;
 }
@@ -82,7 +81,6 @@ export interface Thread extends ModelBase {
 export interface Post extends ModelBase {
   content: string;
   user: UserBase;
-  vote: number;
   threadTitle: string;
   threadId: string;
 }

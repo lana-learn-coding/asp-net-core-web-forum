@@ -216,7 +216,6 @@ export default defineComponent({
       { text: 'Title', value: 'title' },
       { text: 'Tags', value: 'tags' },
       { text: 'Posts', value: 'postsCount' },
-      { text: 'Vote', value: 'vote' },
       { text: 'Status', value: 'status' },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action', sortable: false },

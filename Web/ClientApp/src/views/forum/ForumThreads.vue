@@ -16,16 +16,20 @@
             >
             </v-text-field>
             <v-spacer class="d-none d-md-block"></v-spacer>
-            <thread-sort-select
-              class="mb-2"
-              style="max-width: 200px"
-              v-model="query.sort"
-              label="Sort result"
-              dense
-              single-line
-              hide-details
-            >
-            </thread-sort-select>
+            <div class="d-flex">
+              <thread-sort-select
+                class="mb-2"
+                style="max-width: 200px"
+                v-model="query.sort"
+                label="Sort result"
+                dense
+                single-line
+                hide-details
+              >
+              </thread-sort-select>
+              <v-spacer></v-spacer>
+              <thread-form :forum="forum" class="mb-2 ml-2"> </thread-form>
+            </div>
           </div>
         </template>
 
@@ -56,10 +60,11 @@ import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { formatDateTime } from '@/composable/date';
 import ThreadList from '@/components/forum/ThreadList.vue';
 import ThreadSortSelect from '@/components/form/ThreadSortSelect.vue';
+import ThreadForm from '@/views/forum/ThreadForm.vue';
 
 export default defineComponent({
   name: 'ForumThreads',
-  components: { ThreadSortSelect, ThreadList, AppForumStatistics },
+  components: { ThreadForm, ThreadSortSelect, ThreadList, AppForumStatistics },
   props: {
     slug: {
       required: true,
