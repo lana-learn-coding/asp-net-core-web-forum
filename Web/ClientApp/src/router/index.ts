@@ -21,7 +21,6 @@ const routes: Array<RouteConfig> = [
   {
     path: '*',
     component: Error,
-    name: 'NotFound',
     props: {
       code: '404',
       text: 'We can\'t find the page you\'re looking-for',
