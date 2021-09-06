@@ -297,10 +297,6 @@ export default defineComponent({
         to: { name: 'Home' },
       },
       {
-        text: 'Portal',
-        to: { name: 'Portal' },
-      },
-      {
         text: 'Search',
         to: { name: 'Search' },
       },

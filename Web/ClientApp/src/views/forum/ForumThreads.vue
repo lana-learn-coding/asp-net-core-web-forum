@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="9">
-      <thread-list :forum="forum" :loading="meta.loading" :threads="data">
+      <thread-list :forum="forum" :loading="meta.loading || !forum.uid" :threads="data">
         <template #action>
           <div class="d-flex mb-2 mb-lg-3 flex-column flex-md-row">
             <v-text-field
