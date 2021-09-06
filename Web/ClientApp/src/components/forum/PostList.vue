@@ -61,7 +61,7 @@
       </template>
 
       <v-skeleton-loader
-        v-if="loading"
+        v-if="loading || !thread.uid"
         type="list-item-avatar-three-line@3"
       >
       </v-skeleton-loader>

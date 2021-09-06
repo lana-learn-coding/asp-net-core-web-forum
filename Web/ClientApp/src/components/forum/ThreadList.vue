@@ -57,7 +57,7 @@
       <v-divider class="mb-3"></v-divider>
       <slot name="action"></slot>
       <v-skeleton-loader
-        v-if="loading"
+        v-if="loading || !forum.uid"
         type="list-item-avatar-three-line@4"
       >
       </v-skeleton-loader>

@@ -80,7 +80,7 @@ export default defineComponent({
       { text: 'Posts', disabled: true },
     ]);
 
-    const thread = reactive<Thread>({} as unknown as Thread);
+    const thread = reactive<Thread>({ uid: '' } as unknown as Thread);
     const router = useRouter();
     const http = useHttp();
 

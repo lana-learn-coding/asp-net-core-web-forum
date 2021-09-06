@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="9">
-      <thread-list :forum="forum" :loading="meta.loading || !forum.uid" :threads="data">
+      <thread-list :forum="forum" :loading="meta.loading" :threads="data">
         <template #action>
           <div class="d-flex mb-2 mb-lg-3 flex-column flex-md-row">
             <v-text-field
@@ -79,7 +79,7 @@ export default defineComponent({
       { text: 'Forums Threads', disabled: true },
     ]);
 
-    const forum = reactive<Forum>({} as unknown as Forum);
+    const forum = reactive<Forum>({ uid: '' } as unknown as Forum);
     const router = useRouter();
     const http = useHttp();
 
