@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-btn color="primary" @click.stop="open" text dense :disabled="disabled">
-      <span>New</span>
-      <span class="d-none d-lg-block ml-1">Thread</span></v-btn>
+      <v-icon>add</v-icon>
+      <span class="ml-1">Thread</span></v-btn>
     <v-dialog v-model="dialog" width="unset" transition="fade-transition" eager>
       <v-card
         width="900px"
@@ -87,8 +87,7 @@ import { useForm } from '@/composable/form';
 import { useMessage } from '@/composable/message';
 import { AccessMode, Dictionary, Forum } from '@/services/model';
 import { isAuthorized } from '@/services/auth';
-import { noop } from '@/composable/compat';
-import router from '@/router';
+import { noop, useRouter } from '@/composable/compat';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 import EditorInput from '@/components/form/EditorInput.vue';
 
@@ -158,6 +157,7 @@ export default defineComponent({
     watch(dialog, clear);
 
     const disabled = computed(() => props.forum.threadAccess >= AccessMode.Internal && !isAuthorized('Admin'));
+    const router = useRouter();
 
     function open() {
       if (!isAuthorized('User')) {

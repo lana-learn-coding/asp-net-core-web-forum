@@ -17,6 +17,7 @@
     <v-col cols="10" lg="8">
       <router-link
         class="body-1 text-decoration-none font-weight-medium text-truncate d-block"
+        :class="{ 'text--secondary': thread.status !== 0 }"
         :to="{ name: 'Thread', params: { slug: thread.slug } }"
       >
         {{ thread.title }}

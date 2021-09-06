@@ -57,7 +57,7 @@
       <v-skeleton-loader v-if="!thread.uid" type="list-item-avatar-three-line"></v-skeleton-loader>
       <template v-else>
         <post-row :post="thread" class="mt-3"></post-row>
-        <v-divider class="mb-3"></v-divider>
+        <v-divider class="mb-3 grey"></v-divider>
       </template>
 
       <v-skeleton-loader
