@@ -2,7 +2,6 @@
 using System.Linq;
 using Core.Dto;
 using Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers.Public
@@ -32,6 +31,19 @@ namespace Web.Controllers.Public
             ));
         }
 
+        [HttpGet]
+        [Route("all")]
+        public virtual IActionResult Index([FromQuery] string search, [FromQuery] int skip = 0,
+            [FromQuery] int take = 1000)
+        {
+            search ??= "";
+            return new JsonResult(_service.List(q => q
+                .Where(x => x.Title.Contains(search) || x.Tags.Any(t => t.Name.Contains(search)))
+                .OrderBy(x => x.Id)
+                .Skip(skip)
+                .Take(take)
+            ));
+        }
 
         [HttpGet]
         [Route("{slug}")]
@@ -40,15 +52,6 @@ namespace Web.Controllers.Public
             return Guid.TryParse(slug, out var id)
                 ? new JsonResult(id)
                 : new JsonResult(_service.Get(slug));
-        }
-
-        [HttpDelete]
-        [Authorize(Roles = "Admin")]
-        [Route("{slug}")]
-        public IActionResult Destroy(string slug)
-        {
-            _service.Delete(slug);
-            return new OkResult();
         }
     }
 }

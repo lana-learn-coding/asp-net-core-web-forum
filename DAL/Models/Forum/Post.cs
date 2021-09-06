@@ -18,6 +18,7 @@ namespace DAL.Models.Forum
         [Required(ErrorMessage = "Only user can perform this action")]
         public Guid UserId { get; set; }
 
+        [JsonIgnore]
         public virtual User User { get; set; }
 
         [Column(TypeName = "NTEXT")]

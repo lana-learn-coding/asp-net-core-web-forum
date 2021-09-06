@@ -1,4 +1,6 @@
-﻿namespace Core.Model
+﻿using System;
+
+namespace Core.Model
 {
     public class PostView : ViewBase
     {
@@ -6,5 +8,9 @@
 
         public string Content { get; set; }
         public int Vote { get; set; }
+
+        public string ThreadTitle { get; set; }
+
+        public Guid ThreadId { get; set; }
     }
 }
