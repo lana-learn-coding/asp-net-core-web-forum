@@ -77,6 +77,7 @@ export interface Thread extends ModelBase {
   postsCount: number;
   tags: Tag[],
   viewsCount: number;
+  status: number;
 }
 
 export interface Post extends ModelBase {

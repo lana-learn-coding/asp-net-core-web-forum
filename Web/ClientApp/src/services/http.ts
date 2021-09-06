@@ -195,6 +195,8 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
         Object.assign(meta, res.meta);
         query.page = res.meta.currentPage;
         query.size = res.meta.perPage;
+        newParams.page = res.meta.currentPage;
+        newParams.size = res.meta.perPage;
 
         const newQuery = { ...route.query, ...newParams };
         Object.keys(newQuery).forEach((key) => {

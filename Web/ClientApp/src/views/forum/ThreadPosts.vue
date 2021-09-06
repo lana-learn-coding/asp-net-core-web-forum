@@ -16,16 +16,20 @@
             >
             </v-text-field>
             <v-spacer class="d-none d-md-block"></v-spacer>
-            <post-sort-select
-              class="mb-2"
-              style="max-width: 200px"
-              v-model="query.sort"
-              label="Sort result"
-              dense
-              single-line
-              hide-details
-            >
-            </post-sort-select>
+            <div class="d-flex">
+              <post-sort-select
+                class="mb-2"
+                style="max-width: 200px"
+                v-model="query.sort"
+                label="Sort result"
+                dense
+                single-line
+                hide-details
+              >
+              </post-sort-select>
+              <v-spacer></v-spacer>
+              <post-form :thread="thread" class="mb-2 ml-2" @change="fetchLast"></post-form>
+            </div>
           </div>
         </template>
 
@@ -56,10 +60,11 @@ import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 import { formatDateTime } from '@/composable/date';
 import PostList from '@/components/forum/PostList.vue';
 import PostSortSelect from '@/components/form/PostSortSelect.vue';
+import PostForm from '@/views/forum/PostForm.vue';
 
 export default defineComponent({
   name: 'ThreadPosts',
-  components: { PostSortSelect, PostList, AppForumStatistics },
+  components: { PostForm, PostSortSelect, PostList, AppForumStatistics },
   props: {
     slug: {
       required: true,
@@ -104,11 +109,18 @@ export default defineComponent({
       }
     }, { immediate: true });
 
-    const { query, data, meta } = useQuery<Dictionary>('posts')({
+    const { query, data, meta, fetch } = useQuery<Dictionary>('posts')({
       search: '',
       sort: '',
       thread: props.slug,
     });
+
+    function fetchLast() {
+      query.sort = '';
+      query.search = '';
+      query.page = meta.totalPages + 1;
+      fetch();
+    }
 
     return {
       query,
@@ -116,6 +128,7 @@ export default defineComponent({
       meta,
       thread,
       formatDateTime,
+      fetchLast,
     };
   },
 });
