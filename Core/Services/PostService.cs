@@ -37,13 +37,17 @@ namespace Core.Services
 
         private void ValidateForumAccess(Post entity)
         {
+            var thread = Context.Set<Thread>().First(x => x.Id.Equals(entity.ThreadId));
+            if (thread == null) throw new InvalidDataException("ThreadId", "Specified thread not found");
+            if (thread.Status != ThreadStatus.Approved)
+                throw new InvalidDataException("ThreadId", "Thread is not active");
+
             var forum = Context.Set<Forum>().First(x => x.Threads.Any(t => t.Id.Equals(entity.ThreadId)));
-            if (forum == null) throw new InvalidDataException("ForumId", "Specified forum not found");
+            if (forum == null) throw new InvalidDataException("ThreadId", "Specified forum not found");
 
             forum.LastActivityAt = DateTime.Now;
             var isAdmin = _httpContext.User.IsInRole("Admin");
             if (forum.ForumAccess >= AccessMode.Internal && !isAdmin) throw new ForbiddenException();
-            if (forum.ThreadAccess >= AccessMode.Internal && !isAdmin) throw new ForbiddenException();
         }
 
         protected override IQueryable<PostView> Query(IQueryable<Post> queryable)

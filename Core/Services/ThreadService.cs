@@ -36,7 +36,7 @@ namespace Core.Services
 
             if (!_httpContext.User.IsAdmin())
                 queryable = queryable.Where(x => x.Forum.ForumAccess < AccessMode.Internal)
-                    .Where(x => x.Status == ThreadStatus.Approved);
+                    .Where(x => x.Status != ThreadStatus.Pending);
 
             return queryable
                 .Include("Forum")
