@@ -43,7 +43,6 @@ namespace DAL
             modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
 
-            modelBuilder.Entity<Vote>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Post>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Thread>().Map(m => m.MapInheritedProperties());

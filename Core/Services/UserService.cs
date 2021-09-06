@@ -58,11 +58,11 @@ namespace Core.Services
         protected override void Delete(User entity)
         {
             var defaultUser = GetForWrite(Guid.Empty.ToString());
-            var votes = entity.Votes;
+            var posts = entity.Posts;
 
-            foreach (var vote in votes)
+            foreach (var post in posts)
             {
-                vote.User = defaultUser;
+                post.User = defaultUser;
             }
 
             base.Delete(entity);

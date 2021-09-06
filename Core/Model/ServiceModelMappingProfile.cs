@@ -32,8 +32,6 @@ namespace Core.Model
 
             //Misc
             CreateMap<Post, PostView>()
-                .ForMember(m => m.Vote,
-                    opt => opt.MapFrom(x => x.Votes.Sum(v => (int?)v.Value) ?? 0))
                 .ForMember(m => m.ThreadTitle,
                     opt => opt.MapFrom(x => x.Thread.Title));
             CreateMap<User, UserView>();

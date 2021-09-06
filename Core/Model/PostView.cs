@@ -7,7 +7,6 @@ namespace Core.Model
         public UserView User { get; set; }
 
         public string Content { get; set; }
-        public int Vote { get; set; }
 
         public string ThreadTitle { get; set; }
 

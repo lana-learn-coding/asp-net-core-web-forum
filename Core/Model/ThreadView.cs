@@ -14,8 +14,6 @@ namespace Core.Model
 
         public UserView User => Post.User;
 
-        public int Vote => Post.Vote;
-
         public string Content => Post.Content;
 
         [JsonIgnore]
