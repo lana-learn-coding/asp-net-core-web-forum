@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+using AutoMapper;
 using Core.Dto;
+using Core.Model.Write;
 using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers.Public
@@ -10,11 +13,13 @@ namespace Web.Controllers.Public
     [Route("/api/threads")]
     public class ThreadController
     {
+        private readonly IMapper _mapper;
         private readonly ThreadService _service;
 
-        public ThreadController(ThreadService service)
+        public ThreadController(ThreadService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -43,6 +48,13 @@ namespace Web.Controllers.Public
                 .Skip(skip)
                 .Take(take)
             ));
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Store([FromBody] CreateThreadUser entity)
+        {
+            return new JsonResult(_service.Create(_mapper.Map<CreateThreadAdmin>(entity)));
         }
 
         [HttpGet]

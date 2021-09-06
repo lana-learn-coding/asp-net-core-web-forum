@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using Core.Model.Write;
 using DAL.Models.Auth;
 using DAL.Models.Forum;
 
@@ -35,6 +36,7 @@ namespace Core.Model
                 .ForMember(m => m.ThreadTitle,
                     opt => opt.MapFrom(x => x.Thread.Title));
             CreateMap<User, UserView>();
+            CreateMap<CreateThreadUser, CreateThreadAdmin>();
         }
     }
 }
