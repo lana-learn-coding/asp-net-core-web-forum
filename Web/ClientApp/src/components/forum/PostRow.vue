@@ -26,9 +26,7 @@
           <span>Origin</span>
         </div>
       </div>
-      <div class="body-1">
-        {{ post.content }}
-      </div>
+      <div class="body-1" v-html="post.content"></div>
     </v-col>
   </v-row>
 </template>

@@ -10,7 +10,7 @@
       <v-card-title>{{ forum.title }}</v-card-title>
       <v-card-subtitle class="pb-2">{{ forum.subTitle }}</v-card-subtitle>
       <v-card-text class="pb-0">
-        <div>{{ forum.description }}</div>
+        <div v-html="forum.description"></div>
         <div class="mt-2">
           <div class="mr-1 d-inline">
             <v-icon small>chat_bubble_outline</v-icon>
