@@ -103,45 +103,6 @@ export function useHttp(): HttpClient {
   return new HookedHttpClient();
 }
 
-type PrimitiveOrPrimitiveArray = Primitive | Primitive[]
-
-export function useRouteQuery<T extends PrimitiveOrPrimitiveArray>(name: string, defaultValue?: T): Ref<UnwrapRef<T>> {
-  if (defaultValue == null) {
-    return useRouteQuery(name, '') as Ref<UnwrapRef<T>>;
-  }
-
-  const query = ref<T>(defaultValue);
-  const route = useRoute();
-  const router = useRouter();
-
-  watch(
-    query,
-    (val) => {
-      const queryParams = { ...route.query };
-      const rawValue = val.toString().trim();
-      if (!rawValue || rawValue === defaultValue.toString().trim()) {
-        delete queryParams[name];
-      } else {
-        queryParams[name] = val as never;
-      }
-      router.push({ query: queryParams }).catch(noop);
-    },
-    { deep: true },
-  );
-
-  const queryParams = { ...route.query };
-  if (queryParams[name]) {
-    const converted = convertParamValue(queryParams[name], defaultValue);
-    if (converted == null) {
-      delete queryParams[name];
-      router.push({ query: queryParams }).catch(noop);
-    } else {
-      query.value = converted as UnwrapRef<T>;
-    }
-  }
-  return query;
-}
-
 export interface UseQueryResult<T, Q extends FlatDictionary> {
   data: Ref<UnwrapRef<T[]>>;
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
@@ -255,6 +216,8 @@ function mergeQuery(origin: FlatDictionary, params: Record<string, RouteQueryPar
 
   return result;
 }
+
+type PrimitiveOrPrimitiveArray = Primitive | Primitive[]
 
 /**
  * Try to restore value type from example
