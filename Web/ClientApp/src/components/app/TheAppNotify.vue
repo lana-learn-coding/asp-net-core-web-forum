@@ -1,20 +1,20 @@
 <template>
   <div>
-    <transition name="fade-transition" v-for="(snack, i) of snackbars" :key="snack.id">
-      <v-snackbar
-        :style="{ 'margin-top': i * 55 + 'px'}"
-        :value="true"
-        :timeout="snack.timeout"
-        @input="(x) => x || close(snack)"
-        :color="snack.type"
-        top
-        right
-        rounded
-        text
-      >
-        {{ snack.text }}
-      </v-snackbar>
-    </transition>
+    <v-snackbar
+      v-for="(snack, i) of snackbars"
+      :key="snack.id"
+      :style="{ 'margin-top': i * 55 + 'px'}"
+      :value="true"
+      :timeout="snack.timeout"
+      @input="(x) => x || close(snack)"
+      :color="snack.type"
+      top
+      right
+      rounded
+      text
+    >
+      {{ snack.text }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default defineComponent({
   setup() {
     const defaultOptions: Notify = {
       text: 'Operation completed',
-      timeout: 5000,
+      timeout: 4000,
       type: 'info',
     };
 
@@ -41,7 +41,7 @@ export default defineComponent({
 
     function close(opt: Notify) {
       setTimeout(() => {
-        notifies.value = notifies.value.filter((n) => (n as Notify).id === opt.id);
+        notifies.value = notifies.value.filter((n) => (n as Notify).id !== opt.id);
       });
     }
 
