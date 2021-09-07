@@ -60,7 +60,7 @@ namespace Core.Services
             var authId = _httpContext.User.Id() ?? Guid.NewGuid();
             return queryable
                 .Include("Forum")
-                .Where(x => !x.IsOrigin)
+                .Where(x => !x.Id.Equals(x.ThreadId))
                 .ProjectTo<PostView>(_mapperConfig, new { authId });
         }
 

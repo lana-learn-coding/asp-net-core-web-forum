@@ -91,7 +91,6 @@ namespace DAL.Database
                 {
                     Id = id,
                     ThreadId = id,
-                    IsOrigin = true,
                     Content = faker.Rant.Review(),
                     UserId = users[faker.Random.Int(0, users.Count - 1)].Id
                 };

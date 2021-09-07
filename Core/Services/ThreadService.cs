@@ -64,7 +64,6 @@ namespace Core.Services
             Context.Set<Post>().Add(new Post
             {
                 Id = thread.Id,
-                IsOrigin = true,
                 Content = entity.Content,
                 ThreadId = thread.Id,
                 UserId = userId
