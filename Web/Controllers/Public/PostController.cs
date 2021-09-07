@@ -18,8 +18,11 @@ namespace Web.Controllers.Public
         {
             var search = GetQueryString("search");
             var thread = GetQueryString("thread");
+            var user = GetQueryString("user");
 
             if (!string.IsNullOrWhiteSpace(thread)) query = query.Where(x => x.Thread.Slug.Equals(thread));
+            if (!string.IsNullOrWhiteSpace(user)) query = query.Where(x => x.User.Slug.Equals(user));
+
             return query.Where(x => x.Content.Contains(search));
         }
 

@@ -47,6 +47,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [Route("")]
         public virtual IActionResult Store([FromBody] W entity)
         {
             return new JsonResult(Service.Create(entity));

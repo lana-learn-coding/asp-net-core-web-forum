@@ -24,13 +24,16 @@ namespace Web.Controllers.Admin
         [HttpGet]
         [Route("")]
         public virtual IActionResult Index([FromQuery] PageQuery pageQuery, [FromQuery] string forum,
-            [FromQuery] string search, [FromQuery] int? status)
+            [FromQuery] string search, [FromQuery] int? status, [FromQuery] string user)
         {
             search ??= "";
             return new JsonResult(_service.Page(pageQuery, q =>
                 {
                     if (!string.IsNullOrWhiteSpace(forum)) q = q.Where(x => x.Forum.Slug.Equals(forum));
                     if (status != null) q = q.Where(x => (int)x.Status == status);
+                    if (!string.IsNullOrWhiteSpace(user))
+                        q = q.Where(x =>
+                            x.Posts.FirstOrDefault(p => p.ThreadId.Equals(p.Id) && p.User.Slug.Equals(user)) != null);
                     return q.Where(x => x.Title.Contains(search) || x.Tags.Any(t => t.Name.Contains(search)));
                 }
             ));
