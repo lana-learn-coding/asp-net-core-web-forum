@@ -34,7 +34,8 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count))
                 .ForMember(m => m.Vote,
                     opt => opt.MapFrom(x =>
-                        x.Posts.Where(p => p.Id.Equals(x.Id)).SelectMany(p => p.Votes).Sum(v => (int?)v.Value ?? 0)));
+                        x.Posts.Where(p => p.Id.Equals(x.Id)).Select(p => p.Votes.Sum(v => (int?)v.Value ?? 0))
+                            .FirstOrDefault()));
             CreateMap<Forum, ThreadForumView>();
 
             // Posts
