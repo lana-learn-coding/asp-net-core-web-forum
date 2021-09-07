@@ -1,23 +1,24 @@
 <template>
   <v-autocomplete
-    :value="value"
-    @input="input"
-    :items="data"
-    :loading="loading"
-    :search-input.sync="search"
-    :error-messages="errorMessages"
-    :item-value="itemValue"
-    :multiple="multiple"
-    hide-no-data
-    :item-text="itemText"
-    :label="label"
-    :persistent-placeholder="persistentPlaceholder"
-    :required="required"
-    :single-line="singleLine"
-    :hide-details="hideDetails"
-    :clearable="!required"
-    :rules="required ? [ruleRequired] : []"
-    @click:clear="input(multiple ? [] : '')"
+      :value="value"
+      @input="input"
+      :items="data"
+      :loading="loading"
+      :search-input.sync="search"
+      :error-messages="errorMessages"
+      :item-value="itemValue"
+      :multiple="multiple"
+      hide-no-data
+      :item-text="itemText"
+      :label="label"
+      :persistent-placeholder="persistentPlaceholder"
+      :required="required"
+      :single-line="singleLine"
+      :hide-details="hideDetails"
+      :clearable="!required"
+      :dense="dense"
+      :rules="required ? [ruleRequired] : []"
+      @click:clear="input(multiple ? [] : '')"
   >
   </v-autocomplete>
 </template>
@@ -47,6 +48,7 @@ export default defineComponent({
     errorMessages: [String, Array],
     label: String,
     required: Boolean,
+    dense: Boolean,
     persistentPlaceholder: Boolean,
     singleLine: Boolean,
     hideDetails: Boolean,

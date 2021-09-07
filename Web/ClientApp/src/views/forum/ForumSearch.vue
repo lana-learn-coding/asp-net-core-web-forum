@@ -1,19 +1,48 @@
 <template>
   <v-col cols="12" md="9">
     <v-card flat>
-      <v-card-title>Forums Search Result</v-card-title>
-      <v-card-subtitle>Keyword "{{ query.search }}"</v-card-subtitle>
+      <v-card-title>Forums {{ query.search ? 'Search Result' : 'List' }}</v-card-title>
+      <v-card-subtitle v-if="query.search">Keyword "{{ query.search }}"</v-card-subtitle>
+      <v-card-subtitle v-else>You can search using search bar</v-card-subtitle>
 
       <v-card-text class="pt-0">
-        <forum-sort-select
-          class="mb-3"
-          style="max-width: 200px"
-          v-model="query.sort"
-          dense
-          single-line
-          hide-details
-        >
-        </forum-sort-select>
+        <div class="d-flex mb-2 mb-lg-3 flex-column flex-md-row">
+          <category-select
+            style="max-width: 300px"
+            v-model="query.category"
+            dense
+            item-value="slug"
+            single-line
+            hide-details
+          >
+          </category-select>
+          <v-spacer class="d-none d-md-block"></v-spacer>
+          <div class="d-flex">
+            <auto-complete-select
+              class="mr-3"
+              label="Language"
+              uri="languages/all"
+              style="max-width: 300px"
+              item-text="name"
+              v-model="query.language"
+              item-value="slug"
+              dense
+              single-line
+              hide-details
+            >
+            </auto-complete-select>
+            <v-spacer class="d-none d-md-block"></v-spacer>
+            <forum-sort-select
+              class="mb-2"
+              style="max-width: 200px"
+              v-model="query.sort"
+              dense
+              single-line
+              hide-details
+            >
+            </forum-sort-select>
+          </div>
+        </div>
         <v-skeleton-loader v-if="meta.loading" type="list-item-avatar-three-line@4">
         </v-skeleton-loader>
         <div v-else-if="!data.length">
@@ -44,10 +73,12 @@ import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import ForumRow from '@/components/forum/ForumRow.vue';
 import { useRoute } from '@/composable/compat';
 import ForumSortSelect from '@/components/form/ForumSortSelect.vue';
+import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
+import CategorySelect from '@/components/form/CategorySelect.vue';
 
 export default defineComponent({
   name: 'ForumSearch',
-  components: { ForumSortSelect, ForumList, ForumRow },
+  components: { CategorySelect, AutoCompleteSelect, ForumSortSelect, ForumList, ForumRow },
   setup() {
     useTitle('Forums Search');
     useBreadcrumbs([
@@ -57,8 +88,9 @@ export default defineComponent({
     ]);
 
     const { query, data, meta } = useQuery<Dictionary>('forums')({
-      category: '_all',
+      category: '',
       search: '',
+      language: '',
       sort: '',
     });
 

@@ -289,12 +289,16 @@ export default defineComponent({
     const focus = ref(false);
     const navs = ref<NavLink[]>([
       {
-        text: 'Forums',
+        text: 'Home',
         to: { name: 'Home' },
       },
       {
-        text: 'Search',
+        text: 'Forums',
         to: { name: 'Search' },
+      },
+      {
+        text: 'Search',
+        to: { name: 'AdvancedSearch' },
       },
       {
         text: 'Topics',

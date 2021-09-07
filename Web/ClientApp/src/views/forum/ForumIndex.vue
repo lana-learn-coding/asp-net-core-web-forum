@@ -23,15 +23,31 @@
           >
           </v-text-field>
           <v-spacer class="d-none d-md-block"></v-spacer>
-          <forum-sort-select
-            class="mb-2"
-            style="max-width: 200px"
-            v-model="query.sort"
-            dense
-            single-line
-            hide-details
-          >
-          </forum-sort-select>
+          <div class="d-flex">
+            <auto-complete-select
+              class="mr-3"
+              label="Language"
+              uri="languages/all"
+              style="max-width: 300px"
+              item-text="name"
+              v-model="query.language"
+              item-value="slug"
+              dense
+              single-line
+              hide-details
+            >
+            </auto-complete-select>
+            <v-spacer class="d-none d-md-block"></v-spacer>
+            <forum-sort-select
+              class="mb-2"
+              style="max-width: 200px"
+              v-model="query.sort"
+              dense
+              single-line
+              hide-details
+            >
+            </forum-sort-select>
+          </div>
         </div>
       </template>
 
@@ -56,10 +72,11 @@ import { useQuery } from '@/services/http';
 import { Category, Dictionary } from '@/services/model';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import ForumSortSelect from '@/components/form/ForumSortSelect.vue';
+import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 
 export default defineComponent({
   name: 'ForumIndex',
-  components: { ForumSortSelect, ForumList },
+  components: { AutoCompleteSelect, ForumSortSelect, ForumList },
   async beforeRouteEnter(to, from, next) {
     if (!to.query.category) return next({ name: 'NotFound' });
     const category = Array.isArray(to.query.category) ? to.query.category[0] : to.query.category;
@@ -99,6 +116,7 @@ export default defineComponent({
     const { query, data, meta } = useQuery<Dictionary>('forums')({
       category: '',
       search: '',
+      language: '',
       sort: '',
     });
 
