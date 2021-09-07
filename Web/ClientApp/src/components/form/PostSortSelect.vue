@@ -30,6 +30,7 @@ export default defineComponent({
       sorts: [
         { text: 'Oldest', value: '' },
         { text: 'Newest', value: '-createdAt' },
+        { text: 'Most Voted', value: '-vote' },
       ],
     };
   },

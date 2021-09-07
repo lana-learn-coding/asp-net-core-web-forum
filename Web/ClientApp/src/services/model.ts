@@ -69,6 +69,8 @@ export interface Forum extends ModelBase {
 }
 
 export interface Thread extends ModelBase {
+  vote: number;
+  voted: number;
   title: string;
   content: string;
   user: UserBase,
@@ -81,6 +83,8 @@ export interface Thread extends ModelBase {
 }
 
 export interface Post extends ModelBase {
+  vote: number;
+  voted: number;
   content: string;
   user: UserBase;
   threadTitle: string;

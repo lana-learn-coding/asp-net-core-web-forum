@@ -124,6 +124,7 @@ export default defineComponent({
       { text: 'User', value: 'user.username' },
       { text: 'Thread', value: 'threadTitle' },
       { text: 'Content', value: 'content', sortable: false },
+      { text: 'Vote', value: 'vote' },
       { text: 'Updated At', value: 'updatedAt' },
       { text: 'Action', value: 'action', sortable: false },
     ];

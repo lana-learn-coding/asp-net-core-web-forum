@@ -223,6 +223,7 @@ export default defineComponent({
       { text: 'Tags', value: 'tags', sortable: false },
       { text: 'Posts', value: 'postsCount' },
       { text: 'View', value: 'viewsCount' },
+      { text: 'Vote', value: 'vote' },
       { text: 'Status', value: 'status' },
       { text: 'Last Activity', value: 'lastActivityAt' },
       { text: 'Updated At', value: 'updatedAt' },
