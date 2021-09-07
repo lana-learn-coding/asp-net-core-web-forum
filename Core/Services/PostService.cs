@@ -22,7 +22,7 @@ namespace Core.Services
         public PostService(DbContext context, IHttpContextAccessor httpContextAccessor,
             IConfigurationProvider mapperConfig) : base(context)
         {
-            DefaultSort = new List<string> { "CreatedAt" };
+            DefaultSort = new List<string> { "CreatedAt desc" };
             _httpContext = httpContextAccessor.HttpContext;
             _mapperConfig = mapperConfig;
         }
