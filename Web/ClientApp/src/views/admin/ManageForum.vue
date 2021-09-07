@@ -20,7 +20,21 @@
         >
         </v-text-field>
         <v-spacer class="d-none d-md-block"></v-spacer>
+        <auto-complete-select
+          class="mr-3"
+          label="Language"
+          uri="languages/all"
+          style="max-width: 300px"
+          item-text="name"
+          :value="bind.language"
+          @input="on.language"
+          item-value="slug"
+          single-line
+          hide-details
+        >
+        </auto-complete-select>
         <category-select
+          style="max-width: 300px"
           :value="bind.category"
           @input="on.category"
           item-value="slug"
@@ -77,7 +91,7 @@
           </v-text-field>
         </v-col>
 
-        <v-col>
+        <v-col cols="6">
           <access-select
             :value="values.forumAccess"
             @input="inputs.forumAccess"
@@ -89,7 +103,7 @@
           </access-select>
         </v-col>
 
-        <v-col>
+        <v-col cols="6">
           <access-select
             :value="values.threadAccess"
             @input="inputs.threadAccess"
@@ -110,6 +124,23 @@
             required
           >
           </category-select>
+        </v-col>
+
+        <v-col>
+          <auto-complete-select
+            class="mr-3"
+            label="Language"
+            uri="languages/all"
+            style="max-width: 300px"
+            item-text="name"
+            :value="values.languageId"
+            @input="inputs.languageId"
+            :error-messages="errors.languageId"
+            item-value="uid"
+            persistent-placeholder
+            required
+          >
+          </auto-complete-select>
         </v-col>
 
         <v-col>
@@ -163,6 +194,12 @@
       </div>
     </template>
 
+    <template #table.language.name="{ item }">
+      <div style="max-width: 100px" class="text-truncate">
+        {{ item.language.name }}
+      </div>
+    </template>
+
     <template #table.forumAccess="{ item }">
       <v-chip
         :color="access[item.forumAccess].color"
@@ -208,14 +245,23 @@ import CategorySelect from '@/components/form/CategorySelect.vue';
 import AccessSelect from '@/components/form/AccessSelect.vue';
 import { useAccessType, usePriority } from '@/composable/form';
 import EditorInput from '@/components/form/EditorInput.vue';
+import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 
 export default defineComponent({
   name: 'ManageForum',
-  components: { EditorInput, AccessSelect, CategorySelect, CrudEditForm, CrudTable },
+  components: {
+    AutoCompleteSelect,
+    EditorInput,
+    AccessSelect,
+    CategorySelect,
+    CrudEditForm,
+    CrudTable,
+  },
   setup() {
     const table = [
       { text: 'Title', value: 'title' },
       { text: 'Category', value: 'category.name' },
+      { text: 'Language', value: 'language.name' },
       { text: 'Priority', value: 'priority' },
       { text: 'Forum/Thread Access', value: 'forumAccess' },
       { text: 'Threads', value: 'threadsCount' },
@@ -231,6 +277,7 @@ export default defineComponent({
       category: '',
       forumAccess: '',
       threadAccess: '',
+      language: '',
     });
 
     const form = reactive({
@@ -238,6 +285,7 @@ export default defineComponent({
       categoryId: '',
       threadAccess: 0,
       forumAccess: 0,
+      languageId: '',
       subTitle: '',
       icon: '',
       description: '',

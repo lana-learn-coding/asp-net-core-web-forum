@@ -9,6 +9,7 @@ import AdminLogin from '@/views/auth/AdminLogin.vue';
 import ManageThread from '@/views/admin/ManageThread.vue';
 import ManagePost from '@/views/admin/ManagePost.vue';
 import ManageSpecialty from '@/views/admin/topic/ManageSpecialty.vue';
+import ManageLanguage from '@/views/admin/topic/ManageLanguage.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -39,6 +40,14 @@ const admin: RouteConfig = {
       path: 'categories',
       component: ManageCategory,
       name: 'ManageCategory',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'languages',
+      component: ManageLanguage,
+      name: 'ManageLanguage',
       meta: {
         roles: ['Admin'],
       },
