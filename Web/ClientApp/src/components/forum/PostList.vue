@@ -9,22 +9,26 @@
     <template v-else>
       <v-card-title>{{ thread.title }}</v-card-title>
       <v-card-subtitle>
-        <div class="d-flex">
-          <div class="d-inline mr-2">
+        <div class="d-flex text-caption text-md-body-2">
+          <div class="d-inline mr-1 mr-md-2">
             <v-icon class="material-icons-outlined mr-1" small>person</v-icon>
             <span>{{ thread.user.username }}</span>
           </div>
-          <div class="d-inline mr-2">
+          <div class="d-inline mr-1 mr-md-2">
             <v-icon class="material-icons-outlined mr-1" small>schedule</v-icon>
             <span class="d-none d-md-inline">{{ formatDateTime(thread.createdAt) }}</span>
             <span class="d-md-none">{{ formatDate(thread.createdAt) }}</span>
           </div>
           <v-spacer class="d-none d-md-block"></v-spacer>
-          <div class="d-inline mr-2">
+          <div class="d-inline mr-1 mr-md-2">
             <v-icon class="material-icons-outlined mr-1" small>visibility</v-icon>
             <span>{{ thread.viewsCount || thread.postsCount * 2 }}</span>
           </div>
-          <div class="d-inline mr-2">
+          <div class="d-inline mr-1 mr-md-2">
+            <v-icon class="material-icons-outlined mr-1" small>medication</v-icon>
+            <span>{{ thread.vote }}</span>
+          </div>
+          <div class="d-inline">
             <v-icon class="material-icons-outlined mr-1" small>chat_bubble_outline</v-icon>
             <span>{{ thread.postsCount }}</span>
           </div>

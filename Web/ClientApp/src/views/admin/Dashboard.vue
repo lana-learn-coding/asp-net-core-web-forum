@@ -70,7 +70,7 @@
 
                 <span class="mr-1">
                   <v-icon class="material-icons-outlined" small>medication</v-icon>
-                  {{ thread.vote || 1 }}
+                  {{ thread.vote }}
                 </span>
               </span>
               </div>

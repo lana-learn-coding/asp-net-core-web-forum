@@ -39,7 +39,7 @@
 
         <div class="mr-1 d-inline">
           <v-icon class="material-icons-outlined" small>medication</v-icon>
-          {{ thread.vote || 1 }}
+          {{ thread.vote }}
         </div>
       </div>
       <div>
@@ -78,7 +78,7 @@
       <div class="body-2 d-md-block mr-3">
         <number-counter
           from="0"
-          :to="thread.vote || 1"
+          :to="thread.vote"
           :duration="1"
         >
         </number-counter>
