@@ -40,7 +40,8 @@
             Sign Up
           </v-btn>
         </div>
-        <router-link :to="{ name: 'Forgot' }" class="body-2 d-block ml-3">Forgot your password?</router-link>
+        <router-link :to="{ name: 'Forgot' }" class="body-2 d-block ml-3">Forgot your password?
+        </router-link>
       </v-card-actions>
     </v-card>
   </div>
@@ -94,6 +95,14 @@ export default defineComponent({
     async function back() {
       if (props.redirect.name === 'SignUp') {
         await router.push({ name: 'Me' });
+        return;
+      }
+      if (props.redirect.name === 'Logout') {
+        try {
+          await router.go(-2);
+        } catch {
+          await router.push({ name: 'Home' });
+        }
         return;
       }
       await router.push({ ...props.redirect } as Location);
