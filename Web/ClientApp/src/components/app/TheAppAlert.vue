@@ -69,7 +69,7 @@ export default defineComponent({
     function cb(opt: Alert, accept: boolean) {
       opt.cb(accept);
       setTimeout(() => {
-        alerts.value = alerts.value.filter((a) => (a as Alert).id === opt.id);
+        alerts.value = alerts.value.filter((a) => (a as Alert).id !== opt.id);
       });
     }
 
