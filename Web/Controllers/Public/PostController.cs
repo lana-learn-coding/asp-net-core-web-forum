@@ -24,6 +24,14 @@ namespace Web.Controllers.Public
         }
 
         [HttpPost]
+        [Route("{slug}/votes/{vote:int}")]
+        public IActionResult Store(string slug, int vote)
+        {
+            ((PostService)Service).Vote(slug, (short)vote);
+            return new OkResult();
+        }
+
+        [HttpPost]
         public override IActionResult Store([FromBody] Post entity)
         {
             return base.Store(entity);
