@@ -1,14 +1,12 @@
 <template>
-  <v-main>
-    <div id="app" class="d-flex flex-column justify-center align-center">
-      <div class="text--secondary text-h1">{{ code }}</div>
-      <div class="text--primary mt-3">{{ text }}</div>
-      <div class="mt-3">
-        <v-btn class="mr-2" color="primary" text :to="{ name: 'Home' }">Home</v-btn>
-        <v-btn text disabled>Report</v-btn>
-      </div>
+  <div class="d-flex flex-column justify-center align-center" style="margin-top: 12rem">
+    <div class="text--secondary text-h1">{{ code }}</div>
+    <div class="text--primary mt-3">{{ text }}</div>
+    <div class="mt-3">
+      <v-btn class="mr-2" color="primary" text :to="{ name: 'Home' }">Home</v-btn>
+      <v-btn class="mr-2" color="secondary" text @click="$router.back()">Back</v-btn>
     </div>
-  </v-main>
+  </div>
 </template>
 
 <script lang="ts">

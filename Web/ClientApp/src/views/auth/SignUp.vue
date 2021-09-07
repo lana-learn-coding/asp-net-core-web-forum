@@ -42,14 +42,24 @@
             required
           >
           </v-text-field>
+
+          <v-checkbox v-model="form.terms" :error-messages="errors.terms" dense>
+            <template #label>
+              <span class="body-2">I agree with</span>
+              <router-link :to="{ name: 'Terms'}" class="ml-2 body-2">
+                Dr. Forum's terms of use
+              </router-link>
+            </template>
+          </v-checkbox>
         </v-form>
       </v-card-text>
 
-      <v-card-actions>
-        <v-btn color="primary" :loading="loading" @click="submit">
+      <v-card-actions class="pt-0">
+        <v-btn color="primary" :loading="loading" @click="submit" text>
           Sign Up
         </v-btn>
-        <v-btn @click="clear">Clear</v-btn>
+        <v-btn @click="clear" text>Clear</v-btn>
+        <v-btn :to="{ name: 'Login' }" text>Login</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -71,12 +81,13 @@ export default defineComponent({
       password: '',
       confirm_password: '',
       email: '',
+      terms: false,
     });
 
     const loading = ref(false);
     const http = useHttp();
     const router = useRouter();
-    const { notify } = useMessage();
+    const { confirm } = useMessage();
 
     async function submit() {
       if (form.password !== form.confirm_password) {
@@ -86,11 +97,26 @@ export default defineComponent({
         });
         return;
       }
+      if (!form.terms) {
+        setErrors({
+          terms: 'Please read and agree with ours terms of use',
+        });
+        return;
+      }
       loading.value = true;
       try {
         await http.post('/auth/sign-up', form);
-        router.push({ name: 'Login' });
-        notify({ text: 'Your account was created! Please login' });
+        clearForm();
+        loading.value = false;
+
+        const ok = await confirm({
+          title: 'Signed Up',
+          text: 'Your account was created! Please login',
+          type: 'success',
+          cancel: 'Home',
+        });
+        if (ok) await router.push({ name: 'Login' });
+        else await router.push({ name: 'Home' });
       } catch (e) {
         setErrors(e.response.data);
       } finally {

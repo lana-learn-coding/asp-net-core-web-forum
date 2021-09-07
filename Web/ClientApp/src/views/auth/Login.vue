@@ -22,22 +22,25 @@
             required
           >
           </v-text-field>
-          <v-checkbox v-model="form.rememberMe" label="Remember Me" class="mt-2"></v-checkbox>
+          <v-checkbox v-model="form.rememberMe" label="Remember Me" dense></v-checkbox>
         </v-form>
       </v-card-text>
 
-      <v-card-actions>
-        <v-btn color="primary" @click="submit" :loading="user.loading" text>
-          Login
-        </v-btn>
-        <v-btn
-          :disabled="user.loading"
-          color="success"
-          :to="{ name: 'SignUp'}"
-          text
-        >
-          Sign Up
-        </v-btn>
+      <v-card-actions class="flex-column flex-sm-row pt-0 align-start align-sm-center">
+        <div>
+          <v-btn color="primary" @click="submit" :loading="user.loading" text>
+            Login
+          </v-btn>
+          <v-btn
+            :disabled="user.loading"
+            color="success"
+            :to="{ name: 'SignUp'}"
+            text
+          >
+            Sign Up
+          </v-btn>
+        </div>
+        <router-link :to="{ name: 'Forgot' }" class="body-2 d-block ml-3">Forgot your password?</router-link>
       </v-card-actions>
     </v-card>
   </div>
@@ -50,7 +53,6 @@ import { useTitle } from '@vueuse/core';
 import { useForm } from '@/composable/form';
 import { useRouter } from '@/composable/compat';
 import { useUser } from '@/services/auth';
-import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default defineComponent({
   name: 'Login',
@@ -67,8 +69,6 @@ export default defineComponent({
   },
   setup(props) {
     useTitle('Login');
-    useBreadcrumbs([]);
-
     const { form, errors, setErrors } = useForm({
       username: '',
       password: '',
@@ -76,21 +76,27 @@ export default defineComponent({
     });
 
     const { user, login } = useUser();
+    if (user.isAuthenticated) back();
 
     const router = useRouter();
 
     async function submit() {
       try {
         await login(form);
-        if (props.redirect.name === 'SignUp') {
-          await router.push({ name: 'Home' });
-        }
-        await router.push({ ...props.redirect } as Location);
+        await back();
       } catch (e) {
         if (e.response?.data) {
           setErrors(e.response.data);
         }
       }
+    }
+
+    async function back() {
+      if (props.redirect.name === 'SignUp') {
+        await router.push({ name: 'Me' });
+        return;
+      }
+      await router.push({ ...props.redirect } as Location);
     }
 
     return {

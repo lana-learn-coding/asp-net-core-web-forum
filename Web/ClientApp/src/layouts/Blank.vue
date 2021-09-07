@@ -1,6 +1,8 @@
 <template>
   <the-layout>
-    <router-view></router-view>
+    <v-container class="mt-2 mt-md-3 mt-lg-4 mt-xl-5">
+      <router-view></router-view>
+    </v-container>
   </the-layout>
 </template>
 

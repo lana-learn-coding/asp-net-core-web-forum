@@ -1,20 +1,20 @@
 <template>
   <div>
-    <v-snackbar
-      v-for="(snack, i) of snackbars"
-      :style="{ 'margin-bottom': i * 55 + 'px'}"
-      :key="snack.id"
-      :value="true"
-      :timeout="snack.timeout"
-      @input="(x) => x || close(snack)"
-      :color="snack.type"
-      transition="fade-transition"
-      right
-      rounded
-      text
-    >
-      {{ snack.text }}
-    </v-snackbar>
+    <transition name="fade-transition" v-for="(snack, i) of snackbars" :key="snack.id">
+      <v-snackbar
+        :style="{ 'margin-top': i * 55 + 'px'}"
+        :value="true"
+        :timeout="snack.timeout"
+        @input="(x) => x || close(snack)"
+        :color="snack.type"
+        top
+        right
+        rounded
+        text
+      >
+        {{ snack.text }}
+      </v-snackbar>
+    </transition>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default defineComponent({
   setup() {
     const defaultOptions: Notify = {
       text: 'Operation completed',
-      timeout: 3500,
+      timeout: 5000,
       type: 'info',
     };
 
