@@ -27,16 +27,13 @@ namespace DAL
         public DbSet<User> Users { get; set; }
 
         public DbSet<Forum> Forums { get; set; }
-
         public DbSet<Thread> Threads { get; set; }
-
         public DbSet<Post> Posts { get; set; }
-
         public DbSet<Vote> Votes { get; set; }
 
         public DbSet<Category> Categories { get; set; }
-
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Specialty> Specialties { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -49,6 +46,7 @@ namespace DAL
             modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Post>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Thread>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Specialty>().Map(m => m.MapInheritedProperties());
         }
 
         public override int SaveChanges()

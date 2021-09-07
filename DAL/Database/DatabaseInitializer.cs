@@ -47,11 +47,21 @@ namespace DAL.Database
                 new Tag { Name = "Neurology" },
                 new Tag { Name = "Surgery" },
                 new Tag { Name = "Urology" },
-                new Tag { Name = "Infectious Diseases" },
                 new Tag { Name = "Hematology" },
                 new Tag { Name = "Dermatology" },
-                new Tag { Name = "Endocrinology & Diabetes" },
-                new Tag { Name = "Gastroenterology & Liver Diseases" }
+                new Tag { Name = "Anesthesiology" },
+            });
+
+            foreach (var tag in context.Tags.Local)
+            {
+                context.Specialties.Add(new Specialty { Tag = tag });
+            }
+
+            context.Tags.AddRange(new[]
+            {
+                new Tag { Name = "Infectious Diseases" },
+                new Tag { Name = "Gastroenterology & Liver Diseases" },
+                new Tag { Name = "Endocrinology & Diabetes" }
             });
         }
 

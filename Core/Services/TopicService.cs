@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using Core.Services.Base;
 using DAL.Models.Topic;
 
@@ -29,6 +30,18 @@ namespace Core.Services
     {
         public TagService(DbContext context) : base(context)
         {
+        }
+    }
+
+    public class SpecialtyService : SimpleCrudService<Specialty>
+    {
+        public SpecialtyService(DbContext context) : base(context)
+        {
+        }
+
+        protected override IQueryable<Specialty> Query(IQueryable<Specialty> queryable)
+        {
+            return queryable.Include("Tag");
         }
     }
 }

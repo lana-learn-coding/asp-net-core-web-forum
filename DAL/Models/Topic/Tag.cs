@@ -25,6 +25,12 @@ namespace DAL.Models.Topic
         [StringLength(50)]
         public string Color { get; set; }
 
+        [NotMapped]
+        public bool IsSpecialty => Specialties.Count > 0;
+
+        [JsonIgnore]
+        public virtual ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
+
         [JsonIgnore]
         public virtual ICollection<Thread> Threads { get; set; } = new List<Thread>();
     }
