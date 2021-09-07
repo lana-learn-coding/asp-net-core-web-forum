@@ -22,7 +22,7 @@ namespace DAL.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        [Column(TypeName = "VARCHAR")]
+        [Column(TypeName = "NVARCHAR")]
         [Index(IsUnique = true)]
         public string Slug { get; set; }
 
