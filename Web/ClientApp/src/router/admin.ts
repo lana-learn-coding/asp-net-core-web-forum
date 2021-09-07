@@ -8,6 +8,7 @@ import ManageUser from '@/views/admin/ManageUser.vue';
 import AdminLogin from '@/views/auth/AdminLogin.vue';
 import ManageThread from '@/views/admin/ManageThread.vue';
 import ManagePost from '@/views/admin/ManagePost.vue';
+import ManageSpecialty from '@/views/admin/topic/ManageSpecialty.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -46,6 +47,14 @@ const admin: RouteConfig = {
       path: 'tags',
       component: ManageTag,
       name: 'ManageTag',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'specialties',
+      component: ManageSpecialty,
+      name: 'ManageSpecialty',
       meta: {
         roles: ['Admin'],
       },

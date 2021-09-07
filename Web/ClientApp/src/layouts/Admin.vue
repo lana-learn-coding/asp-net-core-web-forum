@@ -105,6 +105,7 @@ export default defineComponent({
         links: [
           { title: 'Category', icon: 'label_important', name: 'ManageCategory' },
           { title: 'Tag', icon: 'local_offer', name: 'ManageTag' },
+          { title: 'Specialty', icon: 'grade', name: 'ManageSpecialty' },
         ],
       },
       { title: 'Forum', icon: 'folder', name: 'ManageForum' },

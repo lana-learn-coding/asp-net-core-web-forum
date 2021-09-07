@@ -41,11 +41,17 @@ export interface Category extends ModelBase {
 export interface Tag extends ModelBase {
   name: string;
   color?: string;
+  isSpecialty: boolean;
+}
+
+export interface Specialty extends ModelBase {
+  name: string;
 }
 
 export interface UserBase extends ModelBase {
   avatar: string;
   username: string;
+  email: string;
 }
 
 export interface Forum extends ModelBase {
@@ -80,6 +86,11 @@ export interface Thread extends ModelBase {
   tags: Tag[],
   viewsCount: number;
   status: number;
+}
+
+export interface Me extends UserBase {
+  firstName: string;
+  lastName: string;
 }
 
 export interface Post extends ModelBase {
