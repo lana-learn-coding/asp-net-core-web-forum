@@ -59,12 +59,10 @@ namespace Core.Services
         {
             var defaultUser = GetForWrite(Guid.Empty.ToString());
             var posts = entity.Posts;
+            foreach (var post in posts) post.User = defaultUser;
 
-            foreach (var post in posts)
-            {
-                post.User = defaultUser;
-            }
-
+            var votes = entity.Votes;
+            foreach (var vote in votes) vote.User = defaultUser;
             base.Delete(entity);
         }
     }

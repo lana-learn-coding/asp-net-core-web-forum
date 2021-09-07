@@ -32,6 +32,8 @@ namespace DAL
 
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Vote> Votes { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
@@ -43,6 +45,7 @@ namespace DAL
             modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
 
+            modelBuilder.Entity<Vote>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Post>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Thread>().Map(m => m.MapInheritedProperties());

@@ -38,9 +38,10 @@ namespace Core.Services
                 queryable = queryable.Where(x => x.Forum.ForumAccess < AccessMode.Internal)
                     .Where(x => x.Status != ThreadStatus.Pending);
 
+            var authId = _httpContext.User.Id() ?? Guid.NewGuid();
             return queryable
                 .Include("Forum")
-                .ProjectTo<ThreadView>(_mapperConfig);
+                .ProjectTo<ThreadView>(_mapperConfig, new { authId });
         }
 
 

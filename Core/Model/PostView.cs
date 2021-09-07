@@ -11,5 +11,9 @@ namespace Core.Model
         public string ThreadTitle { get; set; }
 
         public Guid ThreadId { get; set; }
+
+        public int Vote { get; set; }
+
+        public short Voted { get; set; }
     }
 }

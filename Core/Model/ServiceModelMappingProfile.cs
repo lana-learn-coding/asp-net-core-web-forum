@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Core.Model.Write;
 using DAL.Models.Auth;
@@ -30,13 +31,24 @@ namespace Core.Model
                 .ForMember(m => m.Post,
                     opt => opt.MapFrom(x => x.Posts.FirstOrDefault(p => p.Id.Equals(x.Id))))
                 .ForMember(m => m.PostsCount,
-                    opt => opt.MapFrom(x => x.Posts.Count));
+                    opt => opt.MapFrom(x => x.Posts.Count))
+                .ForMember(m => m.Vote,
+                    opt => opt.MapFrom(x =>
+                        x.Posts.Where(p => p.Id.Equals(x.Id)).SelectMany(p => p.Votes).Sum(v => (int?)v.Value ?? 0)));
             CreateMap<Forum, ThreadForumView>();
 
-            //Misc
+            // Posts
+            var authId = Guid.NewGuid(); // auto mapper Parameterization
             CreateMap<Post, PostView>()
+                .ForMember(m => m.Vote,
+                    opt => opt.MapFrom(x => x.Votes.Sum(v => (int?)v.Value) ?? 0))
                 .ForMember(m => m.ThreadTitle,
-                    opt => opt.MapFrom(x => x.Thread.Title));
+                    opt => opt.MapFrom(x => x.Thread.Title))
+                .ForMember(m => m.Voted,
+                    opt => opt.MapFrom(x =>
+                        x.Votes.Where(v => v.UserId.Equals(authId)).Select(v => v.Value).FirstOrDefault()));
+
+            //Misc
             CreateMap<User, UserView>();
             CreateMap<CreateThreadUser, CreateThreadAdmin>();
         }

@@ -110,6 +110,18 @@ namespace DAL.Database
                     context.Posts.Add(post);
                 }
 
+                var voteCount = faker.Random.Int(0, users.Count - 1);
+                for (var j = 0; j < voteCount; j++)
+                {
+                    var vote = new Vote
+                    {
+                        Post = originPost,
+                        Value = (short)(new Faker().Random.Bool() ? 1 : -1),
+                        UserId = users[j].Id
+                    };
+                    context.Votes.Add(vote);
+                }
+
                 Console.WriteLine($"Post({postCount}): {thread.Title}");
             }
         }

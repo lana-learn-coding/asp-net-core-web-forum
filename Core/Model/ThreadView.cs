@@ -16,6 +16,11 @@ namespace Core.Model
 
         public string Content => Post.Content;
 
+        public int Vote { get; set; }
+
+        public short Voted => Post.Voted;
+
+
         [JsonIgnore]
         public PostView Post { get; set; }
 

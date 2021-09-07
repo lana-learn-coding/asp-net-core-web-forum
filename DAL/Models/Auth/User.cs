@@ -45,5 +45,8 @@ namespace DAL.Models.Auth
 
         [JsonIgnore]
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+
+        [JsonIgnore]
+        public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     }
 }

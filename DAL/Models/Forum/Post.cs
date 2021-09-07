@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -28,5 +29,8 @@ namespace DAL.Models.Forum
         public Guid ThreadId { get; set; }
 
         public virtual Thread Thread { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
     }
 }

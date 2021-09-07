@@ -57,10 +57,42 @@ namespace Core.Services
             else if (!_httpContext.User.IsInRole("Admin"))
                 queryable = queryable.Where(x => x.Thread.Forum.ForumAccess < AccessMode.Internal);
 
+            var authId = _httpContext.User.Id() ?? Guid.NewGuid();
             return queryable
                 .Include("Forum")
                 .Where(x => !x.IsOrigin)
-                .ProjectTo<PostView>(_mapperConfig);
+                .ProjectTo<PostView>(_mapperConfig, new { authId });
+        }
+
+        public void Vote(string slug, short val)
+        {
+            var userId = _httpContext.User.Id() ?? throw new UnauthorizedException();
+
+            var post = GetForWrite(slug, q => q.Include("Thread.Forum"));
+            if (post.Thread.Forum.ForumAccess > AccessMode.Internal && !_httpContext.User.IsAdmin())
+                throw new ForbiddenException();
+
+            // user vote for post should always 1, except for deleted user (which is default user Anon)
+            if (!userId.Equals(Guid.Empty))
+            {
+                var currentUserVotes = post.Votes.Where(x => x.User.Id.Equals(userId)).ToList();
+                foreach (var vote in currentUserVotes)
+                {
+                    post.Votes.Remove(vote);
+                }
+            }
+
+            if (val != 0)
+            {
+                post.Votes.Add(new Vote
+                {
+                    UserId = userId,
+                    Post = post,
+                    Value = (short)(val > 0 ? 1 : -1)
+                });
+            }
+
+            Context.SaveChanges();
         }
 
         public override PostView Get(string slug)
