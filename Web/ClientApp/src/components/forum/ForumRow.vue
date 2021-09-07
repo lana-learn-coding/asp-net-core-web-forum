@@ -66,7 +66,7 @@
             <div class="text-truncate caption font-weight-medium">Last Activity</div>
             <v-avatar size="38">
               <v-img
-                :src="forum.lastThread.user.avatar || '@/assets/anon.png'"
+                :src="forum.lastThread.user.avatar || require('@/assets/anon.png')"
                 lazy-src="@/assets/anon_thumbnail.png"
                 :alt="forum.lastThread.user.username"
               ></v-img>

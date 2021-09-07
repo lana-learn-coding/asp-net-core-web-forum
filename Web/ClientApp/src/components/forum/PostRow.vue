@@ -3,7 +3,7 @@
     <v-col cols="2" xl="1" class="d-flex flex-column align-center justify-center">
       <v-avatar>
         <v-img
-          :src="post.user.avatar || '@/assets/anon.png'"
+          :src="post.user.avatar || require('@/assets/anon.png')"
           lazy-src="@/assets/anon_thumbnail.png"
           :alt="post.user.username"
         ></v-img>
