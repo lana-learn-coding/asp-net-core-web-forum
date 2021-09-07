@@ -5,6 +5,7 @@
     title="Users"
     url="admin/users"
     :filter="filter"
+    form-width="400px"
   >
     <template #filter="{bind, on}">
       <v-text-field
@@ -58,6 +59,21 @@
           >
           </v-text-field>
         </v-col>
+
+        <v-col cols="12">
+          <auto-complete-select
+            label="Role"
+            uri="admin/users/roles/all"
+            item-text="name"
+            :value="values.roleIds"
+            @input="inputs.roleIds"
+            :error-messages="errors.roleIds"
+            item-value="uid"
+            persistent-placeholder
+            multiple
+          >
+          </auto-complete-select>
+        </v-col>
       </v-row>
     </template>
 
@@ -98,10 +114,18 @@ import CategorySelect from '@/components/form/CategorySelect.vue';
 import AccessSelect from '@/components/form/AccessSelect.vue';
 import { useAccessType, usePriority } from '@/composable/form';
 import EditorInput from '@/components/form/EditorInput.vue';
+import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 
 export default defineComponent({
   name: 'ManageUser',
-  components: { EditorInput, AccessSelect, CategorySelect, CrudEditForm, CrudTable },
+  components: {
+    AutoCompleteSelect,
+    EditorInput,
+    AccessSelect,
+    CategorySelect,
+    CrudEditForm,
+    CrudTable,
+  },
   setup() {
     const table = [
       {
@@ -128,7 +152,7 @@ export default defineComponent({
       username: '',
       email: '',
       password: '',
-      avatar: '',
+      roleIds: '',
     });
 
     return {
