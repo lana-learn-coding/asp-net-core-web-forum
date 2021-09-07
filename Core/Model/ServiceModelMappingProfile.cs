@@ -51,6 +51,14 @@ namespace Core.Model
 
             //Misc
             CreateMap<User, UserViewBase>();
+            CreateMap<User, UserView>()
+                .ForMember(m => m.VotesCount,
+                    opt => opt.MapFrom(x => x.Votes.Count))
+                .ForMember(m => m.ThreadsCount,
+                    opt => opt.MapFrom(x => x.Posts.Count(p => p.Id.Equals(p.ThreadId))))
+                .ForMember(m => m.PostsCount,
+                    opt => opt.MapFrom(x => x.Posts.Count));
+
             CreateMap<CreateThreadUser, CreateThreadAdmin>();
         }
     }

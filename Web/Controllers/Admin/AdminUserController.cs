@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Core.Model;
 using Core.Services;
 using DAL.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace Web.Controllers.Admin
 {
     [ApiController]
     [Route("/api/admin/users")]
-    public class AdminUserController : AbstractAdminController<User>
+    public class AdminUserController : AbstractAdminController<User, UserView>
     {
         public AdminUserController(UserService service) : base(service)
         {

@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Core.Model;
 using Core.Services.Base;
 using DAL.Models.Auth;
 
 namespace Core.Services
 {
-    public class UserService : SimpleCrudService<User>
+    public class UserService : CrudService<User, UserView>
     {
-        public UserService(DbContext context) : base(context)
+        private readonly IConfigurationProvider _mapperConfig;
+
+        public UserService(DbContext context, IConfigurationProvider mapperConfig) : base(context)
         {
+            _mapperConfig = mapperConfig;
         }
 
-        public User Verify(string username, string password)
+        public UserView Verify(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
@@ -30,7 +36,7 @@ namespace Core.Services
             return user;
         }
 
-        public override User Create(User entity)
+        public override UserView Create(User entity)
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             return base.Create(entity);
@@ -50,9 +56,10 @@ namespace Core.Services
             base.Update(current, entity);
         }
 
-        protected override IQueryable<User> Query(IQueryable<User> queryable)
+        protected override IQueryable<UserView> Query(IQueryable<User> queryable)
         {
-            return queryable.Include("Roles");
+            return queryable.Include("Roles")
+                .ProjectTo<UserView>(_mapperConfig);
         }
 
         protected override void Delete(User entity)

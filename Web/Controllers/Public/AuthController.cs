@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
+using Core.Model;
 using Core.Services;
 using Core.Services.Base;
 using DAL.Models.Auth;
@@ -101,7 +102,7 @@ namespace Web.Controllers.Public
         }
 
 
-        private IActionResult Login(User user, AuthPayload authPayload)
+        private IActionResult Login(UserView user, AuthPayload authPayload)
         {
             var token = GenerateToken(user, authPayload.RememberMe);
             if (!authPayload.RememberMe) return new JsonResult(token);
@@ -160,7 +161,7 @@ namespace Web.Controllers.Public
             Response.Cookies.Append(_configuration["JwtConfig:Refresh:Cookies"], Guid.NewGuid().ToString(), options);
         }
 
-        private JwtToken GenerateToken(User user, bool remember = false)
+        private JwtToken GenerateToken(UserView user, bool remember = false)
         {
             var claims = new List<Claim>
             {
