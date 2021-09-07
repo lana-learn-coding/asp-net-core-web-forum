@@ -63,7 +63,6 @@ export class HookedHttpClient extends HttpClient {
     try {
       return await super.intercept(promise);
     } catch (e) {
-      console.log(e.response.status);
       if (e.response.status === 401) {
         this.confirm({
           title: 'Login',
@@ -155,7 +154,6 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
             newParams.page = 1;
           }
 
-          console.log(newParams);
           const res = await client.get<Page<T>>(url, { params: newParams });
           data.value = res.data as UnwrapRefSimple<T>[];
           Object.assign(meta, res.meta);
