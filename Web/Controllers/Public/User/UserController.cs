@@ -5,7 +5,7 @@ using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto.User;
 
-namespace Web.Controllers.Public
+namespace Web.Controllers.Public.User
 {
     [ApiController]
     [Route("/api/users")]

@@ -17,6 +17,7 @@ namespace DAL.Database
             SeedTopic(context);
             SeedUsers(context);
             SeedForums(context);
+            SeedRegion(context);
             context.SaveChanges();
         }
 
@@ -125,6 +126,26 @@ namespace DAL.Database
                     ThreadAccess = AccessMode.Private
                 }
             );
+        }
+
+
+        private static void SeedRegion(ModelContext context)
+        {
+            var vietnam = new Country { Name = "Vietnam" };
+            var germany = new Country { Name = "germany" };
+            context.Countries.AddRange(new[] { vietnam, germany });
+            context.Cities.AddRange(new[]
+            {
+                new City { Name = "Da Lat", Country = vietnam },
+                new City { Name = "Ha Noi", Country = vietnam },
+                new City { Name = "Da Nang", Country = vietnam },
+                new City { Name = "Ho Chi Minh", Country = vietnam },
+                new City { Name = "Nha Trang", Country = vietnam },
+                new City { Name = "Berlin", Country = germany },
+                new City { Name = "Hamburg", Country = germany },
+                new City { Name = "Munich", Country = germany },
+                new City { Name = "Cologne", Country = germany }
+            });
         }
     }
 }

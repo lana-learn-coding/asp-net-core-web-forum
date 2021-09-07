@@ -8,7 +8,6 @@ using AutoMapper;
 using Core.Model;
 using Core.Services;
 using Core.Services.Base;
-using DAL.Models.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -40,7 +39,7 @@ namespace Web.Controllers.Public
 
         [HttpPost]
         [Route("sign-up")]
-        public IActionResult SignUp([FromBody] User entity)
+        public IActionResult SignUp([FromBody] DAL.Models.Auth.User entity)
         {
             return new JsonResult(_service.Create(entity));
         }
