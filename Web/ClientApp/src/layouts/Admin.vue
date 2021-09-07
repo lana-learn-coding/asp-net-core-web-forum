@@ -84,11 +84,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
-import { useTitle } from '@vueuse/core';
-import { useVuetify } from '@/composable/compat';
+import { defineComponent, onMounted, ref, watch } from '@vue/composition-api';
+import { useLocalStorage, useTitle } from '@vueuse/core';
+import { useRoute, useVuetify } from '@/composable/compat';
 import AppIcon from '@/components/app/AppIcon.vue';
 import { useUser } from '@/services/auth';
+import { useMessage } from '@/composable/message';
 
 export default defineComponent({
   name: 'Admin',
@@ -96,7 +97,6 @@ export default defineComponent({
   setup() {
     const title = useTitle('Admin', { observe: true });
     const drawer = ref(useVuetify().breakpoint.lgAndUp && useUser().user.isAuthenticated);
-
     const links = [
       { title: 'Dashboard', icon: 'bar_chart', name: 'Dashboard' },
       {
@@ -113,6 +113,30 @@ export default defineComponent({
       { title: 'Users', icon: 'person', name: 'ManageUser' },
       { title: 'Home', icon: 'home', name: 'Home' },
     ];
+
+    let greeted = false;
+    const greeting = useLocalStorage('drforum-greeting', true);
+    const { confirm } = useMessage();
+    const route = useRoute();
+    const { user } = useUser();
+
+    async function greet() {
+      if (!greeting.value || greeted) return;
+      if (!user.isAuthenticated || !user.roles?.includes('Admin')) return;
+      if (route.name && route.name.includes('Login')) return;
+
+      const showAgain = await confirm({
+        title: 'Greeting',
+        subtitle: 'Welcome back, Admin',
+        text: 'Click on (?) icon to read document',
+        cancel: 'Don\'t show this again',
+      });
+      if (!showAgain) greeting.value = false;
+      greeted = true;
+    }
+
+    watch(() => route.name, greet);
+    onMounted(greet);
 
     return {
       title,
