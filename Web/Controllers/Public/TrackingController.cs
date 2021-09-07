@@ -15,30 +15,28 @@ namespace Web.Controllers.Public
     [Route("/api/tracking")]
     public class TrackingController : Controller
     {
-        private const int TrackPeriod = 1000;
         private readonly IMemoryCache _authCache;
         private readonly IConfiguration _configuration;
 
         private readonly ModelContext _context;
         private readonly ForumService _forumService;
+        private readonly OnlineUserCache _onlineUserCache;
         private readonly ThreadService _threadService;
 
-        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
-        private IDictionary<string, DateTime> _onlineMembers = new Dictionary<string, DateTime>();
-
         public TrackingController(ModelContext context, ThreadService threadService,
-            ForumService forumService, IConfiguration configuration, IMemoryCache cache)
+            ForumService forumService, IConfiguration configuration, IMemoryCache cache,
+            OnlineUserCache onlineUserCache)
         {
             _context = context;
             _forumService = forumService;
             _threadService = threadService;
             _configuration = configuration;
             _authCache = cache;
+            _onlineUserCache = onlineUserCache;
         }
 
         [Route("statistics")]
         [HttpGet]
-        [ResponseCache(Duration = TrackPeriod)]
         public JsonResult Statistic()
         {
             var totalUsers = _context.Users.Count();
@@ -49,15 +47,14 @@ namespace Web.Controllers.Public
                     TotalMembers = totalUsers,
                     TotalPosts = totalPosts,
                     TotalThreads = totalThreads,
-                    OnlineMembers = 5,
-                    OnlineAnonymous = 122
+                    OnlineMembers = _onlineUserCache.CountUser(),
+                    OnlineAnonymous = _onlineUserCache.CountAnon()
                 }
             );
         }
 
         [Route("active-threads")]
         [HttpGet]
-        [ResponseCache(Duration = TrackPeriod)]
         public JsonResult ActiveThreads()
         {
             var query = _threadService.List(q => q.Take(8));
@@ -79,7 +76,7 @@ namespace Web.Controllers.Public
 
 
         // Handle tracking user by open logging api. user
-        // For a forum application, real time is not a critical requirement (~15 mins delay is okay)
+        // For a forum application, real time is not a critical requirement (~10 mins delay is okay)
         // We will migrate to SignalR later on (if we have enough time)
         [Route("logs")]
         [HttpPost]
@@ -87,34 +84,60 @@ namespace Web.Controllers.Public
         {
             var cookies = Request.Cookies[_configuration["JwtConfig:Refresh:Cookies"]];
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-            if (string.IsNullOrWhiteSpace(cookies))
+            if (string.IsNullOrWhiteSpace(cookies) || !_authCache.TryGetValue(cookies, out JwtToken value))
             {
-                _onlineAnons[ip] = DateTime.Now;
-                RemoveInactiveEntry();
+                _onlineUserCache.PutAnon(ip);
                 return new OkResult();
             }
 
-            if (!_authCache.TryGetValue(cookies, out JwtToken value))
+            _onlineUserCache.PutUser(ip, value.User.Username);
+            return new OkResult();
+        }
+    }
+
+    public class OnlineUserCache
+    {
+        public const int TrackPeriod = 300;
+        private IDictionary<string, DateTime> _onlineAnons = new Dictionary<string, DateTime>();
+        private IDictionary<string, DateTime> _onlineMembers = new Dictionary<string, DateTime>();
+
+        public void PutAnon(string ip)
+        {
+            PutUser(ip, string.Empty);
+        }
+
+        public void PutUser(string ip, string username)
+        {
+            if (string.IsNullOrEmpty(username))
             {
                 _onlineAnons[ip] = DateTime.Now;
                 RemoveInactiveEntry();
-                return new OkResult();
+                return;
             }
 
-            _onlineMembers[value.User.Username] = DateTime.Now;
+            _onlineMembers[username] = DateTime.Now;
             _onlineAnons.Remove(ip);
             RemoveInactiveEntry();
-            return new OkResult();
         }
 
         private void RemoveInactiveEntry()
         {
             var expireTime = DateTime.Now.AddSeconds(-100 - TrackPeriod);
-            _onlineMembers = _onlineMembers.Where(kv => kv.Value < expireTime)
+            _onlineMembers = _onlineMembers.Where(kv => kv.Value > expireTime)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-            _onlineAnons = _onlineAnons.Where(kv => kv.Value < expireTime)
+            _onlineAnons = _onlineAnons.Where(kv => kv.Value > expireTime)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
+
+        public int CountUser()
+        {
+            return _onlineMembers.Count;
+        }
+
+        public int CountAnon()
+        {
+            return _onlineAnons.Count;
         }
     }
 }

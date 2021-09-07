@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VueCliMiddleware;
+using Web.Controllers.Public;
 using Web.Dto;
 using Web.Filter;
 
@@ -91,6 +92,7 @@ namespace Web
                 c.AddProfile<ServiceModelMappingProfile>();
             });
 
+            services.AddSingleton<OnlineUserCache>();
             services.AddHttpContextAccessor();
             services.AddMemoryCache();
             services.Scan(scan => scan
