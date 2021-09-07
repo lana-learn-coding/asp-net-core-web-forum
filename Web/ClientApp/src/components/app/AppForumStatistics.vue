@@ -104,11 +104,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api';
+import {
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from '@vue/composition-api';
 import NumberCounter from '@/components/NumberCounter.vue';
 import { useHttp } from '@/services/http';
 import { Thread } from '@/services/model';
 import { formatDateTime } from '@/composable/date';
+import { useRoute } from '@/composable/compat';
 
 export default defineComponent({
   name: 'AppForumStatistics',
@@ -130,7 +138,7 @@ export default defineComponent({
       threads: true,
     });
 
-    onMounted(() => {
+    function fetch() {
       http
         .get('/tracking/statistics')
         .then((val) => {
@@ -144,7 +152,14 @@ export default defineComponent({
           loading.threads = false;
           threads.value = data;
         });
-    });
+    }
+
+    // update data each x2 interval or route change
+    const route = useRoute();
+    watch(() => route.path, fetch);
+    const schedule = setTimeout(fetch, Number(process.env.VUE_APP_API_TRACKING_REFRESH || '1000') * 2000);
+    onBeforeUnmount(() => clearTimeout(schedule));
+    onMounted(fetch);
 
     return {
       threads,
