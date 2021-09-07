@@ -147,7 +147,7 @@ export interface UseQueryResult<T, Q extends FlatDictionary> {
   meta: UnwrapRef<PageMeta & { loading: boolean; initialized: boolean }>;
   query: UnwrapRef<PagedQueryParam<Q>>;
 
-  fetch(queryParams?: FlatDictionary): Promise<void>;
+  fetch(queryParams?: FlatDictionary, eager?: boolean): Promise<void>;
 }
 
 type PagedQueryParam<Q> = Q & { page: number; size: number }
@@ -182,22 +182,27 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
     const router = useRouter();
     const client = useHttp();
 
-    async function fetch(queryParams?: FlatDictionary) {
+    async function fetch(queryParams?: FlatDictionary, eager = true) {
       meta.loading = true;
       try {
         const newParams = { ...query, ...queryParams };
-        const changed = Object.keys(newParams).some((key) => newParams[key] !== query[key]);
-        if (changed && newParams.page && newParams.page === meta.currentPage) {
-          newParams.page = 1;
-        }
-        const res = await client.get<Page<T>>(url, { params: newParams });
+        const changed = Object.keys(newParams).filter((key) => newParams[key] !== query[key] && !key.startsWith('_'));
 
-        data.value = res.data as UnwrapRefSimple<T>[];
-        Object.assign(meta, res.meta);
-        query.page = res.meta.currentPage;
-        query.size = res.meta.perPage;
-        newParams.page = res.meta.currentPage;
-        newParams.size = res.meta.perPage;
+        // only fetch if query changed
+        if (eager || changed.length > 0) {
+          if (newParams.page && newParams.page === meta.currentPage) {
+            newParams.page = 1;
+          }
+
+          console.log(newParams);
+          const res = await client.get<Page<T>>(url, { params: newParams });
+          data.value = res.data as UnwrapRefSimple<T>[];
+          Object.assign(meta, res.meta);
+          query.page = res.meta.currentPage;
+          query.size = res.meta.perPage;
+          newParams.page = res.meta.currentPage;
+          newParams.size = res.meta.perPage;
+        }
 
         const newQuery = { ...route.query, ...newParams };
         Object.keys(newQuery).forEach((key) => {
@@ -240,10 +245,6 @@ function mergeQuery(origin: FlatDictionary, params: Record<string, RouteQueryPar
   if (!params) return result;
 
   Object.keys(params).forEach((param) => {
-    if (param.startsWith('_')) {
-      delete result[param];
-      return;
-    }
     const value = convertParamValue(params[param], result[param]);
     if (value === null) {
       delete result[param];

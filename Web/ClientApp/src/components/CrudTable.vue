@@ -97,7 +97,7 @@ import { computed, defineComponent, PropType } from '@vue/composition-api';
 import { DataTableHeader } from 'vuetify';
 import { useTitle } from '@vueuse/core';
 import { singular } from 'pluralize';
-import { useHttp, useQuery, useRouteQuery } from '@/services/http';
+import { useHttp, useQuery } from '@/services/http';
 import { Dictionary, FlatDictionary } from '@/services/model';
 import { useSetters } from '@/composable/compat';
 import CrudEditForm from '@/components/CrudEditForm.vue';
@@ -137,9 +137,21 @@ export default defineComponent({
     const { query, data, meta, fetch } = useQuery<Dictionary>(props.url)({
       ...props.filter,
       sort: '',
+      _slug: '',
+      _dialog: false,
     });
-    const dialog = useRouteQuery<boolean>('_dialog', false);
-    const slug = useRouteQuery<string>('_slug');
+    const dialog = computed({
+      get: () => query._dialog ?? false,
+      set: (val) => {
+        query._dialog = val;
+      },
+    });
+    const slug = computed({
+      get: () => query._slug ?? '',
+      set: (val) => {
+        query._slug = val;
+      },
+    });
 
     const http = useHttp();
     const { confirm, notify } = useMessage();

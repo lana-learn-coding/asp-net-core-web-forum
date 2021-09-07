@@ -110,7 +110,7 @@ export default defineComponent({
         sort: '',
         search: '',
         page: 1,
-      });
+      }, false);
       nextTick(() => window.scrollTo(0, 50));
     }
 

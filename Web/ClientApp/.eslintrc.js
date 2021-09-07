@@ -18,6 +18,7 @@ module.exports = {
       'warn',
       { code: 150 },
     ],
+    'no-underscore-dangle': ['error', { 'allow': ['_slug', '_dialog'] }],
     'class-methods-use-this': 'off',
     'no-shadow': 'off',
     'no-use-before-define': 'off',
