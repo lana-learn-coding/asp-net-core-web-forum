@@ -3,19 +3,24 @@ using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Core.Helper;
 using Core.Model;
 using Core.Services.Base;
 using DAL.Models.Auth;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Services
 {
     public class UserService : CrudService<User, UserView>
     {
+        private readonly HttpContext _httpContext;
         private readonly IConfigurationProvider _mapperConfig;
 
-        public UserService(DbContext context, IConfigurationProvider mapperConfig) : base(context)
+        public UserService(DbContext context, IConfigurationProvider mapperConfig,
+            IHttpContextAccessor httpContextAccessor) : base(context)
         {
             _mapperConfig = mapperConfig;
+            _httpContext = httpContextAccessor.HttpContext;
         }
 
         public UserView Verify(string username, string password)
@@ -58,6 +63,9 @@ namespace Core.Services
 
         protected override IQueryable<UserView> Query(IQueryable<User> queryable)
         {
+            if (!_httpContext.User.IsAdmin())
+                queryable = queryable.Where(x => !x.Id.Equals(Guid.Empty));
+
             return queryable.Include("Roles")
                 .ProjectTo<UserView>(_mapperConfig);
         }

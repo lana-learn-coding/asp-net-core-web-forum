@@ -117,7 +117,7 @@ namespace DAL.Database
             context.Forums.Add(new Forum
                 {
                     Id = Guid.Empty,
-                    Title = "Deleted",
+                    Title = "Legacy Forum Threads",
                     SubTitle = "Forums contains thread of all deleted forums",
                     Priority = (short)Priority.Low,
                     CategoryId = Guid.Empty,

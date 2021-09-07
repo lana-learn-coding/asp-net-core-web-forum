@@ -40,7 +40,8 @@ namespace Core.Services
         protected override IQueryable<ForumView> Query(IQueryable<Forum> queryable)
         {
             if (!_httpContext.User.IsAdmin())
-                queryable = queryable.Where(x => x.ForumAccess < AccessMode.Internal);
+                queryable = queryable.Where(x => x.ForumAccess < AccessMode.Internal)
+                    .Where(x => !x.Id.Equals(Guid.Empty));
 
             return queryable
                 .Include("Category")
