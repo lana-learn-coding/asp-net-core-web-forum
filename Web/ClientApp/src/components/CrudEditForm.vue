@@ -108,6 +108,7 @@ export default defineComponent({
           Object.assign(form, data);
           emit('change');
           notify({ text: `${formTitle.value} updated successfully`, type: 'success' });
+          clearErrors();
           return;
         }
         await http.post(props.url, form);
