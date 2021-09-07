@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -39,8 +40,6 @@ namespace DAL.Models.Auth
         [StringLength(120)]
         public string Password { get; set; }
 
-        public virtual UserInfo UserInfo { get; set; }
-
         public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 
         [JsonIgnore]
@@ -48,5 +47,8 @@ namespace DAL.Models.Auth
 
         [JsonIgnore]
         public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
+
+        [NotMapped]
+        public ICollection<Guid> RoleIds { get; set; } = new List<Guid>();
     }
 }

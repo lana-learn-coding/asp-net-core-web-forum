@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
@@ -19,6 +20,7 @@ namespace Core.Services
         public UserService(DbContext context, IConfigurationProvider mapperConfig,
             IHttpContextAccessor httpContextAccessor) : base(context)
         {
+            DefaultSort = new List<string> { "UpdatedAt desc" };
             _mapperConfig = mapperConfig;
             _httpContext = httpContextAccessor.HttpContext;
         }
@@ -44,6 +46,7 @@ namespace Core.Services
         public override UserView Create(User entity)
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
+            if (_httpContext.User.IsAdmin()) FillRoles(entity);
             return base.Create(entity);
         }
 
@@ -58,7 +61,22 @@ namespace Core.Services
                 entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             }
 
+            if (_httpContext.User.IsAdmin()) FillRoles(current);
             base.Update(current, entity);
+        }
+
+        private void FillRoles(User user)
+        {
+            var roleIds = user.RoleIds;
+            if (user.RoleIds == null || roleIds.Count == 0)
+            {
+                user.Roles.Clear();
+                return;
+            }
+
+            var roles = Context.Set<Role>().Where(x => roleIds.Contains(x.Id));
+            user.Roles.Clear();
+            foreach (var role in roles) user.Roles.Add(role);
         }
 
         protected override IQueryable<UserView> Query(IQueryable<User> queryable)
