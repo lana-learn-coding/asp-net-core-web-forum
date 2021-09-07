@@ -37,7 +37,7 @@ namespace Core.Model
 
     public class LastThread : ViewBase
     {
-        public UserView User { get; set; }
+        public UserViewBase User { get; set; }
 
         public string Title { get; set; }
 

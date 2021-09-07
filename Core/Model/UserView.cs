@@ -1,8 +1,13 @@
 ﻿namespace Core.Model
 {
-    public class UserView : ViewBase
+    public class UserView : UserViewBase
     {
-        public string Avatar { get; set; }
-        public string Username { get; set; }
+        public string Password { get; set; }
+
+        public string VotesCount { get; set; }
+
+        public string ThreadsCount { get; set; }
+
+        public string PostsCount { get; set; }
     }
 }

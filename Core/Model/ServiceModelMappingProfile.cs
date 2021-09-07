@@ -50,7 +50,7 @@ namespace Core.Model
                         x.Votes.Where(v => v.UserId.Equals(authId)).Select(v => v.Value).FirstOrDefault()));
 
             //Misc
-            CreateMap<User, UserView>();
+            CreateMap<User, UserViewBase>();
             CreateMap<CreateThreadUser, CreateThreadAdmin>();
         }
     }

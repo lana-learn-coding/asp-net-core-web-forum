@@ -12,7 +12,7 @@ namespace Core.Model
     {
         public int PostsCount { get; set; }
 
-        public UserView User => Post.User;
+        public UserViewBase User => Post.User;
 
         public string Content => Post.Content;
 

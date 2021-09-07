@@ -4,7 +4,7 @@ namespace Core.Model
 {
     public class PostView : ViewBase
     {
-        public UserView User { get; set; }
+        public UserViewBase User { get; set; }
 
         public string Content { get; set; }
 
