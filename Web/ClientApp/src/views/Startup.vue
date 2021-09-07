@@ -43,10 +43,10 @@ export default defineComponent({
         user.loading = true;
         await refresh().catch(noop);
         // tracking user. must called after refresh to correctly track if user logged in
-        await tracking().catch(noop);
         user.loading = false;
       }
 
+      await tracking().catch(noop);
       await categories.fetch().catch(noop);
     }
 
