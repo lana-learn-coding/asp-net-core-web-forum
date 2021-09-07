@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center flex-column justify-center h-full">
+  <div class="d-flex align-center flex-column justify-center" style="margin-top: 35vh">
     <transition name="fade">
       <div class="text-center" v-show="show">
         <v-progress-circular
@@ -20,14 +20,11 @@ import { useTitle } from '@vueuse/core';
 import { useUser } from '@/services/auth';
 import { useRouter } from '@/composable/compat';
 import { useMessage } from '@/composable/message';
-import { useBreadcrumbs } from '@/composable/breadcrumbs';
 
 export default defineComponent({
   name: 'Logout',
   setup() {
     useTitle('Logout');
-    useBreadcrumbs([]);
-
     const router = useRouter();
     const { logout } = useUser();
     const { notify } = useMessage();

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column justify-center align-center" style="margin-top: 12rem">
+  <div class="d-flex flex-column justify-center align-center" style="margin-top: 25vh">
     <div class="text--secondary text-h1">{{ code }}</div>
     <div class="text--primary mt-3">{{ text }}</div>
     <div class="mt-3">
@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 
 export default defineComponent({
   props: {
@@ -18,5 +19,8 @@ export default defineComponent({
     text: String,
   },
   name: 'Error',
+  setup(props) {
+    useTitle(`${props.code} - ${props.text}`);
+  },
 });
 </script>
