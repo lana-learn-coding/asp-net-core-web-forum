@@ -266,10 +266,7 @@
     </v-navigation-drawer>
 
     <v-main class="grey lighten-2">
-      <v-container class="mt-2 mt-md-3 mt-lg-4 mt-xl-5">
-        <app-breadcrumbs class="mb-2 mb-md-3 mb-lg-4"></app-breadcrumbs>
-        <slot></slot>
-      </v-container>
+      <slot></slot>
     </v-main>
   </div>
 </template>
@@ -279,16 +276,14 @@ import { defineComponent, ref, watch } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { useUser } from '@/services/auth';
 import { useCategories } from '@/composable/form';
-import AppBreadcrumbs from '@/components/app/AppBreadcrumbs.vue';
 import { useRouter } from '@/composable/compat';
 import { useMessage } from '@/composable/message';
 import AppIcon from '@/components/app/AppIcon.vue';
 import { Dictionary } from '@/services/model';
-import AppForumStatistics from '@/components/app/AppForumStatistics.vue';
 
 export default defineComponent({
   name: 'TheLayout',
-  components: { AppForumStatistics, AppIcon, AppBreadcrumbs },
+  components: { AppIcon },
   setup() {
     useTitle('Dr. Forums');
     const focus = ref(false);
@@ -307,7 +302,7 @@ export default defineComponent({
       },
     ]);
 
-    const { user, logout } = useUser();
+    const { user } = useUser();
     const keyword = ref('');
 
     const categories = useCategories();
@@ -338,7 +333,7 @@ export default defineComponent({
         title: 'Logout',
         text: 'You are about to logout',
       });
-      if (ok) await logout();
+      if (ok) await router.push({ name: 'Logout' });
     }
 
     return {

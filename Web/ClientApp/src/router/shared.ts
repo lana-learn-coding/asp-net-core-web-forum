@@ -3,6 +3,7 @@ import Blank from '@/layouts/Blank.vue';
 import Error from '@/views/Error.vue';
 import Login from '@/views/auth/Login.vue';
 import SignUp from '@/views/auth/SignUp.vue';
+import Logout from '@/views/auth/Logout.vue';
 
 const shared: RouteConfig = {
   path: '/',
@@ -12,6 +13,11 @@ const shared: RouteConfig = {
       path: '/login',
       component: Login,
       name: 'Login',
+    },
+    {
+      path: '/logout',
+      component: Logout,
+      name: 'Logout',
     },
     {
       path: '/sign-up',
