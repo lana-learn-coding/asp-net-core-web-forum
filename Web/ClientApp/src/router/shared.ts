@@ -1,15 +1,22 @@
 import { RouteConfig } from 'vue-router';
 import Blank from '@/layouts/Blank.vue';
 import Error from '@/views/Error.vue';
+import Login from '@/views/auth/Login.vue';
+import SignUp from '@/views/auth/SignUp.vue';
 
-const error: RouteConfig = {
-  path: '/errors',
+const shared: RouteConfig = {
+  path: '/',
   component: Blank,
   children: [
     {
-      path: '/',
-      redirect: () => ({ name: 'NotFound' }),
-      name: 'Error',
+      path: '/login',
+      component: Login,
+      name: 'Login',
+    },
+    {
+      path: '/sign-up',
+      component: SignUp,
+      name: 'SignUp',
     },
     {
       path: '404',
@@ -31,4 +38,4 @@ const error: RouteConfig = {
     },
   ],
 };
-export default error;
+export default shared;

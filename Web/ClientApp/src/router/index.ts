@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { NavigationGuardNext, Route, RouteConfig } from 'vue-router';
 import admin from '@/router/admin';
-import error from '@/router/error';
+import shared from '@/router/shared';
 import home from '@/router/home';
 import user from '@/router/user';
 import { useAlert } from '@/composable/message';
@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   admin,
   home,
-  error,
+  shared,
   user,
   forum,
   {

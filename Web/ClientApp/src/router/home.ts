@@ -1,10 +1,10 @@
 import { RouteConfig } from 'vue-router';
-import Layout from '@/layouts/Layout.vue';
 import Home from '@/views/Home.vue';
+import Common from '@/layouts/Common.vue';
 
 const home: RouteConfig = {
   path: '/',
-  component: Layout,
+  component: Common,
   children: [
     {
       path: '/',

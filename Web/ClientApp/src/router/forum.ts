@@ -1,13 +1,13 @@
 import { RouteConfig } from 'vue-router';
-import Layout from '@/layouts/Layout.vue';
 import ForumIndex from '@/views/forum/ForumIndex.vue';
 import ForumSearch from '@/views/forum/ForumSearch.vue';
 import ForumThreads from '@/views/forum/ForumThreads.vue';
 import ThreadPosts from '@/views/forum/ThreadPosts.vue';
+import Common from '@/layouts/Common.vue';
 
 const forum: RouteConfig = {
   path: '/',
-  component: Layout,
+  component: Common,
   children: [
     {
       path: '/forums',

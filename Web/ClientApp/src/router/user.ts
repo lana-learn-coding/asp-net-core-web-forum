@@ -1,21 +1,15 @@
 import { RouteConfig } from 'vue-router';
-import Layout from '@/layouts/Layout.vue';
-import Login from '@/views/auth/Login.vue';
-import SignUp from '@/views/auth/SignUp.vue';
+import Me from '@/views/user/Me.vue';
+import User from '@/layouts/User.vue';
 
 const user: RouteConfig = {
-  path: '/',
-  component: Layout,
+  path: '/me',
+  component: User,
   children: [
     {
-      path: '/login',
-      component: Login,
-      name: 'Login',
-    },
-    {
-      path: '/sign-up',
-      component: SignUp,
-      name: 'SignUp',
+      path: '/',
+      component: Me,
+      name: 'Me',
     },
   ],
 };
