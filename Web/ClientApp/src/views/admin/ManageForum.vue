@@ -190,7 +190,7 @@
     </template>
 
     <template #table.lastActivityAt="{ item }">
-      {{ formatDateTime(item.createdAt) }}
+      {{ formatDateTime(item.lastActivityAt) }}
     </template>
 
     <template #table.updatedAt="{ item }">
