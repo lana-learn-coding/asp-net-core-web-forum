@@ -41,7 +41,7 @@ export default defineComponent({
 
     function close(opt: Notify) {
       setTimeout(() => {
-        notifies.value = notifies.value.filter((n) => (n as Notify).id !== opt.id);
+        notifies.value = notifies.value.filter((n) => (n as Notify).id === opt.id);
       });
     }
 
