@@ -42,6 +42,20 @@
           hide-details
         >
         </thread-status-select>
+        <v-spacer class="d-none d-md-block"></v-spacer>
+        <auto-complete-select
+          class="mr-3"
+          label="Users"
+          uri="users/all"
+          style="max-width: 200px"
+          item-text="username"
+          :value="bind.user"
+          @input="on.user"
+          item-value="slug"
+          single-line
+          hide-details
+        >
+        </auto-complete-select>
       </div>
     </template>
 
@@ -234,6 +248,7 @@ export default defineComponent({
       search: '',
       status: '',
       forum: '',
+      user: '',
     });
 
     const form = reactive({
