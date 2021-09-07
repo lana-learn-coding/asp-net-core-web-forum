@@ -63,6 +63,13 @@ namespace DAL.Database
                 new Tag { Name = "Gastroenterology & Liver Diseases" },
                 new Tag { Name = "Endocrinology & Diabetes" }
             });
+
+            context.Languages.AddRange(new[]
+            {
+                new Language { Name = "English", Id = Guid.Empty },
+                new Language { Name = "Vietnamese" },
+                new Language { Name = "German" }
+            });
         }
 
         private static void SeedUsers(ModelContext context)

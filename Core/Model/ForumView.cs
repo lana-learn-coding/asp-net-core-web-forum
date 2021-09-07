@@ -24,6 +24,10 @@ namespace Core.Model
 
         public Category Category { get; set; }
 
+        public Guid LanguageId { get; set; }
+
+        public Language Language { get; set; }
+
         public AccessMode ThreadAccess { get; set; }
 
         public AccessMode ForumAccess { get; set; }

@@ -35,18 +35,24 @@ namespace DAL
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
 
+        public DbSet<Language> Languages { get; set; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
-            modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
-            modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
+
 
             modelBuilder.Entity<Vote>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Post>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Thread>().Map(m => m.MapInheritedProperties());
+
+            modelBuilder.Entity<Category>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Specialty>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Language>().Map(m => m.MapInheritedProperties());
         }
 
         public override int SaveChanges()

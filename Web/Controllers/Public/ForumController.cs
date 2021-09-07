@@ -19,13 +19,17 @@ namespace Web.Controllers.Public
         {
             var search = GetQueryString("search");
             var category = GetQueryString("category");
+            var language = GetQueryString("language");
 
             if (!HttpContext.User.IsInRole("Admin"))
                 query = query.Where(x => (short)x.ForumAccess < (short)AccessMode.Internal);
 
-            query = query.Where(x => x.Title.Contains(search));
-            if (string.IsNullOrWhiteSpace(category) || category.Equals("_all")) return query;
-            return query.Where(x => x.Category.Slug.Equals(category));
+            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("_all"))
+                query = query.Where(x => x.Category.Slug.Equals(category));
+            if (!string.IsNullOrWhiteSpace(language))
+                query = query.Where(x => x.Language.Slug.Equals(language));
+
+            return query.Where(x => x.Title.Contains(search));
         }
     }
 }

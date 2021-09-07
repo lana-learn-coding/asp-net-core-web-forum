@@ -35,9 +35,14 @@ namespace DAL.Models.Forum
         public string Icon { get; set; }
 
         [Required(ErrorMessage = "Please select a category")]
-        public Guid CategoryId { get; set; }
+        public Guid CategoryId { get; set; } = Guid.Empty;
+
+        [Required(ErrorMessage = "Please select a language")]
+        public Guid LanguageId { get; set; } = Guid.Empty;
 
         public Category Category { get; set; }
+
+        public Language Language { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Thread> Threads { get; set; } = new List<Thread>();

@@ -44,4 +44,23 @@ namespace Core.Services
             return queryable.Include("Tag");
         }
     }
+
+    public class LanguageService : SimpleCrudService<Language>
+    {
+        public LanguageService(DbContext context) : base(context)
+        {
+            DefaultSort = new List<string> { "CreatedAt" };
+        }
+
+        protected override void Delete(Language entity)
+        {
+            // set deleted forum category to Uncategorized
+            foreach (var forum in entity.Forums)
+            {
+                forum.LanguageId = Guid.Empty;
+            }
+
+            base.Delete(entity);
+        }
+    }
 }
