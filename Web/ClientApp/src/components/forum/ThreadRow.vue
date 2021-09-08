@@ -55,6 +55,7 @@
           {{ tag.name }}
         </v-chip>
       </div>
+      <slot name="footer"></slot>
     </v-col>
     <v-col class="d-none d-lg-block" cols="2">
       <div class="body-2 d-md-block mr-3">

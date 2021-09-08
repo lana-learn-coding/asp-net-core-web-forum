@@ -17,7 +17,7 @@ import { defineComponent } from '@vue/composition-api';
 import { useTitle } from '@vueuse/core';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import MeAccount from '@/views/user/account/MeAccount.vue';
-import { useUser } from '@/services/auth';
+import { useRequireAuth } from '@/services/auth';
 
 export default defineComponent({
   name: 'Me',
@@ -28,7 +28,7 @@ export default defineComponent({
       { text: 'Home', name: 'Home' },
       { text: 'Me', disabled: true },
     ]);
-    const { user } = useUser();
+    const { user } = useRequireAuth('User');
     return {
       user,
     };

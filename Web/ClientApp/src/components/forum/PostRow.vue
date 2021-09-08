@@ -25,6 +25,7 @@
           <span>Origin Post</span>
         </div>
       </div>
+      <slot name="title"></slot>
       <div class="body-1" v-html="post.content"></div>
       <v-spacer></v-spacer>
 

@@ -41,7 +41,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/composition-api';
 import { Me } from '@/services/model';
-import { useRequireAuth } from '@/services/auth';
 import MeChangePassword from '@/views/user/account/MeChangePassword.vue';
 import MeChangeAvatar from '@/views/user/account/MeChangeAvatar.vue';
 
@@ -53,9 +52,6 @@ export default defineComponent({
       type: Object as PropType<Me>,
       required: true,
     },
-  },
-  setup() {
-    useRequireAuth('User');
   },
 });
 </script>

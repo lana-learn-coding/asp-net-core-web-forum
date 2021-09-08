@@ -94,12 +94,12 @@ function useNavs() {
     {
       icon: 'question_answer',
       text: 'My Threads',
-      to: { name: 'MeThreads' },
+      to: { name: 'MeThread' },
     },
     {
       icon: 'chat_bubble_outline',
       text: 'My Posts',
-      to: { name: 'MePosts' },
+      to: { name: 'MePost' },
     },
     {
       icon: 'visibility',

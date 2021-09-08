@@ -123,11 +123,16 @@ export function isAuthorized(roles?: string | string[]): boolean {
   return !!user.roles && user.roles.includes(roles);
 }
 
-export function useRequireAuth(role?: string | string[], soft = false): boolean {
+// useUser with extra redirect step
+export function useRequireAuth(role?: string | string[], soft = false): UseUserResult {
   const { confirm } = useMessage();
   const router = useRouter();
-  const pass = isAuthorized(role);
-  if (!pass) {
+  const use = useUser();
+  if (isAuthorized(role)) {
+    return use;
+  }
+
+  if (!use.user.isAuthenticated) {
     confirm({
       text: 'Please login to continue',
       persistent: !soft,
@@ -137,8 +142,10 @@ export function useRequireAuth(role?: string | string[], soft = false): boolean 
       .then((ok) => {
         if (ok) router.push({ name: 'Login' }).catch(noop);
         if (soft) return;
-        router.push({ name: 'Home' });
+        router.push({ name: 'Home' }).catch(noop);
       });
+  } else {
+    router.push({ name: 'Forbidden' }).catch(noop);
   }
-  return pass;
+  return use;
 }
