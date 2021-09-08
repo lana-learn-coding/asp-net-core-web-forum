@@ -120,6 +120,8 @@ export default defineComponent({
           { title: 'Specialty', icon: 'grade', name: 'ManageSpecialty' },
           { title: 'Country', icon: 'language', name: 'ManageCountry' },
           { title: 'City', icon: 'location_city', name: 'ManageCity' },
+          { title: 'Experience', icon: 'wheelchair_pickup', name: 'ManageExperience' },
+          { title: 'Position', icon: 'people_alt', name: 'ManagePosition' },
         ],
       },
       { title: 'Home', icon: 'home', name: 'Home' },

@@ -12,6 +12,8 @@ import ManageSpecialty from '@/views/admin/topic/ManageSpecialty.vue';
 import ManageLanguage from '@/views/admin/topic/ManageLanguage.vue';
 import ManageCountry from '@/views/admin/user/ManageCountry.vue';
 import ManageCity from '@/views/admin/user/ManageCity.vue';
+import ManageExperience from '@/views/admin/user/ManageExperience.vue';
+import ManagePosition from '@/views/admin/user/ManagePosition.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -114,6 +116,22 @@ const admin: RouteConfig = {
       path: 'regions/cities',
       component: ManageCity,
       name: 'ManageCity',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'exp/experiences',
+      component: ManageExperience,
+      name: 'ManageExperience',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'exp/positions',
+      component: ManagePosition,
+      name: 'ManagePosition',
       meta: {
         roles: ['Admin'],
       },
