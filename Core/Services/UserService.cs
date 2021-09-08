@@ -68,14 +68,16 @@ namespace Core.Services
 
         public void ChangePassword(string slug, string newPassword)
         {
-            var update = FindForWrite(slug);
+            var update = FindForWrite(slug, x => x.Include("Roles"));
+            update.RoleIds = update.Roles.Select(x => x.Id).ToList();
             update.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             base.Update(slug, update);
         }
 
         public void ChangeAvatar(string slug, string newAvatar)
         {
-            var update = FindForWrite(slug);
+            var update = FindForWrite(slug, x => x.Include("Roles"));
+            update.RoleIds = update.Roles.Select(x => x.Id).ToList();
             update.Avatar = newAvatar;
             base.Update(slug, update);
         }
