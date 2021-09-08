@@ -26,7 +26,7 @@
         </div>
       </div>
       <slot name="title"></slot>
-      <div class="body-1" v-html="post.content"></div>
+      <div class="body-1" v-html="post.content" style="max-width: 100%; overflow: hidden"></div>
       <v-spacer></v-spacer>
 
       <div class="mt-2 d-inline">
