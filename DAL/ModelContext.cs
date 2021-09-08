@@ -27,6 +27,8 @@ namespace DAL
         public DbSet<User> Users { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Experience> Experiences { get; set; }
+        public DbSet<Position> Positions { get; set; }
 
         public DbSet<Forum> Forums { get; set; }
         public DbSet<Thread> Threads { get; set; }
@@ -45,7 +47,8 @@ namespace DAL
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Country>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<City>().Map(m => m.MapInheritedProperties());
-
+            modelBuilder.Entity<Experience>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<Position>().Map(m => m.MapInheritedProperties());
 
             modelBuilder.Entity<Vote>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Forum>().Map(m => m.MapInheritedProperties());

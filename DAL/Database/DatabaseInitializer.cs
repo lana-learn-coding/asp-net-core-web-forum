@@ -18,6 +18,7 @@ namespace DAL.Database
             SeedUsers(context);
             SeedForums(context);
             SeedRegion(context);
+            SeedExperience(context);
             context.SaveChanges();
         }
 
@@ -145,6 +146,28 @@ namespace DAL.Database
                 new City { Name = "Hamburg", Country = germany },
                 new City { Name = "Munich", Country = germany },
                 new City { Name = "Cologne", Country = germany }
+            });
+        }
+
+        private static void SeedExperience(ModelContext context)
+        {
+            context.Experiences.AddRange(new[]
+            {
+                new Experience { Measurement = "<2 Years", Level = 1 },
+                new Experience { Measurement = "2+ Years", Level = 2 },
+                new Experience { Measurement = "5+ Years", Level = 5 },
+                new Experience { Measurement = "10+ Years", Level = 10 },
+                new Experience { Measurement = "15+ Years", Level = 15 },
+                new Experience { Measurement = "20+ Years", Level = 20 }
+            });
+
+            context.Positions.AddRange(new[]
+            {
+                new Position { Name = "Doctor" },
+                new Position { Name = "Nurse" },
+                new Position { Name = "Physician" },
+                new Position { Name = "Student" },
+                new Position { Name = "Attending" }
             });
         }
     }
