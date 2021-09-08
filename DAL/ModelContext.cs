@@ -8,6 +8,7 @@ using DAL.Models;
 using DAL.Models.Auth;
 using DAL.Models.Forum;
 using DAL.Models.Topic;
+using DAL.Validation;
 using Humanizer;
 using SlugityLib;
 using Thread = DAL.Models.Forum.Thread;
@@ -110,14 +111,20 @@ namespace DAL
                     .GetType()
                     .GetProperties()
                     .Where(prop =>
-                        Attribute.IsDefined(prop, typeof(TitleCase)) && prop.PropertyType == typeof(string));
+                        Attribute.IsDefined(prop, typeof(Standardized)) && prop.PropertyType == typeof(string));
 
                 foreach (var property in properties)
                 {
-                    var attribute = (TitleCase)property.GetCustomAttributes(typeof(TitleCase), true)[0];
                     var value = entry.CurrentValues[property.Name]?.ToString();
                     if (string.IsNullOrWhiteSpace(value)) return;
-                    entry.CurrentValues[property.Name] = value.Transform(attribute.To);
+                    if (property.IsDefined(typeof(CodeId), true))
+                    {
+                        entry.CurrentValues[property.Name] = value.Transform(To.LowerCase);
+                    }
+                    else
+                    {
+                        entry.CurrentValues[property.Name] = value.Transform(To.TitleCase);
+                    }
                 }
             }
 

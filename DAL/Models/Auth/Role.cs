@@ -12,7 +12,7 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Name;
 
-        [TitleCase]
+        [Standardized]
         [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(20)]

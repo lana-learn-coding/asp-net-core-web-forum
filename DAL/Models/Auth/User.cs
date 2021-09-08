@@ -18,7 +18,7 @@ namespace DAL.Models.Auth
         [StringLength(200)]
         public string Avatar { get; set; }
 
-        [LowerCase]
+        [Standardized]
         [CodeId]
         [Unique]
         [Column(TypeName = "VARCHAR")]

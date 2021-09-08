@@ -15,7 +15,7 @@ namespace DAL.Models.Forum
         public override string RawSlug => Title;
 
         [Unique]
-        [TitleCase]
+        [Standardized]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(200)]
         [Index(IsUnique = true)]

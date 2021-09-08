@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Humanizer;
 
 namespace DAL.Models
 {
@@ -79,14 +78,7 @@ namespace DAL.Models
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class TitleCase : Attribute
+    public class Standardized : Attribute
     {
-        public virtual ICulturedStringTransformer To { get; } = Humanizer.To.TitleCase;
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class LowerCase : TitleCase
-    {
-        public override ICulturedStringTransformer To { get; } = Humanizer.To.TitleCase;
     }
 }
