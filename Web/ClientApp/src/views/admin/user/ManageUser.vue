@@ -95,10 +95,6 @@
       <v-chip v-else label small>User</v-chip>
     </template>
 
-    <template #table.createdAt="{ item }">
-      {{ formatDate(item.createdAt) }}
-    </template>
-
     <template #table.updatedAt="{ item }">
       {{ formatDateTime(item.updatedAt) }}
     </template>
@@ -110,9 +106,6 @@ import { defineComponent, reactive } from '@vue/composition-api';
 import { formatDateTime } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
-import CategorySelect from '@/components/form/CategorySelect.vue';
-import AccessSelect from '@/components/form/AccessSelect.vue';
-import { useAccessType, usePriority } from '@/composable/form';
 import EditorInput from '@/components/form/EditorInput.vue';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 
@@ -121,8 +114,6 @@ export default defineComponent({
   components: {
     AutoCompleteSelect,
     EditorInput,
-    AccessSelect,
-    CategorySelect,
     CrudEditForm,
     CrudTable,
   },
@@ -160,8 +151,6 @@ export default defineComponent({
       filter,
       formatDateTime,
       form,
-      access: useAccessType(),
-      getPriority: usePriority,
     };
   },
 });

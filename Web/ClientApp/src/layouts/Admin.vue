@@ -117,6 +117,7 @@ export default defineComponent({
         icon: 'person',
         links: [
           { title: 'Account', icon: 'person_outline', name: 'ManageUser' },
+          { title: 'Bio', icon: 'badge', name: 'ManageUserInfo' },
           { title: 'Specialty', icon: 'grade', name: 'ManageSpecialty' },
           { title: 'Country', icon: 'language', name: 'ManageCountry' },
           { title: 'City', icon: 'location_city', name: 'ManageCity' },

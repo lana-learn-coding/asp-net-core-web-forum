@@ -14,6 +14,7 @@ import ManageCountry from '@/views/admin/user/ManageCountry.vue';
 import ManageCity from '@/views/admin/user/ManageCity.vue';
 import ManageExperience from '@/views/admin/user/ManageExperience.vue';
 import ManagePosition from '@/views/admin/user/ManagePosition.vue';
+import ManageUserInfo from '@/views/admin/user/ManageUserInfo.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -132,6 +133,14 @@ const admin: RouteConfig = {
       path: 'exp/positions',
       component: ManagePosition,
       name: 'ManagePosition',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'users/infos',
+      component: ManageUserInfo,
+      name: 'ManageUserInfo',
       meta: {
         roles: ['Admin'],
       },

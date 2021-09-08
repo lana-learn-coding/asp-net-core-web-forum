@@ -4,9 +4,16 @@
       {{ title }}
       <v-spacer></v-spacer>
       <slot name="action" :bind="query" :on="onQuery"></slot>
-      <v-dialog v-model="dialog" width="unset" transition="fade-transition" eager>
+      <v-dialog
+        v-model="dialog"
+        width="unset"
+        transition="fade-transition"
+        eager
+      >
         <template #activator="{on, attrs}">
-          <v-btn color="primary" v-bind="attrs" v-on="on">Create</v-btn>
+          <v-btn color="primary" v-bind="attrs" v-on="on" v-if="operations.includes('create')">
+            Create
+          </v-btn>
         </template>
 
         <!-- Form slot. expose #form.<name> slot for customization-->
@@ -70,6 +77,7 @@
             icon
             color="primary"
             @click="update(item.slug)"
+            v-if="operations.includes('update')"
           >
             <v-icon>
               edit
@@ -81,6 +89,7 @@
             icon
             color="error"
             @click="remove(item.slug)"
+            v-if="operations.includes('delete')"
           >
             <v-icon>
               delete
@@ -130,6 +139,11 @@ export default defineComponent({
     formWidth: {
       type: String,
       required: false,
+    },
+    operations: {
+      type: Array,
+      required: false,
+      default: () => ['create', 'update', 'delete'],
     },
   },
   setup(props) {
