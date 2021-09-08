@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using Core.Helper;
+﻿using Core.Helper;
 using Core.Services;
 using Core.Services.Base;
+using DAL.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Dto.User;
@@ -13,22 +13,27 @@ namespace Web.Controllers.Public.User
     [Authorize]
     public class MeController : Controller
     {
-        private readonly IMapper _mapper;
+        private readonly UserInfoService _info;
         private readonly UserService _service;
 
-        public MeController(UserService service, IMapper mapper)
+        public MeController(UserService service, UserInfoService userInfoService)
         {
             _service = service;
-            _mapper = mapper;
+            _info = userInfoService;
         }
-
-        private string Id => User.Id()?.ToString() ?? throw new UnauthorizedException();
 
         [HttpGet]
         [Route("")]
         public virtual IActionResult Me()
         {
-            return new JsonResult(_mapper.Map<MeUser>(_service.Get(Id)));
+            return new JsonResult(_info.Me());
+        }
+
+        [HttpPost]
+        [Route("profile")]
+        public virtual IActionResult MeUpdate([FromBody] UserInfo info)
+        {
+            return new JsonResult(_info.MeUpdate(info));
         }
 
         [HttpPost]
