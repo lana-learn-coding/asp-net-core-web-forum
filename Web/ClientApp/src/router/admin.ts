@@ -4,12 +4,14 @@ import Dashboard from '@/views/admin/Dashboard.vue';
 import ManageCategory from '@/views/admin/topic/ManageCategory.vue';
 import ManageTag from '@/views/admin/topic/ManageTag.vue';
 import ManageForum from '@/views/admin/ManageForum.vue';
-import ManageUser from '@/views/admin/ManageUser.vue';
+import ManageUser from '@/views/admin/user/ManageUser.vue';
 import AdminLogin from '@/views/auth/AdminLogin.vue';
 import ManageThread from '@/views/admin/ManageThread.vue';
 import ManagePost from '@/views/admin/ManagePost.vue';
 import ManageSpecialty from '@/views/admin/topic/ManageSpecialty.vue';
 import ManageLanguage from '@/views/admin/topic/ManageLanguage.vue';
+import ManageCountry from '@/views/admin/user/ManageCountry.vue';
+import ManageCity from '@/views/admin/user/ManageCity.vue';
 
 const admin: RouteConfig = {
   path: '/admin',
@@ -96,6 +98,22 @@ const admin: RouteConfig = {
       path: 'users',
       component: ManageUser,
       name: 'ManageUser',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'regions/countries',
+      component: ManageCountry,
+      name: 'ManageCountry',
+      meta: {
+        roles: ['Admin'],
+      },
+    },
+    {
+      path: 'regions/cities',
+      component: ManageCity,
+      name: 'ManageCity',
       meta: {
         roles: ['Admin'],
       },

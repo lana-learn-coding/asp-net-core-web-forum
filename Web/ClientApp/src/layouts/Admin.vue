@@ -112,7 +112,16 @@ export default defineComponent({
       { title: 'Forum', icon: 'folder', name: 'ManageForum' },
       { title: 'Thread', icon: 'forum', name: 'ManageThread' },
       { title: 'Post', icon: 'chat_bubble', name: 'ManagePost' },
-      { title: 'Users', icon: 'person', name: 'ManageUser' },
+      {
+        title: 'Users',
+        icon: 'person',
+        links: [
+          { title: 'Account', icon: 'person_outline', name: 'ManageUser' },
+          { title: 'Specialty', icon: 'grade', name: 'ManageSpecialty' },
+          { title: 'Country', icon: 'language', name: 'ManageCountry' },
+          { title: 'City', icon: 'location_city', name: 'ManageCity' },
+        ],
+      },
       { title: 'Home', icon: 'home', name: 'Home' },
     ];
 
