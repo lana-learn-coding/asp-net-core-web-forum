@@ -2,7 +2,8 @@ import { useLocalStorage } from '@vueuse/core';
 import { reactive } from '@vue/composition-api';
 import { AxiosError } from 'axios';
 import { useCoreHttp } from '@/services/http';
-import { next, noop } from '@/composable/compat';
+import { next, noop, useRouter } from '@/composable/compat';
+import { useMessage } from '@/composable/message';
 
 export interface UseUserResult {
   user: AuthUser;
@@ -120,4 +121,24 @@ export function isAuthorized(roles?: string | string[]): boolean {
 
   if (roles === 'User') return true;
   return !!user.roles && user.roles.includes(roles);
+}
+
+export function useRequireAuth(role?: string | string[], soft = false): boolean {
+  const { confirm } = useMessage();
+  const router = useRouter();
+  const pass = isAuthorized(role);
+  if (!pass) {
+    confirm({
+      text: 'Please login to continue',
+      persistent: !soft,
+      title: 'Login required',
+      cancel: soft ? 'Cancel' : 'Home',
+    })
+      .then((ok) => {
+        if (ok) router.push({ name: 'Login' }).catch(noop);
+        if (soft) return;
+        router.push({ name: 'Home' });
+      });
+  }
+  return pass;
 }

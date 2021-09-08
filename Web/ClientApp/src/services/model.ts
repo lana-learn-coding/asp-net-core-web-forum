@@ -91,6 +91,7 @@ export interface Thread extends ModelBase {
 export interface Me extends UserBase {
   firstName: string;
   lastName: string;
+  createdAt: string;
 }
 
 export interface Post extends ModelBase {

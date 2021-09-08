@@ -10,6 +10,9 @@ const user: RouteConfig = {
       path: '/',
       component: Me,
       name: 'Me',
+      meta: {
+        roles: ['User'],
+      },
     },
   ],
 };
