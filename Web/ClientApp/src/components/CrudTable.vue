@@ -156,15 +156,11 @@ export default defineComponent({
     });
     const dialog = computed({
       get: () => query._dialog ?? false,
-      set: (val) => {
-        query._dialog = val;
-      },
+      set: (val) => fetch({ _dialog: val }, false),
     });
     const slug = computed({
       get: () => query._slug ?? '',
-      set: (val) => {
-        query._slug = val;
-      },
+      set: (val) => fetch({ _slug: val }, false),
     });
 
     const http = useHttp();

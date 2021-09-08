@@ -147,13 +147,11 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
       try {
         const newParams = { ...query, ...queryParams };
         const changed = Object.keys(newParams).filter((key) => newParams[key] !== query[key] && !key.startsWith('_'));
-
+        if (changed.length > 0 && newParams.page && newParams.page === meta.currentPage) {
+          newParams.page = 1;
+        }
         // only fetch if query changed
         if (eager || changed.length > 0) {
-          if (newParams.page && newParams.page === meta.currentPage) {
-            newParams.page = 1;
-          }
-
           const res = await client.get<Page<T>>(url, { params: newParams });
           data.value = res.data as UnwrapRefSimple<T>[];
           Object.assign(meta, res.meta);
@@ -163,6 +161,7 @@ export function useQuery<T>(url: string): UseQueryCurlyFunction<T> {
           newParams.size = res.meta.perPage;
         }
 
+        Object.assign(query, newParams);
         const newQuery = { ...route.query, ...newParams };
         Object.keys(newQuery).forEach((key) => {
           const value = newQuery[key]?.toString().trim();
