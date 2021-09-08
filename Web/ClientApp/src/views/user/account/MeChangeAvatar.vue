@@ -5,7 +5,7 @@
         Change Avatar
       </v-btn>
     </template>
-    <v-card width="300px" :max-width="$vuetify.breakpoint.width - 40">
+    <v-card width="350px" :max-width="$vuetify.breakpoint.width - 40">
       <v-card-title>Change Avatar</v-card-title>
       <v-card-text>
         <v-row>
