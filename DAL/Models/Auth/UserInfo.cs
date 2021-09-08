@@ -12,7 +12,7 @@ namespace DAL.Models.Auth
     {
         [NotMapped]
         [JsonIgnore]
-        public override string RawSlug => User.Username;
+        public override string RawSlug => User?.Username;
 
         [Column(TypeName = "NVARCHAR")]
         [MinLength(3)]

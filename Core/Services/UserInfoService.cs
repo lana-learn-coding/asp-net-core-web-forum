@@ -39,6 +39,7 @@ namespace Core.Services
                 entity.WorkCountryId = city.CountryId;
             }
 
+            Context.Entry(current).Reference(x => x.User).Load();
             entity.User = current.User;
 
             base.Update(current, entity);
