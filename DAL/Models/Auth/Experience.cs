@@ -9,7 +9,7 @@ namespace DAL.Models.Auth
     {
         [NotMapped]
         [JsonIgnore]
-        public override string RawSlug => Measurement;
+        public override string RawSlug => Level.ToString();
 
         [Unique]
         [Column(TypeName = "NVARCHAR")]
