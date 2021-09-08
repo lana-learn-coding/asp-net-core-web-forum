@@ -69,8 +69,7 @@ namespace DAL
             modelBuilder.Entity<UserInfo>().HasRequired(m => m.User)
                 .WithOptional(x => x.UserInfo);
             modelBuilder.Entity<UserInfo>().HasMany(m => m.WorkSpecialities)
-                .WithOptional()
-                .WillCascadeOnDelete(false);
+                .WithMany();
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkExperience)
                 .WithMany()
                 .HasForeignKey(m => m.WorkExperienceId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using DAL.Models.Auth;
 using DAL.Models.Topic;
@@ -44,12 +45,16 @@ namespace Core.Model
         public Experience WorkExperience { get; set; }
 
         public string WorkDescription { get; set; }
+
+        [JsonIgnore]
         public virtual ICollection<Specialty> WorkSpecialities { get; set; }
+
+        public virtual IEnumerable<Guid> WorkSpecialitiesIds => WorkSpecialities.Select(x => x.Id);
 
         public bool ShowPhone { get; set; } = false;
         public bool ShowEmail { get; set; } = true;
-        public bool ShowWorkAddress { get; set; } = false;
-        public bool ShowWorkExperience { get; set; } = false;
-        public bool ShowWorkSpecialities { get; set; } = false;
+        public bool ShowWorkAddress { get; set; } = true;
+        public bool ShowWorkExperience { get; set; } = true;
+        public bool ShowWorkSpecialities { get; set; } = true;
     }
 }

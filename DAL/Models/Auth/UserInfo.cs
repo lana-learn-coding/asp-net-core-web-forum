@@ -66,10 +66,13 @@ namespace DAL.Models.Auth
 
         public virtual ICollection<Specialty> WorkSpecialities { get; set; } = new List<Specialty>();
 
+        [NotMapped]
+        public virtual ICollection<Guid> WorkSpecialitiesIds { get; set; } = new List<Guid>();
+
         public bool ShowPhone { get; set; } = false;
         public bool ShowEmail { get; set; } = true;
-        public bool ShowWorkAddress { get; set; } = false;
-        public bool ShowWorkExperience { get; set; } = false;
-        public bool ShowWorkSpecialities { get; set; } = false;
+        public bool ShowWorkAddress { get; set; } = true;
+        public bool ShowWorkExperience { get; set; } = true;
+        public bool ShowWorkSpecialities { get; set; } = true;
     }
 }
