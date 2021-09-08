@@ -114,7 +114,7 @@ export default defineComponent({
         search: '',
         page: meta.totalPages + 1,
       }, false);
-      nextTick(() => window.scrollTo(0, document.body.scrollHeight));
+      nextTick(() => window.scrollTo(0, document.body.scrollHeight - 50));
     }
 
     return {
