@@ -159,12 +159,23 @@
                 >
                 </auto-complete-select>
               </v-col>
-              <v-col cols="12" lg="8" xl="9">
+              <v-col cols="12" lg="5" xl="6">
                 <v-text-field
                   v-model="form.workAddress"
                   :error-messages="errors.workAddress"
                   label="My work address"
-                  placeholder="My hospital/home address..."
+                  placeholder="Your hospital/home address..."
+                  persistent-placeholder
+                  :readonly="readonly"
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" lg="4" xl="3">
+                <v-text-field
+                  v-model="form.workPhone"
+                  :error-messages="errors.workPhone"
+                  label="My work phone"
+                  placeholder="Your work phone"
                   persistent-placeholder
                   :readonly="readonly"
                   dense

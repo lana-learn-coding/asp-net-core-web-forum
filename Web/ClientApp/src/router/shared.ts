@@ -11,7 +11,7 @@ const shared: RouteConfig = {
   component: Blank,
   children: [
     {
-      path: '/user/:slug',
+      path: '/users/:slug',
       component: Profile,
       name: 'Profile',
       props: true,

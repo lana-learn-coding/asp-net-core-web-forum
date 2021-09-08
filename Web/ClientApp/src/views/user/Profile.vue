@@ -117,10 +117,19 @@
                     >
                     </v-text-field>
                   </v-col>
-                  <v-col cols="12" lg="8" xl="9">
+                  <v-col cols="12" lg="5" xl="6">
                     <v-text-field
                       :value="user.workAddress || 'unknown'"
-                      label="Work Dddress"
+                      label="Work address"
+                      persistent-placeholder
+                      readonly
+                      dense
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" lg="4" xl="3">
+                    <v-text-field
+                      :value="user.workPhone || 'unknown'"
+                      label="Work phone number"
                       persistent-placeholder
                       readonly
                       dense
