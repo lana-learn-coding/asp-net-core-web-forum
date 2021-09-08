@@ -1,7 +1,7 @@
 <template>
   <v-card flat class="mt-4">
     <v-card-title>Yours Account</v-card-title>
-    <v-card-subtitle>Manage your information</v-card-subtitle>
+    <v-card-subtitle>Manage your account</v-card-subtitle>
     <v-card-text>
       <v-row>
         <v-col cols="3" xl="2" class="d-none d-md-block">
@@ -13,7 +13,7 @@
             :alt="user.username"
           ></v-img>
         </v-col>
-        <v-col cols="12" md="9" lg="8" xl="6">
+        <v-col cols="12" md="9" lg="8" xl="7">
           <v-text-field
             :value="user.username"
             label="Username"
