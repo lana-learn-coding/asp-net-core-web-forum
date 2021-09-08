@@ -25,12 +25,14 @@ namespace Web.Controllers.Public
         [HttpGet]
         [Route("")]
         public virtual IActionResult Index([FromQuery] PageQuery pageQuery, [FromQuery] string forum,
-            [FromQuery] string search)
+            [FromQuery] string search, [FromQuery] string user)
         {
             search ??= "";
             return new JsonResult(_service.Page(pageQuery, q =>
                 {
                     if (!string.IsNullOrWhiteSpace(forum)) q = q.Where(x => x.Forum.Slug.Equals(forum));
+                    if (!string.IsNullOrWhiteSpace(user))
+                        q = q.Where(x => x.Posts.Any(p => p.Id.Equals(x.Id) && p.User.Slug.Equals(user)));
                     return q.Where(x => x.Title.Contains(search) || x.Tags.Any(t => t.Name.Contains(search)));
                 }
             ));

@@ -46,6 +46,8 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Votes.Sum(v => (int?)v.Value) ?? 0))
                 .ForMember(m => m.ThreadTitle,
                     opt => opt.MapFrom(x => x.Thread.Title))
+                .ForMember(m => m.ThreadSlug,
+                    opt => opt.MapFrom(x => x.Thread.Slug))
                 .ForMember(m => m.Voted,
                     opt => opt.MapFrom(x =>
                         x.Votes.Where(v => v.UserId.Equals(authId)).Select(v => v.Value).FirstOrDefault()));

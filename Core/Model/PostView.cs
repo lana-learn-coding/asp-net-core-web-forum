@@ -8,6 +8,7 @@ namespace Core.Model
 
         public string Content { get; set; }
 
+        public string ThreadSlug { get; set; }
         public string ThreadTitle { get; set; }
 
         public Guid ThreadId { get; set; }
