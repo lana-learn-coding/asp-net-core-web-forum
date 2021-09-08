@@ -258,13 +258,6 @@
                   :readonly="readonly"
                   dense>
                 </v-checkbox>
-                <v-checkbox
-                  v-model="form.showWorkSpecialities"
-                  :error-messages="errors.showWorkSpecialities"
-                  label="Public your specialities"
-                  :readonly="readonly"
-                  dense>
-                </v-checkbox>
               </v-col>
             </v-row>
           </v-col>
@@ -313,7 +306,6 @@ export default defineComponent({
       showEmail: true,
       showWorkAddress: true,
       showWorkExperience: true,
-      showWorkSpecialities: true,
       workSpecialitiesIds: [],
       workDescription: '',
       workPhone: '',

@@ -100,7 +100,6 @@ export interface Me extends UserBase {
 
   showWorkAddress: boolean,
   showWorkExperience: boolean,
-  showWorkSpecialities: boolean,
   workSpecialitiesIds: string[],
   workPhone: string;
   workCountryId: string;
