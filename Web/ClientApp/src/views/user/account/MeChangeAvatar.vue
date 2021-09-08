@@ -32,6 +32,7 @@
           @click="submit"
           color="primary"
           :loading="loading"
+          :disabled="old === form.avatar"
         >
           Ok
         </v-btn>
@@ -66,6 +67,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const dialog = ref(false);
+    const old = ref(props.user.avatar);
     const { form, errors, setErrors, clearErrors, clearForm } = useForm({
       avatar: props.user.avatar,
     });
@@ -83,6 +85,7 @@ export default defineComponent({
         emit('change');
         await refresh().catch(noop);
         notify({ text: 'Avatar changed successfully', type: 'success' });
+        old.value = props.user.avatar;
       } catch (e) {
         if (e.response.data) {
           setErrors(e.response.data);
@@ -101,6 +104,7 @@ export default defineComponent({
     }
 
     return {
+      old,
       form,
       errors,
       submit,
