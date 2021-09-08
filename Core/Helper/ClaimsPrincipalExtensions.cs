@@ -20,7 +20,7 @@ namespace Core.Helper
         {
             if (!obj.IsUser()) return "";
             var claim = obj.Claims.FirstOrDefault(x => x.Type.Equals(name));
-            return (claim != null) ? claim.Value : string.Empty;
+            return claim?.Value;
         }
 
         public static Guid? Id(this ClaimsPrincipal obj)

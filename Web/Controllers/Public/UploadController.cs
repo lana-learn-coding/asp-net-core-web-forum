@@ -67,7 +67,7 @@ namespace Web.Controllers.Public
                 _context.SaveChanges();
                 return new OkResult();
             }
-            catch (DataNotFoundException)
+            catch (Exception)
             {
                 return new OkResult();
             }

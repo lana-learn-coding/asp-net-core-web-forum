@@ -37,20 +37,26 @@ namespace Web.Controllers.Public.User
         {
             try
             {
-                var username = User.GetClaim("username");
+                var username = User.GetClaim("username") ?? throw new UnauthorizedException();
                 var user = _service.Verify(username, request.Password);
                 if (request.Password.Equals(request.NewPassword))
                     throw new InvalidDataException("NewPassword", "New password must different from old one");
-
-                var update = _service.FindForWrite(user.Slug);
-                update.Password = request.NewPassword;
-                _service.Update(user.Slug, update);
+                _service.ChangePassword(user.Slug, request.NewPassword);
                 return new OkResult();
             }
             catch (UnauthorizedException)
             {
                 throw new InvalidDataException("Password", "Wrong password");
             }
+        }
+
+        [HttpPost]
+        [Route("change-avatar")]
+        public virtual IActionResult ChangeAvatar([FromBody] ChangeAvatar request)
+        {
+            var userId = User.Id() ?? throw new UnauthorizedException();
+            _service.ChangeAvatar(userId.ToString(), request.Avatar);
+            return new OkResult();
         }
     }
 }

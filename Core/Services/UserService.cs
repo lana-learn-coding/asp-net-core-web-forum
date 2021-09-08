@@ -57,10 +57,27 @@ namespace Core.Services
             {
                 entity.Password = current.Password;
             }
+            else
+            {
+                entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
+            }
 
-            entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             if (_httpContext.User.IsAdmin()) FillRoles(current);
             base.Update(current, entity);
+        }
+
+        public void ChangePassword(string slug, string newPassword)
+        {
+            var update = FindForWrite(slug);
+            update.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            base.Update(slug, update);
+        }
+
+        public void ChangeAvatar(string slug, string newAvatar)
+        {
+            var update = FindForWrite(slug);
+            update.Avatar = newAvatar;
+            base.Update(slug, update);
         }
 
         private void FillRoles(User user)
