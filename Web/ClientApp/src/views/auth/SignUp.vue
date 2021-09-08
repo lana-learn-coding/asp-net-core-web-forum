@@ -20,6 +20,7 @@
             label="Username"
             persistent-placeholder
             required
+            hint="Your username will auto convert to lower case variant"
           >
           </v-text-field>
 
