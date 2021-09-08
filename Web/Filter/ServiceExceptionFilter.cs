@@ -44,6 +44,15 @@ namespace Web.Filter
                     };
                     return;
 
+                case InvalidFileException exception:
+                    context.ExceptionHandled = true;
+                    context.Result = new JsonResult(new { Error = new { exception.Message } })
+                    {
+                        SerializerSettings = ModelStateInvalidFilter.SerializerOptions,
+                        StatusCode = 400
+                    };
+                    return;
+
                 case ConflictException exception:
                     context.ExceptionHandled = true;
                     context.Result = new JsonResult(new { exception.Message })

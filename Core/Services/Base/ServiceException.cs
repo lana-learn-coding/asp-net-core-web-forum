@@ -65,8 +65,6 @@ namespace Core.Services.Base
     // 400
     public class InvalidDataException : ServiceException
     {
-        public IDictionary<string, ICollection<string>> ModelErrors { get; }
-
         public InvalidDataException(string field, params string[] messages) : base("Model is invalid")
         {
             ModelErrors = new Dictionary<string, ICollection<string>>
@@ -80,10 +78,19 @@ namespace Core.Services.Base
             ModelErrors = new Dictionary<string, ICollection<string>>();
         }
 
+        public IDictionary<string, ICollection<string>> ModelErrors { get; }
+
         public ICollection<string> this[string index]
         {
             set => ModelErrors[index] = value;
             get => ModelErrors[index];
+        }
+    }
+
+    public class InvalidFileException : ServiceException
+    {
+        public InvalidFileException(string message) : base(message)
+        {
         }
     }
 }

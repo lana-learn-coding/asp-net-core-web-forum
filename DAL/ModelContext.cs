@@ -41,9 +41,11 @@ namespace DAL
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<Language> Languages { get; set; }
 
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Image>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Role>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<User>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Country>().Map(m => m.MapInheritedProperties());
