@@ -37,6 +37,7 @@ const router = new VueRouter({
 const { confirm } = useAlert();
 const { user: currentUser } = useUser();
 router.beforeEach((to: Route, from: Route, next: NavigationGuardNext) => {
+  if (process.env.VUE_APP_OFFLINE_DISABLE_AUTH === 'true') return next();
   if (!to.meta?.roles) return next();
 
   if (!currentUser.isAuthenticated) {

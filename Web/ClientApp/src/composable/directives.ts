@@ -10,6 +10,7 @@ Vue.directive('debounce', getDirective('2', {
 }));
 
 Vue.directive('auth', (el, binding) => {
+  if (process.env.VUE_APP_OFFLINE_DISABLE_AUTH === 'true') return;
   const role = binding.expression?.replace(/['"]/g, '') || '';
 
   if (!isAuthorized(role)) {
