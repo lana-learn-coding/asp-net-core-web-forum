@@ -76,7 +76,7 @@ namespace Core.Services
         {
             ValidateForumAccess(entity);
             var tags = Context.Set<Tag>().Where(x => entity.TagIds.Contains(x.Id)).ToList();
-            var thread = GetForWrite(slug);
+            var thread = FindForWrite(slug);
             if (_httpContext.User.IsInRole("Admin"))
             {
                 thread.Status = entity.Status;
@@ -132,7 +132,7 @@ namespace Core.Services
 
         public override ThreadView Get(string slug)
         {
-            var thread = GetForWrite(slug, q => q.Include("Forum"));
+            var thread = FindForWrite(slug, q => q.Include("Forum"));
             if (thread.Forum.ForumAccess > AccessMode.Internal && !_httpContext.User.IsAdmin())
                 throw new ForbiddenException();
             if (thread.Forum.ForumAccess >= AccessMode.Protected && !_httpContext.User.IsUser())

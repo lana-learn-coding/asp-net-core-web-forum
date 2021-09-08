@@ -57,11 +57,8 @@ namespace Core.Services
             {
                 entity.Password = current.Password;
             }
-            else
-            {
-                entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
-            }
 
+            entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             if (_httpContext.User.IsAdmin()) FillRoles(current);
             base.Update(current, entity);
         }
@@ -92,7 +89,7 @@ namespace Core.Services
 
         protected override void Delete(User entity)
         {
-            var defaultUser = GetForWrite(Guid.Empty.ToString());
+            var defaultUser = FindForWrite(Guid.Empty.ToString());
             var posts = entity.Posts;
             foreach (var post in posts) post.User = defaultUser;
 

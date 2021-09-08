@@ -143,14 +143,14 @@ namespace Core.Services.Base
 
         public R Update(string slug, W entity)
         {
-            var current = GetForWrite(slug);
+            var current = FindForWrite(slug);
             Update(current, entity);
             return Get(current.Id.ToString());
         }
 
         public void Delete(string slug)
         {
-            var current = GetForWrite(slug);
+            var current = FindForWrite(slug);
             Delete(current);
         }
 
@@ -211,12 +211,12 @@ namespace Core.Services.Base
         /// and CRUD methods
         protected abstract IQueryable<R> Query(IQueryable<W> queryable);
 
-        protected W GetForWrite(string slug)
+        public W FindForWrite(string slug)
         {
-            return GetForWrite(slug, NoQuery);
+            return FindForWrite(slug, NoQuery);
         }
 
-        protected W GetForWrite(string slug, Func<IQueryable<W>, IQueryable<W>> query)
+        protected W FindForWrite(string slug, Func<IQueryable<W>, IQueryable<W>> query)
         {
             if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
 
