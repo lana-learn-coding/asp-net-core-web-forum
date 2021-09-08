@@ -11,6 +11,7 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Level.ToString();
 
+        [TitleCase]
         [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(100)]
@@ -30,6 +31,7 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public override string RawSlug => Name;
 
+        [TitleCase]
         [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(120)]

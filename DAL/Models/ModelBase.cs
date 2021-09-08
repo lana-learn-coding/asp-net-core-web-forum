@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Humanizer;
 
 namespace DAL.Models
 {
@@ -75,5 +76,17 @@ namespace DAL.Models
         Protected = 1,
         Internal = 2,
         Private = 3
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class TitleCase : Attribute
+    {
+        public virtual ICulturedStringTransformer To { get; } = Humanizer.To.TitleCase;
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class LowerCase : TitleCase
+    {
+        public override ICulturedStringTransformer To { get; } = Humanizer.To.TitleCase;
     }
 }

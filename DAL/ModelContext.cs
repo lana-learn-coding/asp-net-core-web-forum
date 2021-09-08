@@ -8,6 +8,7 @@ using DAL.Models;
 using DAL.Models.Auth;
 using DAL.Models.Forum;
 using DAL.Models.Topic;
+using Humanizer;
 using SlugityLib;
 using Thread = DAL.Models.Forum.Thread;
 
@@ -102,6 +103,24 @@ namespace DAL
         // Audit date and slug generation handle
         private void SetProperties()
         {
+            foreach (var entry in ChangeTracker.Entries()
+                .Where(p => p.State is EntityState.Modified or EntityState.Added))
+            {
+                var properties = entry.Entity
+                    .GetType()
+                    .GetProperties()
+                    .Where(prop =>
+                        Attribute.IsDefined(prop, typeof(TitleCase)) && prop.PropertyType == typeof(string));
+
+                foreach (var property in properties)
+                {
+                    var attribute = (TitleCase)property.GetCustomAttributes(typeof(TitleCase), true)[0];
+                    var value = entry.CurrentValues[property.Name]?.ToString();
+                    if (string.IsNullOrWhiteSpace(value)) return;
+                    entry.CurrentValues[property.Name] = value.Transform(attribute.To);
+                }
+            }
+
             foreach (var entity in ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
             {
                 if (entity.Entity is IAuditable created)

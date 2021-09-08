@@ -14,6 +14,7 @@ namespace DAL.Models.Forum
         [JsonIgnore]
         public override string RawSlug => Title;
 
+        [TitleCase]
         [Unique]
         [Column(TypeName = "NVARCHAR")]
         [StringLength(150)]

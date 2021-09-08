@@ -11,6 +11,7 @@ namespace DAL.Validation
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null) return ValidationResult.Success;
             var context = (ModelContext)validationContext.GetService(typeof(ModelContext));
             if (context == null) return ValidationResult.Success;
             var type = Type ?? validationContext.ObjectType;
