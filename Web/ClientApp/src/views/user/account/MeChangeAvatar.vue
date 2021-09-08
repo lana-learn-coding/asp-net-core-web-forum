@@ -5,33 +5,26 @@
         Change Avatar
       </v-btn>
     </template>
-    <v-card width="500px" :max-width="$vuetify.breakpoint.width - 40">
-      <v-card-title>Change password</v-card-title>
+    <v-card width="300px" :max-width="$vuetify.breakpoint.width - 40">
+      <v-card-title>Change Avatar</v-card-title>
       <v-card-text>
-        <v-text-field
-          label="Current Password"
-          type="password"
-          v-model="form.password"
-          :error-messages="errors.password"
-          persistent-placeholder
-        >
-        </v-text-field>
-        <v-text-field
-          label="New Password"
-          type="password"
-          v-model="form.newPassword"
-          :error-messages="errors.newPassword"
-          persistent-placeholder
-        >
-        </v-text-field>
-        <v-text-field
-          label="Confirm New Password"
-          type="password"
-          v-model="form.confirmNewPassword"
-          :error-messages="errors.confirmNewPassword"
-          persistent-placeholder
-        >
-        </v-text-field>
+        <v-row>
+          <v-col>
+            <image-picker
+              v-model="form.avatar"
+              :error-messages="errors.avatar"
+              persistent-placeholder
+              label="Avatar"
+            >
+            </image-picker>
+            <v-img
+              :src="user.avatar || require('@/assets/anon.png')"
+              lazy-src="@/assets/anon_thumbnail.png"
+              :alt="user.username"
+              rounded
+            ></v-img>
+          </v-col>
+        </v-row>
       </v-card-text>
       <v-card-actions>
         <v-btn
@@ -58,10 +51,13 @@ import { useMessage } from '@/composable/message';
 import { UserBase } from '@/services/model';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 import EditorInput from '@/components/form/EditorInput.vue';
+import ImagePicker from '@/components/form/ImagePicker.vue';
+import { useUser } from '@/services/auth';
+import { noop } from '@/composable/compat';
 
 export default defineComponent({
   name: 'MeChangeAvatar',
-  components: { EditorInput, AutoCompleteSelect },
+  components: { ImagePicker, EditorInput, AutoCompleteSelect },
   props: {
     user: {
       type: Object as PropType<UserBase>,
@@ -71,29 +67,22 @@ export default defineComponent({
   setup(props, { emit }) {
     const dialog = ref(false);
     const { form, errors, setErrors, clearErrors, clearForm } = useForm({
-      password: '',
-      newPassword: '',
-      confirmNewPassword: '',
+      avatar: props.user.avatar,
     });
 
     const loading = ref(false);
     const http = useHttp();
     const { notify } = useMessage();
+    const { refresh } = useUser();
 
     async function submit() {
       loading.value = true;
-      if (form.newPassword !== form.confirmNewPassword) {
-        setErrors({
-          confirmNewPassword: 'Password confirmation not match',
-          password: 'Password confirmation not match',
-        });
-        return;
-      }
       try {
-        await http.post('me/change-password', form);
+        await http.post('me/change-avatar', form);
         close();
         emit('change');
-        notify({ text: 'Password changed successfully', type: 'success' });
+        await refresh().catch(noop);
+        notify({ text: 'Avatar changed successfully', type: 'success' });
       } catch (e) {
         if (e.response.data) {
           setErrors(e.response.data);
