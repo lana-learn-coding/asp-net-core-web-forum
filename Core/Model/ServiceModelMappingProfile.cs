@@ -53,6 +53,7 @@ namespace Core.Model
                         x.Votes.Where(v => v.UserId.Equals(authId)).Select(v => v.Value).FirstOrDefault()));
 
             //User
+            var showUserInfo = false;
             CreateMap<User, UserViewBase>();
             CreateMap<User, UserView>()
                 .ForMember(m => m.VotesCount,
@@ -61,7 +62,33 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count(p => p.Id.Equals(p.ThreadId))))
                 .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Posts.Count));
-            CreateMap<UserInfo, UserInfoView>();
+            CreateMap<UserInfo, UserInfoView>()
+                .ForMember(m => m.Email,
+                    opt => opt.MapFrom(x => x.ShowEmail || showUserInfo ? x.User.Email : null))
+                .ForMember(m => m.Phone,
+                    opt => opt.MapFrom(x => x.ShowPhone || showUserInfo ? x.Phone : null))
+                .ForMember(m => m.WorkAddress,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkAddress : null))
+                .ForMember(m => m.WorkCity,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkCity : null))
+                .ForMember(m => m.WorkCityId,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkCityId : null))
+                .ForMember(m => m.WorkCountryId,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkCountryId : null))
+                .ForMember(m => m.WorkCountry,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkCountry : null))
+                .ForMember(m => m.WorkPhone,
+                    opt => opt.MapFrom(x => x.ShowWorkAddress || showUserInfo ? x.WorkPhone : null))
+                .ForMember(m => m.WorkExperience,
+                    opt => opt.MapFrom(x => x.ShowWorkExperience || showUserInfo ? x.WorkExperience : null))
+                .ForMember(m => m.WorkExperienceId,
+                    opt => opt.MapFrom(x => x.ShowWorkExperience || showUserInfo ? x.WorkExperienceId : null))
+                .ForMember(m => m.WorkDescription,
+                    opt => opt.MapFrom(x => x.ShowWorkExperience || showUserInfo ? x.WorkDescription : null))
+                .ForMember(m => m.WorkPosition,
+                    opt => opt.MapFrom(x => x.ShowWorkExperience || showUserInfo ? x.WorkPosition : null))
+                .ForMember(m => m.WorkPositionId,
+                    opt => opt.MapFrom(x => x.ShowWorkExperience || showUserInfo ? x.WorkPositionId : null));
         }
     }
 }

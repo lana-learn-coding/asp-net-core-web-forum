@@ -14,7 +14,7 @@ namespace Core.Model
 
         public override string Avatar => User.Avatar;
         public override string Username => User.Username;
-        public override string Email => User.Email;
+        public override string Email { get; set; }
 
         public bool? Gender { get; set; }
 
@@ -49,12 +49,11 @@ namespace Core.Model
         [JsonIgnore]
         public virtual ICollection<Specialty> WorkSpecialities { get; set; }
 
-        public virtual IEnumerable<Guid> WorkSpecialitiesIds => WorkSpecialities.Select(x => x.Id);
+        public virtual IEnumerable<Guid> WorkSpecialitiesIds => WorkSpecialities.Select(x => x.Id) ?? new List<Guid>();
 
         public bool ShowPhone { get; set; } = false;
         public bool ShowEmail { get; set; } = true;
         public bool ShowWorkAddress { get; set; } = true;
         public bool ShowWorkExperience { get; set; } = true;
-        public bool ShowWorkSpecialities { get; set; } = true;
     }
 }

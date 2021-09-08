@@ -57,7 +57,7 @@ namespace Core.Services
             var info = DbSet.Where(x => x.Id.Equals(id))
                 .Include("User")
                 .Include("WorkSpecialities")
-                .ProjectTo<UserInfoView>(_mapperConfig)
+                .ProjectTo<UserInfoView>(_mapperConfig, new { showUserInfo = true })
                 .FirstOrDefault();
             return info ?? throw new DataNotFoundException("User not found");
         }
@@ -89,9 +89,10 @@ namespace Core.Services
 
         protected override IQueryable<UserInfoView> Query(IQueryable<UserInfo> queryable)
         {
+            var isAdmin = _httpContext.User.IsAdmin();
             return queryable.Include("User")
                 .Include("WorkSpecialities")
-                .ProjectTo<UserInfoView>(_mapperConfig);
+                .ProjectTo<UserInfoView>(_mapperConfig, new { showUserInfo = isAdmin });
         }
     }
 }

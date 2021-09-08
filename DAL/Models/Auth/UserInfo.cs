@@ -40,6 +40,7 @@ namespace DAL.Models.Auth
 
         public User User { get; set; }
 
+        [Phone]
         [Column(TypeName = "VARCHAR")]
         [StringLength(30)]
         public string WorkPhone { get; set; }
@@ -73,6 +74,5 @@ namespace DAL.Models.Auth
         public bool ShowEmail { get; set; } = true;
         public bool ShowWorkAddress { get; set; } = true;
         public bool ShowWorkExperience { get; set; } = true;
-        public bool ShowWorkSpecialities { get; set; } = true;
     }
 }
