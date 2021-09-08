@@ -8,6 +8,8 @@ using DAL.Models.Forum;
 namespace DAL.Database
 {
     // Fake additional data (for testing purpose)
+    // The generated data is not relevant to this project real domain
+    // but it is useful when you need a lot of data to test
     public class FakeDataDatabaseInitializer : DatabaseInitializer
     {
         protected override void Seed(ModelContext context)
@@ -41,6 +43,28 @@ namespace DAL.Database
                 };
                 context.Users.Add(user);
                 Console.WriteLine($"User: {user.Username}");
+
+                var cities = context.Cities.Include("Country").ToList();
+                var specialities = context.Specialties.ToList();
+                var experiences = context.Experiences.ToList();
+                var positions = context.Positions.ToList();
+                var city = faker.Random.CollectionItem(cities);
+                user.UserInfo = new UserInfo
+                {
+                    User = user,
+                    FirstName = faker.Person.FirstName,
+                    LastName = faker.Person.LastName,
+                    DateOfBirth = faker.Person.DateOfBirth,
+                    Phone = faker.Person.Phone,
+                    WorkCity = city,
+                    WorkCountry = city.Country,
+                    WorkExperience = faker.Random.ListItem(experiences),
+                    WorkPosition = faker.Random.ListItem(positions),
+                    WorkSpecialities = faker.Random.ListItems(specialities),
+                    WorkPhone = faker.Person.Phone,
+                    WorkAddress = $"{faker.Person.Address.Street}, {faker.Person.Address.State}",
+                    WorkDescription = faker.Name.JobTitle()
+                };
             }
         }
 
@@ -57,7 +81,7 @@ namespace DAL.Database
                     Title = $"{faker.Company.CatchPhrase()} {i}",
                     SubTitle = $"{faker.Name.JobDescriptor()} {faker.Name.JobTitle()}",
                     Description = faker.Lorem.Sentence(10, 10),
-                    CategoryId = categories[faker.Random.Int(0, 3)].Id,
+                    CategoryId = faker.Random.ListItem(categories).Id,
                     ForumAccess = AccessMode.Public,
                     ThreadAccess = AccessMode.Public
                 };
@@ -91,8 +115,9 @@ namespace DAL.Database
                 {
                     Id = id,
                     ThreadId = id,
-                    Content = faker.Rant.Review(),
-                    UserId = users[faker.Random.Int(0, users.Count - 1)].Id
+                    Content = string.Join("<br>",
+                        faker.Rant.Reviews(faker.Random.ListItem(tags).Name, faker.Random.Int(2, 10))),
+                    UserId = faker.Random.ListItem(users).Id
                 };
                 context.Posts.Add(originPost);
                 context.Threads.Add(thread);
@@ -103,8 +128,9 @@ namespace DAL.Database
                     var post = new Post
                     {
                         ThreadId = thread.Id,
-                        Content = faker.Rant.Review(),
-                        UserId = users[faker.Random.Int(0, users.Count - 1)].Id
+                        Content = string.Join("<br>",
+                            faker.Rant.Reviews(faker.Random.ListItem(tags).Name, faker.Random.Int(2, 6))),
+                        UserId = faker.Random.ListItem(users).Id
                     };
                     context.Posts.Add(post);
                 }

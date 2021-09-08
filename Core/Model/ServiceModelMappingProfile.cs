@@ -37,6 +37,7 @@ namespace Core.Model
                         x.Posts.Where(p => p.Id.Equals(x.Id)).Select(p => p.Votes.Sum(v => (int?)v.Value ?? 0))
                             .FirstOrDefault()));
             CreateMap<Forum, ThreadForumView>();
+            CreateMap<CreateThreadUser, CreateThreadAdmin>();
 
             // Posts
             var authId = Guid.NewGuid(); // auto mapper Parameterization
@@ -49,7 +50,7 @@ namespace Core.Model
                     opt => opt.MapFrom(x =>
                         x.Votes.Where(v => v.UserId.Equals(authId)).Select(v => v.Value).FirstOrDefault()));
 
-            //Misc
+            //User
             CreateMap<User, UserViewBase>();
             CreateMap<User, UserView>()
                 .ForMember(m => m.VotesCount,
@@ -58,8 +59,7 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count(p => p.Id.Equals(p.ThreadId))))
                 .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Posts.Count));
-
-            CreateMap<CreateThreadUser, CreateThreadAdmin>();
+            CreateMap<UserInfo, UserInfoView>();
         }
     }
 }

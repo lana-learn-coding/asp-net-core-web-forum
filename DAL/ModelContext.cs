@@ -29,6 +29,7 @@ namespace DAL
         public DbSet<Country> Countries { get; set; }
         public DbSet<Experience> Experiences { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
 
         public DbSet<Forum> Forums { get; set; }
         public DbSet<Thread> Threads { get; set; }
@@ -59,6 +60,29 @@ namespace DAL
             modelBuilder.Entity<Tag>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Specialty>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<Language>().Map(m => m.MapInheritedProperties());
+
+            modelBuilder.Entity<UserInfo>().Map(m => m.MapInheritedProperties());
+            modelBuilder.Entity<UserInfo>().HasRequired(m => m.User)
+                .WithOptional(x => x.UserInfo);
+            modelBuilder.Entity<UserInfo>().HasMany(m => m.WorkSpecialities)
+                .WithOptional()
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkExperience)
+                .WithMany()
+                .HasForeignKey(m => m.WorkExperienceId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkPosition)
+                .WithMany()
+                .HasForeignKey(m => m.WorkPositionId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkCity)
+                .WithMany()
+                .HasForeignKey(m => m.WorkCityId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkCountry)
+                .WithMany()
+                .HasForeignKey(m => m.WorkCountryId)
+                .WillCascadeOnDelete(false);
         }
 
         public override int SaveChanges()

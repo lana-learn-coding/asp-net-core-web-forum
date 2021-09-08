@@ -2,8 +2,8 @@
 {
     public class UserViewBase : ViewBase
     {
-        public string Avatar { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
+        public virtual string Avatar { get; set; }
+        public virtual string Username { get; set; }
+        public virtual string Email { get; set; }
     }
 }

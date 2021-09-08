@@ -47,6 +47,7 @@ namespace Core.Services
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             if (_httpContext.User.IsAdmin()) FillRoles(entity);
+            entity.UserInfo = new UserInfo();
             return base.Create(entity);
         }
 
@@ -85,6 +86,7 @@ namespace Core.Services
                 queryable = queryable.Where(x => !x.Id.Equals(Guid.Empty));
 
             return queryable.Include("Roles")
+                .Include("UserInfo")
                 .ProjectTo<UserView>(_mapperConfig);
         }
 

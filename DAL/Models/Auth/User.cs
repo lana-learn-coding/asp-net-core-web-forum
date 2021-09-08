@@ -48,6 +48,9 @@ namespace DAL.Models.Auth
         [JsonIgnore]
         public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
 
+        [JsonIgnore]
+        public UserInfo UserInfo { get; set; }
+
         [NotMapped]
         public ICollection<Guid> RoleIds { get; set; } = new List<Guid>();
     }

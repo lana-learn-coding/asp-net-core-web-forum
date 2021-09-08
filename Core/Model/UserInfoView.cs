@@ -1,51 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DAL.Models.Auth;
 using DAL.Models.Topic;
-using DAL.Validation;
 
-namespace DAL.Models.Auth
+namespace Core.Model
 {
-    public class UserInfo : Entity
+    public class UserInfoView : UserViewBase
     {
-        [NotMapped]
         [JsonIgnore]
-        public override string RawSlug => User.Username;
+        public UserViewBase User { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
-        [MinLength(3)]
-        [StringLength(150)]
-        public string FirstName { get; set; }
-
-        [Column(TypeName = "NVARCHAR")]
-        [MinLength(3)]
-        [StringLength(150)]
-        public string LastName { get; set; }
-
-        [Unique]
-        [Column(TypeName = "VARCHAR")]
-        [StringLength(30)]
-        public string Phone { get; set; }
-
-        [Column(TypeName = "NVARCHAR")]
-        [StringLength(500)]
-        public string Bio { get; set; }
-
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
-        public DateTime? DateOfBirth { get; set; }
+        public override string Avatar => User.Avatar;
+        public override string Username => User.Username;
+        public override string Email => User.Email;
 
         public bool? Gender { get; set; }
 
-        public User User { get; set; }
+        public string FirstName { get; set; }
 
-        [Column(TypeName = "VARCHAR")]
-        [StringLength(30)]
+        public string LastName { get; set; }
+
+        public string Phone { get; set; }
+
+        public string Bio { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
+
         public string WorkPhone { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
-        [StringLength(200)]
         public string WorkAddress { get; set; }
 
         public Guid? WorkCityId { get; set; }
@@ -60,11 +43,8 @@ namespace DAL.Models.Auth
         public Guid? WorkExperienceId { get; set; }
         public Experience WorkExperience { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
-        [StringLength(500)]
         public string WorkDescription { get; set; }
-
-        public virtual ICollection<Specialty> WorkSpecialities { get; set; } = new List<Specialty>();
+        public virtual ICollection<Specialty> WorkSpecialities { get; set; }
 
         public bool ShowPhone { get; set; } = false;
         public bool ShowEmail { get; set; } = true;
