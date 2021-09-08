@@ -22,7 +22,7 @@ namespace Core.Services
         public PostService(DbContext context, IHttpContextAccessor httpContextAccessor,
             IConfigurationProvider mapperConfig) : base(context)
         {
-            DefaultSort = new List<string> { "CreatedAt desc" };
+            DefaultSort = new List<string> { "CreatedAt" };
             _httpContext = httpContextAccessor.HttpContext;
             _mapperConfig = mapperConfig;
         }
@@ -68,7 +68,7 @@ namespace Core.Services
         {
             var userId = _httpContext.User.Id() ?? throw new UnauthorizedException();
 
-            var post = GetForWrite(slug, q => q.Include("Thread.Forum"));
+            var post = FindForWrite(slug, q => q.Include("Thread.Forum"));
             if (post.Thread.Forum.ForumAccess > AccessMode.Internal && !_httpContext.User.IsAdmin())
                 throw new ForbiddenException();
 
@@ -97,7 +97,7 @@ namespace Core.Services
 
         public override PostView Get(string slug)
         {
-            var post = GetForWrite(slug, q => q.Include("Thread.Forum"));
+            var post = FindForWrite(slug, q => q.Include("Thread.Forum"));
             if (post.Thread.Forum.ForumAccess > AccessMode.Internal && !_httpContext.User.IsAdmin())
                 throw new ForbiddenException();
             if (post.Thread.Forum.ForumAccess >= AccessMode.Protected && !_httpContext.User.IsUser())
