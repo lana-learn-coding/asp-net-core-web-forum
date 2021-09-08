@@ -4,11 +4,18 @@ import Error from '@/views/Error.vue';
 import Login from '@/views/auth/Login.vue';
 import SignUp from '@/views/auth/SignUp.vue';
 import Logout from '@/views/auth/Logout.vue';
+import Profile from '@/views/user/Profile.vue';
 
 const shared: RouteConfig = {
   path: '/',
   component: Blank,
   children: [
+    {
+      path: '/user/:slug',
+      component: Profile,
+      name: 'Profile',
+      props: true,
+    },
     {
       path: '/login',
       component: Login,

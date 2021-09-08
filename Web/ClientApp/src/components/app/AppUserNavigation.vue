@@ -76,54 +76,53 @@ export default defineComponent({
     const { user } = useUser();
     const loading = computed(() => false);
 
+    const navs = ref<NavLink[]>([
+      {
+        icon: 'home',
+        text: 'Home',
+        to: { name: 'Home' },
+      },
+      {
+        icon: 'badge',
+        text: 'My Profile',
+        to: { name: 'Me' },
+      },
+      {
+        icon: 'question_answer',
+        text: 'My Threads',
+        to: { name: 'MeThread' },
+      },
+      {
+        icon: 'chat_bubble_outline',
+        text: 'My Posts',
+        to: { name: 'MePost' },
+      },
+      {
+        icon: 'visibility',
+        text: 'My Public Profile',
+        to: { name: 'Profile', params: { slug: user.slug } },
+      },
+    ]);
+
+    const router = useRouter();
+    const { confirm } = useMessage();
+
+    async function logout() {
+      const ok = await confirm({
+        title: 'Logout',
+        text: 'You are about to logout',
+      });
+      if (ok) await router.push({ name: 'Logout' });
+    }
+
     return {
-      ...useNavs(),
+      navs,
+      logout,
       loading,
       user,
     };
   },
 });
-
-function useNavs() {
-  const navs = ref<NavLink[]>([
-    {
-      icon: 'home',
-      text: 'Home',
-      to: { name: 'Home' },
-    },
-    {
-      icon: 'question_answer',
-      text: 'My Threads',
-      to: { name: 'MeThread' },
-    },
-    {
-      icon: 'chat_bubble_outline',
-      text: 'My Posts',
-      to: { name: 'MePost' },
-    },
-    {
-      icon: 'visibility',
-      text: 'My Public Profile',
-      to: { name: 'User' },
-    },
-  ]);
-
-  const router = useRouter();
-  const { confirm } = useMessage();
-
-  async function logout() {
-    const ok = await confirm({
-      title: 'Logout',
-      text: 'You are about to logout',
-    });
-    if (ok) await router.push({ name: 'Logout' });
-  }
-
-  return {
-    navs,
-    logout,
-  };
-}
 
 interface NavLink {
   icon: string,
