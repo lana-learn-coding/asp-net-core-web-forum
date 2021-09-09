@@ -34,7 +34,7 @@ namespace Core.Services.Base
         private static readonly Func<IQueryable<W>, IQueryable<W>> NoQuery = query => query;
         protected readonly DbContext Context;
         protected readonly DbSet<W> DbSet;
-        protected List<string> DefaultSort = new() { "CreatedAt" };
+        public List<string> DefaultSort = new() { "CreatedAt" };
 
         protected CrudService(DbContext context)
         {

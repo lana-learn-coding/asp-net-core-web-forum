@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Linq.Dynamic.Core;
 using Core.Dto;
 using Core.Services.Base;
 using DAL.Models;
@@ -22,7 +23,7 @@ namespace Web.Controllers
         {
             return new JsonResult(
                 Service.List(query => Query(query)
-                    .OrderBy(x => x.Id)
+                    .OrderBy(string.Join(",", Service.DefaultSort))
                     .Skip(skip)
                     .Take(take)
                 )
