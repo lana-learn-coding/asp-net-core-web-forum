@@ -105,6 +105,7 @@ import { computed, defineComponent, PropType } from '@vue/composition-api';
 import { DataTableHeader } from 'vuetify';
 import { useTitle } from '@vueuse/core';
 import { singular } from 'pluralize';
+import { debounce } from 'vue-debounce';
 import { useHttp, useQuery } from '@/services/http';
 import { Dictionary, FlatDictionary } from '@/services/model';
 import { useSetters } from '@/composable/compat';
@@ -215,19 +216,37 @@ export default defineComponent({
 });
 
 function useTableSort(query) {
+  const set = debounce((val, setter: (val) => void) => setter(val), 200);
+
+  function setDesc(val) {
+    if (val === undefined) {
+      query.sort = '';
+      return;
+    }
+    if (val && !query.sort.startsWith('-')) {
+      query.sort = `-${query.sort}`;
+    }
+
+    if (!val && query.sort.startsWith('-')) {
+      query.sort = query.sort.substring(1);
+    }
+  }
+
+  function setSort(val) {
+    if (!val) {
+      query.sort = '';
+      return;
+    }
+    query.sort = val;
+  }
+
   const desc = computed<boolean>(
     {
       get() {
         return query.sort?.startsWith('-');
       },
       set(val) {
-        if (val && !query.sort.startsWith('-')) {
-          query.sort = `-${query.sort}`;
-        }
-
-        if (!val && query.sort.startsWith('-')) {
-          query.sort = query.sort.substring(1);
-        }
+        set(val, setDesc);
       },
     },
   );
@@ -237,11 +256,7 @@ function useTableSort(query) {
       return query.sort?.startsWith('-') ? query.sort?.substring(1) : query.sort;
     },
     set(val) {
-      if (!val) {
-        query.sort = '';
-        return;
-      }
-      query.sort = val;
+      set(val, setSort);
     },
   });
 
