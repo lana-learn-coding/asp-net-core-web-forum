@@ -11,7 +11,7 @@ namespace Web.Controllers.Public
     [Route("/api/posts")]
     public class PostController
     {
-        protected readonly PostService _service;
+        private readonly PostService _service;
 
         public PostController(PostService service)
         {
