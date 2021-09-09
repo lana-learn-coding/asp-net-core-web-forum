@@ -47,7 +47,8 @@ namespace Core.Services
 
             Context.Entry(current).Reference(x => x.User).Load();
             entity.User = current.User;
-            FillSpecialities(entity);
+            current.WorkSpecialitiesIds = entity.WorkSpecialitiesIds;
+            FillSpecialities(current);
             base.Update(current, entity);
         }
 

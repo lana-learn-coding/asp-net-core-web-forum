@@ -62,7 +62,12 @@ namespace Core.Services
                 entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
             }
 
-            if (_httpContext.User.IsAdmin()) FillRoles(current);
+            if (_httpContext.User.IsAdmin())
+            {
+                current.RoleIds = entity.RoleIds;
+                FillRoles(current);
+            }
+
             base.Update(current, entity);
         }
 
