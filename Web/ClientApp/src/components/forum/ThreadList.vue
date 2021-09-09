@@ -10,7 +10,7 @@
       <v-card-title>{{ forum.title }}</v-card-title>
       <v-card-subtitle class="pb-2">{{ forum.subTitle }}</v-card-subtitle>
       <v-card-text class="pb-0">
-        <div v-html="forum.description"></div>
+        <div v-html="forum.description" class="ck-content"></div>
         <div class="mt-2 d-flex">
           <div>
             <div class="mr-1 d-inline">

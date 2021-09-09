@@ -30,7 +30,7 @@
         </div>
       </div>
       <slot name="title"></slot>
-      <div class="body-1" v-html="post.content" style="max-width: 100%; overflow: hidden"></div>
+      <div class="body-1 ck-content" v-html="post.content" ></div>
       <v-spacer></v-spacer>
 
       <div class="mt-2 d-inline">

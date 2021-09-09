@@ -100,7 +100,7 @@
     </template>
 
     <template #table.content="{ item }">
-      <div style="max-width: 500px" class="text-truncate" v-html="item.content"></div>
+      <div style="max-width: 500px" class="text-truncate ck-content" v-html="item.content"></div>
     </template>
 
     <template #table.updatedAt="{ item }">
