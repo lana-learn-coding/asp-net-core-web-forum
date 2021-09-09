@@ -159,7 +159,7 @@
                     <auto-complete-select
                       uri="specialties/all"
                       v-model="user.workSpecialitiesIds"
-                      label="I have experience in"
+                      label="I have knowledge in"
                       item-value="uid"
                       item-text="name"
                       persistent-placeholder

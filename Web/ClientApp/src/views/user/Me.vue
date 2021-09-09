@@ -216,7 +216,7 @@
                   uri="specialties/all"
                   v-model="form.workSpecialitiesIds"
                   :error-messages="errors.workSpecialitiesIds"
-                  label="I have experience in"
+                  label="I have knowledge in"
                   placeholder="My Specialties"
                   item-value="uid"
                   item-text="name"

@@ -155,6 +155,20 @@
           </auto-complete-select>
         </v-col>
         <v-col cols="12">
+          <auto-complete-select
+            uri="specialties/all"
+            :value="values.workSpecialitiesIds"
+            :error-messages="errors.workSpecialitiesIds"
+            @input="inputs.workSpecialitiesIds"
+            label="Work specialities"
+            item-value="uid"
+            item-text="name"
+            persistent-placeholder
+            multiple
+          >
+          </auto-complete-select>
+        </v-col>
+        <v-col cols="12">
           <v-textarea
             outlined
             :value="values.workDescription"
@@ -267,6 +281,7 @@ export default defineComponent({
       workCityId: '',
       workCountryId: '',
       workDescription: '',
+      workSpecialitiesIds: [],
       gender: null,
     });
 
