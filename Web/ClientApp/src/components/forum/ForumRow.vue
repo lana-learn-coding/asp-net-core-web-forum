@@ -25,7 +25,7 @@
         {{ forum.title }}
       </router-link>
       <div class="body-2 text-truncate">{{ forum.subTitle }}</div>
-      <span class="d-lg-none">{{ formatDateTime(forum.lastThread.lastActivityAt) }}</span>
+      <span class="d-lg-none" v-if="forum.lastThread">{{ formatDateTime(forum.lastThread.lastActivityAt) }}</span>
       <div>
         <v-tooltip bottom v-if="forum.forumAccess > 0">
           <template v-slot:activator="{ on, attrs }">
