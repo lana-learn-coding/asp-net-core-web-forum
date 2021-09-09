@@ -8,7 +8,6 @@
         v-model="dialog"
         width="unset"
         transition="fade-transition"
-        eager
       >
         <template #activator="{on, attrs}">
           <v-btn color="primary" v-bind="attrs" v-on="on" v-if="operations.includes('create')">
