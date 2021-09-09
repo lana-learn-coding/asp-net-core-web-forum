@@ -85,7 +85,6 @@ export default defineComponent({
     const { notify } = useMessage();
 
     async function submit() {
-      loading.value = true;
       if (form.newPassword !== form.confirmNewPassword) {
         setErrors({
           confirmNewPassword: 'Password confirmation not match',
@@ -93,6 +92,7 @@ export default defineComponent({
         });
         return;
       }
+      loading.value = true;
       try {
         await http.post('me/change-password', form);
         close();
