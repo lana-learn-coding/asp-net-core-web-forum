@@ -71,6 +71,7 @@ export function useUser(): UseUserResult {
       Object.assign(user, res.data.user);
       client.defaults.headers.Authorization = `Bearer ${res.data.token}`;
       user.isAuthenticated = true;
+      await client.post('tracking/logs').catch(noop);
     } finally {
       user.loading = false;
     }
@@ -81,7 +82,9 @@ export function useUser(): UseUserResult {
     try {
       delete client.defaults.headers.Authorization;
       Object.assign(user, { ...defaultUser });
+      await client.delete('tracking/logs').catch(noop);
       await client.post('auth/logout', null, config).catch(noop);
+      await client.post('tracking/logs').catch(noop);
     } finally {
       user.loading = false;
     }
