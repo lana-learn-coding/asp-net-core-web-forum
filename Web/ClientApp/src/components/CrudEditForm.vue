@@ -112,8 +112,8 @@ export default defineComponent({
           return;
         }
         await http.post(props.url, form);
-        emit('change');
         close();
+        emit('change');
         notify({ text: `${formTitle.value} created successfully`, type: 'success' });
       } catch (e) {
         if (e.response.data) {
