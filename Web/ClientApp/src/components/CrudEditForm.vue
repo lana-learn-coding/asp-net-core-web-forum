@@ -53,6 +53,7 @@ import { useHttp } from '@/services/http';
 import { useForm } from '@/composable/form';
 import { useSetters } from '@/composable/compat';
 import { useMessage } from '@/composable/message';
+import { Dictionary } from '@/services/model';
 
 export default defineComponent({
   name: 'CrudEditForm',
@@ -89,7 +90,11 @@ export default defineComponent({
       setErrors,
       clearErrors,
       clearForm,
-    } = useForm({ ...props.form });
+    } = useForm({
+      uid: '',
+      slug: '',
+      ...props.form,
+    });
 
     const isEdit = computed(() => !!slug.value);
     const loading = ref(false);
@@ -105,7 +110,7 @@ export default defineComponent({
       try {
         if (isEdit.value) {
           const data = await http.put(`${props.url}/${form.uid}`, form);
-          Object.assign(form, data);
+          assignForm(data);
           emit('change');
           notify({ text: `${formTitle.value} updated successfully`, type: 'success' });
           clearErrors();
@@ -142,7 +147,7 @@ export default defineComponent({
         try {
           loading.value = true;
           const data = await http.get(`/${props.url}/${slug.value}`);
-          Object.assign(form, data);
+          assignForm(data);
         } catch {
           close();
         } finally {
@@ -152,6 +157,15 @@ export default defineComponent({
       }
       clearForm();
     }, { immediate: true });
+
+    function assignForm(data) {
+      Object.keys(form).forEach((key) => {
+        if (key in data) form[key] = data[key];
+      });
+      if (data.createdAt) (form as Dictionary).createdAt = data.createdAt;
+      if (data.updatedAt) (form as Dictionary).updatedAt = data.updatedAt;
+      if (data.lastActivityAt) (form as Dictionary).lastActivityAt = data.lastActivityAt;
+    }
 
     const formBinding = computed(() => ({
       fields: form,
