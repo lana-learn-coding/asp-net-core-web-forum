@@ -68,7 +68,7 @@ export default defineComponent({
     useTitle('Forums Threads');
     useBreadcrumbs([
       { text: 'Home', name: 'Home' },
-      { text: 'Forums', name: 'Home' },
+      { text: 'Forums', name: 'Search' },
       { text: 'Forums Threads', disabled: true },
     ]);
 
@@ -89,7 +89,7 @@ export default defineComponent({
         query.forum = val;
         useBreadcrumbs([
           { text: 'Home', name: 'Home' },
-          { text: 'Forums', name: 'Home' },
+          { text: 'Forums', name: 'Search' },
           { text: res.title, disabled: true },
         ]);
       } catch (e) {

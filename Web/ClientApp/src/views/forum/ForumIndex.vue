@@ -93,7 +93,7 @@ export default defineComponent({
     useTitle(`${category.name} Forums`);
     useBreadcrumbs([
       { text: 'Home', name: 'Home' },
-      { text: 'Forums', name: 'Home' },
+      { text: 'Forums', name: 'Search' },
       { text: category.name, disabled: true },
     ]);
 
@@ -108,7 +108,7 @@ export default defineComponent({
       useTitle(`${category.name} Forums`);
       useBreadcrumbs([
         { text: 'Home', name: 'Home' },
-        { text: 'Forums', name: 'Home' },
+        { text: 'Forums', name: 'Search' },
         { text: category.name, disabled: true },
       ]);
     });

@@ -83,8 +83,7 @@ export default defineComponent({
     useTitle('Forums Search');
     useBreadcrumbs([
       { text: 'Home', name: 'Home' },
-      { text: 'Forums', name: 'Home' },
-      { text: 'Search', disabled: true },
+      { text: 'Forums', disabled: true },
     ]);
 
     const { query, data, meta } = useQuery<Dictionary>('forums')({

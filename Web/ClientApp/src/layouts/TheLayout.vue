@@ -28,6 +28,8 @@
             prepend-inner-icon="search"
             placeholder="Search for forums..."
             @change="search"
+            @keypress.enter="search"
+            @click:prepend-inner="search"
           >
           </v-text-field>
         </v-responsive>
@@ -330,7 +332,8 @@ export default defineComponent({
 
     function search() {
       if (keyword.value.trim() === '') {
-        notify({ text: 'Please enter something to search' });
+        notify({ text: 'Search empty keyword' });
+        router.push({ name: 'Search' });
         return;
       }
       router.push({ name: 'Search', query: { search: keyword.value } });

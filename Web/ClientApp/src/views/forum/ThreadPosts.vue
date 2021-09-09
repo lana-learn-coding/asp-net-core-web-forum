@@ -68,7 +68,7 @@ export default defineComponent({
     useTitle('Threads Posts');
     useBreadcrumbs([
       { text: 'Home', name: 'Home' },
-      { text: 'Forums', name: 'Home' },
+      { text: 'Forums', name: 'Search' },
       { text: 'Threads', disabled: true },
       { text: 'Posts', disabled: true },
     ]);
@@ -91,7 +91,7 @@ export default defineComponent({
         useTitle(`Thread ${res.title}`);
         useBreadcrumbs([
           { text: 'Home', name: 'Home' },
-          { text: 'Forums', name: 'Home' },
+          { text: 'Forums', name: 'Search' },
           { text: 'Threads', disabled: true },
           { text: res.title, disabled: true },
         ]);
