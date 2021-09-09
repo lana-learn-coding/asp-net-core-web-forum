@@ -20,28 +20,30 @@
         >
         </v-text-field>
         <v-spacer class="d-none d-md-block"></v-spacer>
-        <auto-complete-select
-          class="mr-3"
-          label="Language"
-          uri="languages/all"
-          style="max-width: 300px"
-          item-text="name"
-          :value="bind.language"
-          @input="on.language"
-          item-value="slug"
-          single-line
-          hide-details
-        >
-        </auto-complete-select>
-        <category-select
-          style="max-width: 300px"
-          :value="bind.category"
-          @input="on.category"
-          item-value="slug"
-          single-line
-          hide-details
-        >
-        </category-select>
+        <div class="d-flex">
+          <auto-complete-select
+            class="mr-3"
+            label="Language"
+            uri="languages/all"
+            style="max-width: 300px"
+            item-text="name"
+            :value="bind.language"
+            @input="on.language"
+            item-value="slug"
+            single-line
+            hide-details
+          >
+          </auto-complete-select>
+          <category-select
+            style="max-width: 300px"
+            :value="bind.category"
+            @input="on.category"
+            item-value="slug"
+            single-line
+            hide-details
+          >
+          </category-select>
+        </div>
         <v-spacer class="d-none d-md-block"></v-spacer>
         <div class="d-flex">
           <access-select
