@@ -20,7 +20,7 @@ namespace Core.Services
         public UserInfoService(DbContext context, IConfigurationProvider mapperConfig,
             IHttpContextAccessor httpContextAccessor) : base(context)
         {
-            DefaultSort = new List<string> { "UpdatedAt desc" };
+            DefaultSort = new List<string> { "CreatedAt desc" };
             _mapperConfig = mapperConfig;
             _httpContext = httpContextAccessor.HttpContext;
         }

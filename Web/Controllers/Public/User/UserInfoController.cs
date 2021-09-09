@@ -18,11 +18,25 @@ namespace Web.Controllers.Public.User
 
         [HttpGet]
         [Route("")]
-        public virtual IActionResult Index([FromQuery] PageQuery pageQuery, [FromQuery] string search)
+        public virtual IActionResult Index([FromQuery] PageQuery pageQuery, [FromQuery] string search,
+            [FromQuery] string speciality, [FromQuery] string city, [FromQuery] string country,
+            [FromQuery] string position)
         {
-            var page = _service.Page(pageQuery,
-                q => q.Where(x => x.User.Username.Contains(search) || x.User.Email.Contains(search)));
-            return new JsonResult(page);
+            search ??= "";
+            return new JsonResult(_service.Page(pageQuery, q =>
+            {
+                if (!string.IsNullOrWhiteSpace(search))
+                    q = q.Where(x => x.User.Username.Contains(search) || x.User.Email.Contains(search));
+                if (!string.IsNullOrWhiteSpace(speciality))
+                    q = q.Where(x => x.WorkSpecialities.Any(s => s.Slug.Equals(speciality)));
+                if (!string.IsNullOrWhiteSpace(city))
+                    q = q.Where(x => x.WorkCity != null && x.WorkCity.Slug.Equals(city));
+                if (!string.IsNullOrWhiteSpace(country))
+                    q = q.Where(x => x.WorkCountry != null && x.WorkCountry.Slug.Equals(country));
+                if (!string.IsNullOrWhiteSpace(position))
+                    q = q.Where(x => x.WorkPosition != null && x.WorkPosition.Slug.Equals(position));
+                return q;
+            }));
         }
 
         [HttpGet]

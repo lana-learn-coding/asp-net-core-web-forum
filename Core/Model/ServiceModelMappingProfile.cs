@@ -62,7 +62,10 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count(p => p.Id.Equals(p.ThreadId))))
                 .ForMember(m => m.PostsCount,
                     opt => opt.MapFrom(x => x.Posts.Count));
+
             CreateMap<UserInfo, UserInfoView>()
+                .ForMember(m => m.ThreadsCount,
+                    opt => opt.MapFrom(x => x.User.Posts.Count(p => p.Id.Equals(p.ThreadId))))
                 .ForMember(m => m.Email,
                     opt => opt.MapFrom(x => x.ShowEmail || showUserInfo ? x.User.Email : null))
                 .ForMember(m => m.Phone,

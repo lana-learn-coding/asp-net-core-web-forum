@@ -46,6 +46,8 @@ namespace Core.Model
 
         public string WorkDescription { get; set; }
 
+        public int ThreadsCount { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Specialty> WorkSpecialities { get; set; }
 

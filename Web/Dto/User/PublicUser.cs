@@ -4,8 +4,8 @@ namespace Web.Dto.User
 {
     public class PublicUser : UserViewBase
     {
-        public string ThreadsCount { get; set; }
+        public int ThreadsCount { get; set; }
 
-        public string PostsCount { get; set; }
+        public int PostsCount { get; set; }
     }
 }
