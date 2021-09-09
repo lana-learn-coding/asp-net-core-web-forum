@@ -4,7 +4,7 @@
       <v-container class="py-0 px-0 fill-height">
         <v-app-bar-nav-icon
           @click="drawer = !drawer"
-          v-if="$vuetify.breakpoint.smAndDown"
+          v-if="$vuetify.breakpoint.mdAndDown"
         >
         </v-app-bar-nav-icon>
 
@@ -14,7 +14,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-responsive v-if="$vuetify.breakpoint.mdAndUp">
+        <v-responsive v-if="$vuetify.breakpoint.lgAndUp">
           <v-text-field
             v-model="keyword"
             dense
@@ -34,7 +34,7 @@
 
         <v-spacer></v-spacer>
 
-        <div v-if="$vuetify.breakpoint.mdAndUp">
+        <div v-if="$vuetify.breakpoint.lgAndUp">
           <template v-for="link in navs">
             <v-menu
               v-if="link.links"
@@ -291,6 +291,10 @@ export default defineComponent({
       {
         text: 'Home',
         to: { name: 'Home' },
+      },
+      {
+        text: 'Members',
+        to: { name: 'Users' },
       },
       {
         text: 'Forums',

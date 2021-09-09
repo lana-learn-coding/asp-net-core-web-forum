@@ -97,6 +97,7 @@ export interface Me extends UserBase {
   dateOfBirth: string;
   showPhone: boolean,
   showEmail: boolean,
+  threadsCount: number;
 
   showWorkAddress: boolean,
   showWorkExperience: boolean,
