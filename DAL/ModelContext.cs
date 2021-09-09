@@ -67,7 +67,8 @@ namespace DAL
 
             modelBuilder.Entity<UserInfo>().Map(m => m.MapInheritedProperties());
             modelBuilder.Entity<UserInfo>().HasRequired(m => m.User)
-                .WithOptional(x => x.UserInfo);
+                .WithOptional(x => x.UserInfo)
+                .WillCascadeOnDelete(true);
             modelBuilder.Entity<UserInfo>().HasMany(m => m.WorkSpecialities)
                 .WithMany();
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkExperience)
