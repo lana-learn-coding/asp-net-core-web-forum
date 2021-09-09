@@ -7,28 +7,6 @@
         <v-col cols="12" md="3">
           <app-forum-statistics></app-forum-statistics>
           <app-latest-threads class="mt-4"></app-latest-threads>
-          <v-card flat class="mt-4">
-            <v-card-title>About us</v-card-title>
-            <v-card-text>
-              <div class="mb-1">
-                <v-icon class="material-icons-outlined mr-2" small>email</v-icon>
-                support@drforummail.com
-              </div>
-              <div class="mb-1">
-                <v-icon class="material-icons-outlined mr-2" small>phone</v-icon>
-                0915212328, 0915 561 252
-              </div>
-              <div>
-                <v-icon class="material-icons-outlined mr-2" small>payment</v-icon>
-                <a href="#">Donate us</a>
-              </div>
-              <v-divider class="my-2"></v-divider>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-              has been the industry's standard dummy text ever since the 1500s, when an unknown
-              printer
-              took
-            </v-card-text>
-          </v-card>
         </v-col>
       </v-row>
     </v-container>

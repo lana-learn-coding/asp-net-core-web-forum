@@ -267,9 +267,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main class="grey lighten-2">
+    <v-main class="grey lighten-2 pb-10">
       <slot></slot>
     </v-main>
+
+    <app-footer></app-footer>
   </div>
 </template>
 
@@ -282,10 +284,11 @@ import { useRouter } from '@/composable/compat';
 import { useMessage } from '@/composable/message';
 import AppIcon from '@/components/app/AppIcon.vue';
 import { Dictionary } from '@/services/model';
+import AppFooter from '@/components/app/AppFooter.vue';
 
 export default defineComponent({
   name: 'TheLayout',
-  components: { AppIcon },
+  components: { AppFooter, AppIcon },
   setup() {
     useTitle('Dr. Forums');
     const focus = ref(false);
