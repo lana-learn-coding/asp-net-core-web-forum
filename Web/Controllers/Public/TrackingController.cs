@@ -93,6 +93,23 @@ namespace Web.Controllers.Public
             _onlineUserCache.PutUser(ip, value.User.Username);
             return new OkResult();
         }
+
+        // Untrack the user
+        [Route("logs")]
+        [HttpDelete]
+        public ActionResult UnTrack()
+        {
+            var cookies = Request.Cookies[_configuration["JwtConfig:Refresh:Cookies"]];
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            if (string.IsNullOrWhiteSpace(cookies) || !_authCache.TryGetValue(cookies, out JwtToken value))
+            {
+                _onlineUserCache.Remove(ip);
+                return new OkResult();
+            }
+
+            _onlineUserCache.Remove(value.User.Username);
+            return new OkResult();
+        }
     }
 
     public class OnlineUserCache
@@ -118,6 +135,14 @@ namespace Web.Controllers.Public
             _onlineMembers[username] = DateTime.Now;
             _onlineAnons.Remove(ip);
             RemoveInactiveEntry();
+        }
+
+        public void Remove(string entry)
+        {
+            if (string.IsNullOrEmpty(entry)) return;
+
+            _onlineAnons.Remove(entry);
+            _onlineMembers.Remove(entry);
         }
 
         private void RemoveInactiveEntry()
