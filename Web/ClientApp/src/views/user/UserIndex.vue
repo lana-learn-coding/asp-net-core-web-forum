@@ -132,7 +132,7 @@ export default defineComponent({
 
     const { query, data, meta } = useQuery<Dictionary>('users/infos')({
       search: '',
-      speciality: [],
+      speciality: '',
       city: '',
       country: '',
       position: '',
