@@ -14,11 +14,11 @@ namespace Core.Model
             // Forums
             CreateMap<Forum, ForumView>()
                 .ForMember(m => m.ViewsCount,
-                    opt => opt.MapFrom(x => x.Threads.Sum(t => t.ViewsCount)))
+                    opt => opt.MapFrom(x => x.Threads.Sum(t => (int?)t.ViewsCount) ?? 0))
                 .ForMember(m => m.ThreadsCount,
                     opt => opt.MapFrom(x => x.Threads.Count))
                 .ForMember(m => m.PostsCount,
-                    opt => opt.MapFrom(x => x.Threads.Sum(t => t.Posts.Count)))
+                    opt => opt.MapFrom(x => x.Threads.Sum(t => (int?)t.Posts.Count) ?? 0))
                 .ForMember(m => m.LastThread,
                     opt => opt.MapFrom(x =>
                         x.Threads.OrderByDescending(t => t.LastActivityAt)
@@ -34,7 +34,7 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count))
                 .ForMember(m => m.Vote,
                     opt => opt.MapFrom(x =>
-                        x.Posts.Where(p => p.Id.Equals(x.Id)).Select(p => p.Votes.Sum(v => (int?)v.Value ?? 0))
+                        x.Posts.Where(p => p.Id.Equals(x.Id)).Select(p => p.Votes.Sum(v => (int?)v.Value) ?? 0)
                             .FirstOrDefault()));
             CreateMap<Forum, ThreadForumView>();
             CreateMap<CreateThreadUser, CreateThreadAdmin>();
