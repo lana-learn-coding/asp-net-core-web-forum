@@ -35,6 +35,12 @@ namespace Core.Services
             return base.Create(entity);
         }
 
+        protected override void Update(Post current, Post entity)
+        {
+            entity.UserId = current.UserId;
+            base.Update(current, entity);
+        }
+
         private void ValidateForumAccess(Post entity)
         {
             var thread = Context.Set<Thread>().First(x => x.Id.Equals(entity.ThreadId));
@@ -49,6 +55,17 @@ namespace Core.Services
             thread.LastActivityAt = DateTime.Now;
             var isAdmin = _httpContext.User.IsInRole("Admin");
             if (forum.ForumAccess >= AccessMode.Internal && !isAdmin) throw new ForbiddenException();
+        }
+
+        protected override void Delete(Post entity)
+        {
+            var votes = entity.Votes.ToList();
+            foreach (var vote in votes)
+            {
+                Context.Set<Vote>().Remove(vote);
+            }
+
+            base.Delete(entity);
         }
 
         protected override IQueryable<PostView> Query(IQueryable<Post> queryable)
