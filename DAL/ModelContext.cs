@@ -70,21 +70,21 @@ namespace DAL
                 .WithOptional(x => x.UserInfo)
                 .WillCascadeOnDelete(true);
             modelBuilder.Entity<UserInfo>().HasMany(m => m.WorkSpecialities)
-                .WithMany();
+                .WithMany(x => x.UserInfos);
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkExperience)
-                .WithMany()
+                .WithMany(x => x.UserInfos)
                 .HasForeignKey(m => m.WorkExperienceId)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkPosition)
-                .WithMany()
+                .WithMany(x => x.UserInfos)
                 .HasForeignKey(m => m.WorkPositionId)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkCity)
-                .WithMany()
+                .WithMany(x => x.UserInfos)
                 .HasForeignKey(m => m.WorkCityId)
                 .WillCascadeOnDelete(false);
             modelBuilder.Entity<UserInfo>().HasOptional(m => m.WorkCountry)
-                .WithMany()
+                .WithMany(x => x.UserInfos)
                 .HasForeignKey(m => m.WorkCountryId)
                 .WillCascadeOnDelete(false);
         }

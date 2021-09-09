@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using DAL.Validation;
@@ -23,6 +24,9 @@ namespace DAL.Models.Auth
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify level of this experience")]
         public short Level { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<UserInfo> UserInfos { get; set; } = new List<UserInfo>();
     }
 
     public class Position : Entity
@@ -38,5 +42,8 @@ namespace DAL.Models.Auth
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Please specify a name")]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<UserInfo> UserInfos { get; set; } = new List<UserInfo>();
     }
 }

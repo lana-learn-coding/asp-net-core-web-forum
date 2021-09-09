@@ -23,6 +23,9 @@ namespace DAL.Models.Auth
 
         [JsonIgnore]
         public virtual ICollection<City> Cities { get; set; } = new List<City>();
+
+        [JsonIgnore]
+        public virtual ICollection<UserInfo> UserInfos { get; set; } = new List<UserInfo>();
     }
 
     public class City : Entity
@@ -42,5 +45,8 @@ namespace DAL.Models.Auth
         public Guid CountryId { get; set; }
 
         public Country Country { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<UserInfo> UserInfos { get; set; } = new List<UserInfo>();
     }
 }
