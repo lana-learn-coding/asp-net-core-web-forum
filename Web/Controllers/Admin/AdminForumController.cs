@@ -31,7 +31,8 @@ namespace Web.Controllers.Admin
             if (int.TryParse(threadAccess, out var tAccess))
                 query = query.Where(x => (int)x.ThreadAccess == tAccess);
 
-            if (string.IsNullOrWhiteSpace(category) || category.Equals("_all")) return query;
+            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("_all"))
+                query = query.Where(x => x.Category.Slug.Equals(category));
             return query.Where(x => x.Title.Contains(search));
         }
     }
