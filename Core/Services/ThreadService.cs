@@ -142,5 +142,16 @@ namespace Core.Services
             Context.SaveChanges();
             return base.Get(slug);
         }
+
+        protected override void Delete(Thread entity)
+        {
+            var votes = entity.Posts.SelectMany(x => x.Votes).ToList();
+            foreach (var vote in votes)
+            {
+                Context.Set<Vote>().Remove(vote);
+            }
+
+            base.Delete(entity);
+        }
     }
 }
