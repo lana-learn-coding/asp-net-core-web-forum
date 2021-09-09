@@ -76,15 +76,14 @@
           </v-col>
 
           <v-col cols="6" md="3" lg="1">
-            <forum-sort-select
+            <user-sort-select
               class="mb-2"
               style="max-width: 200px"
               v-model="query.sort"
               dense
               single-line
               hide-details
-            >
-            </forum-sort-select>
+            ></user-sort-select>
           </v-col>
         </v-row>
         <v-skeleton-loader v-if="meta.loading" type="list-item-avatar-three-line@4">
@@ -119,10 +118,11 @@ import { useBreadcrumbs } from '@/composable/breadcrumbs';
 import ForumSortSelect from '@/components/form/ForumSortSelect.vue';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 import UserRow from '@/components/user/UserRow.vue';
+import UserSortSelect from '@/components/form/UserSortSelect.vue';
 
 export default defineComponent({
   name: 'UserIndex',
-  components: { UserRow, AutoCompleteSelect, ForumSortSelect, ForumList },
+  components: { UserSortSelect, UserRow, AutoCompleteSelect, ForumSortSelect, ForumList },
   setup() {
     useTitle('Forums Members');
     useBreadcrumbs([
