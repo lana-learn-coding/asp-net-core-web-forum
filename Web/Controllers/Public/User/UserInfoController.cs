@@ -26,15 +26,16 @@ namespace Web.Controllers.Public.User
             return new JsonResult(_service.Page(pageQuery, q =>
             {
                 if (!string.IsNullOrWhiteSpace(search))
-                    q = q.Where(x => x.User.Username.Contains(search) || x.User.Email.Contains(search));
+                    q = q.Where(x => x.User.Email.Contains(search) && x.ShowEmail || x.User.Username.Contains(search));
                 if (!string.IsNullOrWhiteSpace(speciality))
                     q = q.Where(x => x.WorkSpecialities.Any(s => s.Slug.Equals(speciality)));
                 if (!string.IsNullOrWhiteSpace(city))
-                    q = q.Where(x => x.WorkCity != null && x.WorkCity.Slug.Equals(city));
+                    q = q.Where(x => x.WorkCity != null && x.WorkCity.Slug.Equals(city) && x.ShowWorkAddress);
                 if (!string.IsNullOrWhiteSpace(country))
-                    q = q.Where(x => x.WorkCountry != null && x.WorkCountry.Slug.Equals(country));
+                    q = q.Where(x => x.WorkCountry != null && x.WorkCountry.Slug.Equals(country) && x.ShowWorkAddress);
                 if (!string.IsNullOrWhiteSpace(position))
-                    q = q.Where(x => x.WorkPosition != null && x.WorkPosition.Slug.Equals(position));
+                    q = q.Where(x =>
+                        x.WorkPosition != null && x.WorkPosition.Slug.Equals(position) && x.ShowWorkExperience);
                 return q;
             }));
         }
