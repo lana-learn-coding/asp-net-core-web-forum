@@ -12,20 +12,25 @@ namespace DAL.Database
     // but it is useful when you need a lot of data to test
     public class FakeDataDatabaseInitializer : DatabaseInitializer
     {
+        private const bool Test = false;
+
         protected override void Seed(ModelContext context)
         {
-            base.Seed(context);
+            if (Test)
+            {
+                base.Seed(context);
 
-            Console.WriteLine("Start generating fake data...");
-            FakeUsers(context);
-            context.SaveChanges();
+                Console.WriteLine("Start generating fake data...");
+                FakeUsers(context);
+                context.SaveChanges();
 
-            FakeForums(context);
-            context.SaveChanges();
+                FakeForums(context);
+                context.SaveChanges();
 
-            FakeThreads(context);
-            context.SaveChanges();
-            Console.WriteLine("Generation completed.");
+                FakeThreads(context);
+                context.SaveChanges();
+                Console.WriteLine("Generation completed.");
+            }
         }
 
         private static void FakeUsers(ModelContext context)
