@@ -25,13 +25,14 @@
         <div class="mb-2">
           <b>
             <v-icon small class="mr-1">record_voice_over</v-icon>
-            <number-counter from="0" :to="statistics.onlineMembers"></number-counter>
+            <number-counter from="0" :to="statistics.onlineMembers" :duration="1"></number-counter>
           </b> Online
         </div>
         <div>
           <b>
             <v-icon small class="mr-1">fiber_manual_record</v-icon>
-            <number-counter from="0" :to="statistics.onlineAnonymous"></number-counter>
+            <number-counter from="0" :to="statistics.onlineAnonymous"
+                            :duration="1"></number-counter>
           </b> Anonymous
         </div>
       </template>
