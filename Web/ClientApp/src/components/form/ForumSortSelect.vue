@@ -32,6 +32,7 @@ export default defineComponent({
         { text: 'Most Important', value: 'priority' },
         { text: 'Most Viewed', value: '-viewsCount' },
         { text: 'Most Threads', value: '-threadsCount' },
+        { text: 'Most Posts', value: '-postsCount' },
       ],
     };
   },

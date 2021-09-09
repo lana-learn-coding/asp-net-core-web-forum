@@ -7,24 +7,21 @@
     </template>
     <v-card width="350px" :max-width="$vuetify.breakpoint.width - 40">
       <v-card-title>Change Avatar</v-card-title>
+      <v-card-subtitle>Click on input to change</v-card-subtitle>
       <v-card-text>
-        <v-row>
-          <v-col>
-            <image-picker
-              v-model="form.avatar"
-              :error-messages="errors.avatar"
-              persistent-placeholder
-              label="Avatar"
-            >
-            </image-picker>
-            <v-img
-              :src="user.avatar || require('@/assets/anon.png')"
-              lazy-src="@/assets/anon_thumbnail.png"
-              :alt="user.username"
-              rounded
-            ></v-img>
-          </v-col>
-        </v-row>
+        <image-picker
+          v-model="form.avatar"
+          :error-messages="errors.avatar"
+          persistent-placeholder
+          label="Avatar"
+        >
+        </image-picker>
+        <v-img
+          :src="user.avatar || require('@/assets/anon.png')"
+          lazy-src="@/assets/anon_thumbnail.png"
+          :alt="user.username"
+          rounded
+        ></v-img>
       </v-card-text>
       <v-card-actions>
         <v-btn
