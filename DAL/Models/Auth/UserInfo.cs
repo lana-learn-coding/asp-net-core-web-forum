@@ -24,6 +24,7 @@ namespace DAL.Models.Auth
         [StringLength(150)]
         public string LastName { get; set; }
 
+        [PhoneNumber]
         [Unique]
         [Column(TypeName = "VARCHAR")]
         [StringLength(30)]
@@ -40,7 +41,7 @@ namespace DAL.Models.Auth
 
         public User User { get; set; }
 
-        [Phone]
+        [PhoneNumber]
         [Column(TypeName = "VARCHAR")]
         [StringLength(30)]
         public string WorkPhone { get; set; }
