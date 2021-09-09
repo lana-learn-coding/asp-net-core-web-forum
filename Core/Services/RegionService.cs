@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Core.Services.Base;
@@ -17,6 +18,11 @@ namespace Core.Services
         {
             return queryable.Include("Country");
         }
+
+        protected override City FindForWrite(string slug, Func<IQueryable<City>, IQueryable<City>> query)
+        {
+            return base.FindForWrite(slug, q => q.Include("UserInfos.User"));
+        }
     }
 
     public class CountryService : SimpleCrudService<Country>
@@ -24,6 +30,22 @@ namespace Core.Services
         public CountryService(DbContext context) : base(context)
         {
             DefaultSort = new List<string> { "Name" };
+        }
+
+        protected override Country FindForWrite(string slug, Func<IQueryable<Country>, IQueryable<Country>> query)
+        {
+            return base.FindForWrite(slug, q => q.Include("UserInfos.User"));
+        }
+
+        protected override void Delete(Country entity)
+        {
+            foreach (var userInfo in entity.UserInfos)
+            {
+                userInfo.WorkCityId = null;
+                userInfo.WorkCountryId = null;
+            }
+
+            base.Delete(entity);
         }
     }
 }

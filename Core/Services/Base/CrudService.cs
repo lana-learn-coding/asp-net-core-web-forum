@@ -210,7 +210,7 @@ namespace Core.Services.Base
             return FindForWrite(slug, NoQuery);
         }
 
-        protected W FindForWrite(string slug, Func<IQueryable<W>, IQueryable<W>> query)
+        protected virtual W FindForWrite(string slug, Func<IQueryable<W>, IQueryable<W>> query)
         {
             if (slug == null) throw new DataNotFoundException($"{typeof(W).Name} without id/slug not found");
 
