@@ -62,16 +62,20 @@
     <v-col class="d-none d-lg-block" lg="4" xl="5">
       <div v-if="forum.lastThread">
         <v-row>
-          <v-col cols="3" class="d-flex flex-column align-center justify-center">
-            <div class="text-truncate caption font-weight-medium">Last Activity</div>
-            <v-avatar size="38">
-              <v-img
-                :src="forum.lastThread.user.avatar || require('@/assets/anon.png')"
-                lazy-src="@/assets/anon_thumbnail.png"
-                :alt="forum.lastThread.user.username"
-              ></v-img>
-            </v-avatar>
-            <div class="text-truncate caption">{{ forum.lastThread.user.username }}</div>
+          <v-col cols="3">
+            <router-link
+              class="d-flex flex-column align-center justify-center text-decoration-none text--secondary"
+              :to="{name: 'Profile', params: { slug: forum.lastThread.user.slug }}">
+              <div class="text-truncate caption font-weight-medium">Last Activity</div>
+              <v-avatar size="38">
+                <v-img
+                  :src="forum.lastThread.user.avatar || require('@/assets/anon.png')"
+                  lazy-src="@/assets/anon_thumbnail.png"
+                  :alt="forum.lastThread.user.username"
+                ></v-img>
+              </v-avatar>
+              <div class="text-truncate caption">{{ forum.lastThread.user.username }}</div>
+            </router-link>
           </v-col>
           <v-col cols="9">
             <router-link

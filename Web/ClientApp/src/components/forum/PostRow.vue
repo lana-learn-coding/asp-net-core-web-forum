@@ -1,18 +1,22 @@
 <template>
   <v-row class="py-2">
-    <v-col cols="2" xl="1" class="d-flex flex-column align-center justify-center">
-      <v-avatar>
-        <v-img
-          :src="post.user.avatar || require('@/assets/anon.png')"
-          lazy-src="@/assets/anon_thumbnail.png"
-          :alt="post.user.username"
-        ></v-img>
-      </v-avatar>
-      <div style="max-width: 100%">
-        <div class="text-truncate caption font-weight-medium">
-          {{ post.user.username }}
+    <v-col cols="2" xl="1">
+      <router-link
+        :to="{name: 'Profile', params: { slug: post.user.slug }}"
+        class="d-flex flex-column align-center justify-center text-decoration-none">
+        <v-avatar>
+          <v-img
+            :src="post.user.avatar || require('@/assets/anon.png')"
+            lazy-src="@/assets/anon_thumbnail.png"
+            :alt="post.user.username"
+          ></v-img>
+        </v-avatar>
+        <div style="max-width: 100%">
+          <div class="text-truncate caption font-weight-medium text--secondary">
+            {{ post.user.username }}
+          </div>
         </div>
-      </div>
+      </router-link>
     </v-col>
     <v-col cols="10" xl="11" class="pt-0 d-flex flex-column">
       <div class="d-flex">

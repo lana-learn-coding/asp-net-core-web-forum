@@ -1,18 +1,22 @@
 <template>
   <v-row class="py-2 py-xl-4">
-    <v-col cols="2" xl="1" class="d-flex flex-column align-center justify-center">
-      <v-avatar>
-        <v-img
-          :src="thread.user.avatar || require('@/assets/anon.png')"
-          lazy-src="@/assets/anon_thumbnail.png"
-          :alt="thread.user.username"
-        ></v-img>
-      </v-avatar>
-      <div style="max-width: 100%">
-        <div class="text-truncate caption font-weight-medium">
-          {{ thread.user.username }}
+    <v-col cols="2" xl="1">
+      <router-link
+        :to="{name: 'Profile', params: { slug: thread.user.slug }}"
+        class="d-flex flex-column align-center justify-center text-decoration-none">
+        <v-avatar>
+          <v-img
+            :src="thread.user.avatar || require('@/assets/anon.png')"
+            lazy-src="@/assets/anon_thumbnail.png"
+            :alt="thread.user.username"
+          ></v-img>
+        </v-avatar>
+        <div style="max-width: 100%">
+          <div class="text-truncate caption font-weight-medium text--secondary">
+            {{ thread.user.username }}
+          </div>
         </div>
-      </div>
+      </router-link>
     </v-col>
     <v-col cols="10" lg="8">
       <router-link
