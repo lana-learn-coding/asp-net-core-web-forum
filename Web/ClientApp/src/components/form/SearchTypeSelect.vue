@@ -16,7 +16,7 @@
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
-  name: 'ThreadSortSelect',
+  name: 'SearchTypeSelect',
   props: {
     value: String,
     label: String,
@@ -28,13 +28,8 @@ export default defineComponent({
   setup() {
     return {
       sorts: [
-        { text: 'Last Activity', value: '' },
-        { text: 'Newest', value: '-createdAt' },
-        { text: 'Oldest', value: 'createdAt' },
-        { text: 'Most Important', value: 'priority' },
-        { text: 'Most Viewed', value: '-viewsCount' },
-        { text: 'Most Voted', value: '-vote' },
-        { text: 'Most Posts', value: '-postsCount' },
+        { text: 'Threads', value: '' },
+        { text: 'Posts', value: 'post' },
       ],
     };
   },
