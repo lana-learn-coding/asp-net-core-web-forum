@@ -112,13 +112,7 @@ namespace Core.Services.Base
 
             // change to last page if the page number is too large
             if (pageQuery.Skip >= total)
-                pageQuery = new PageQuery
-                {
-                    Page = (int)Math.Ceiling(total / (double)pageQuery.Size),
-                    Size = pageQuery.Size,
-                    Sorts = pageQuery.Sorts
-                };
-
+                pageQuery.Page = (int)Math.Ceiling(total / (double)pageQuery.Size);
 
             var sort = string.Join(",", pageQuery.IsSorted ? pageQuery.Sorts : DefaultSort);
 
