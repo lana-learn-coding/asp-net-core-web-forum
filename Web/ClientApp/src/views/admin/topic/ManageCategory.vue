@@ -1,5 +1,6 @@
 <template>
   <crud-table
+    @change="fetch"
     :table="table"
     :form="form"
     title="Categories"
@@ -99,10 +100,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from '@vue/composition-api';
+import { debounce } from 'vue-debounce';
 import { formatDate } from '@/composable/date';
 import CrudTable from '@/components/CrudTable.vue';
 import CrudEditForm from '@/components/CrudEditForm.vue';
-import { usePriority } from '@/composable/form';
+import { useCategories, usePriority } from '@/composable/form';
 
 export default defineComponent({
   name: 'ManageCategory',
@@ -133,7 +135,10 @@ export default defineComponent({
       description: '',
     });
 
+    const { fetch } = useCategories();
+
     return {
+      fetch: debounce(fetch, 1000),
       table,
       filter,
       formatDate,

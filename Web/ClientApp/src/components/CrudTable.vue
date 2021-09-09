@@ -146,7 +146,7 @@ export default defineComponent({
       default: () => ['create', 'update', 'delete'],
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     useTitle(`Manage ${props.title}`);
     const { query, data, meta, fetch } = useQuery<Dictionary>(props.url)({
       ...props.filter,
@@ -177,6 +177,7 @@ export default defineComponent({
       await http.delete(`${props.url}/${id}`);
       data.value = data.value.filter((item) => item.slug !== id);
       notify({ text: `${singular(props.title)} deleted` });
+      emit('change');
     }
 
     function update(id: string) {
@@ -192,7 +193,10 @@ export default defineComponent({
         dialog.value = false;
         slug.value = '';
       },
-      change: fetch,
+      change: () => {
+        fetch();
+        emit('change');
+      },
     };
 
     return {
