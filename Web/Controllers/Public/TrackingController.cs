@@ -57,7 +57,7 @@ namespace Web.Controllers.Public
         [HttpGet]
         public JsonResult ActiveThreads()
         {
-            var query = _threadService.List(q => q.Take(8));
+            var query = _threadService.List(q => q.OrderByDescending(x => x.LastActivityAt).Take(8));
             return new JsonResult(query);
         }
 

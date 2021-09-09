@@ -46,6 +46,7 @@ namespace Core.Services
             if (forum == null) throw new InvalidDataException("ThreadId", "Specified forum not found");
 
             forum.LastActivityAt = DateTime.Now;
+            thread.LastActivityAt = DateTime.Now;
             var isAdmin = _httpContext.User.IsInRole("Admin");
             if (forum.ForumAccess >= AccessMode.Internal && !isAdmin) throw new ForbiddenException();
         }
