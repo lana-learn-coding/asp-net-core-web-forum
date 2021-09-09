@@ -34,7 +34,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" lg="3">
                     <v-text-field
-                      :value="user.email || 'unknown'"
+                      :value="user.email || 'Unknown'"
                       dense
                       label="Email"
                       persistent-placeholder
@@ -44,7 +44,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" lg="3">
                     <v-text-field
-                      :value="user.phone || 'unknown'"
+                      :value="user.phone || 'Unknown'"
                       dense
                       label="Phone Number"
                       persistent-placeholder
@@ -54,7 +54,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" lg="5" xl="6">
                     <v-text-field
-                      :value="user.dateOfBirth || 'unknown'"
+                      :value="user.dateOfBirth || 'Unknown'"
                       dense
                       label="BirthDate"
                       persistent-placeholder
@@ -99,7 +99,7 @@
                 <v-row>
                   <v-col cols="12" sm="6" lg="4">
                     <v-text-field
-                      :value="user.workCountry ? user.workCountry.name : 'unknown'"
+                      :value="user.workCountry ? user.workCountry.name : 'Unknown'"
                       dense
                       label="Work Country"
                       persistent-placeholder
@@ -109,7 +109,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" lg="5">
                     <v-text-field
-                      :value="user.workCity ? user.workCity.name : 'unknown'"
+                      :value="user.workCity ? user.workCity.name : 'Unknown'"
                       dense
                       label="Work City"
                       persistent-placeholder
@@ -119,7 +119,7 @@
                   </v-col>
                   <v-col cols="12" lg="5" xl="6">
                     <v-text-field
-                      :value="user.workAddress || 'unknown'"
+                      :value="user.workAddress || 'Unknown'"
                       label="Work address"
                       persistent-placeholder
                       readonly
@@ -128,7 +128,7 @@
                   </v-col>
                   <v-col cols="12" lg="4" xl="3">
                     <v-text-field
-                      :value="user.workPhone || 'unknown'"
+                      :value="user.workPhone || 'Unknown'"
                       label="Work phone number"
                       persistent-placeholder
                       readonly
@@ -137,7 +137,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" lg="4">
                     <v-text-field
-                      :value="user.workPositionId ? user.workPosition.name : 'unknown'"
+                      :value="user.workPositionId ? user.workPosition.name : 'Unknown'"
                       dense
                       label="Work Position"
                       persistent-placeholder
@@ -147,7 +147,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" lg="5">
                     <v-text-field
-                      :value="user.workExperienceId ? user.workExperience.measurement : 'unknown'"
+                      :value="user.workExperienceId ? user.workExperience.measurement : 'Unknown'"
                       dense
                       label="Work Experience"
                       persistent-placeholder

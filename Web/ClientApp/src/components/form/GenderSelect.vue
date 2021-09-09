@@ -10,7 +10,6 @@
     :single-line="singleLine"
     :hide-details="hideDetails"
     :clearable="!required && !readonly"
-    :rules="required ? [ruleRequired] : []"
     @click:clear="input('')"
     :readonly="readonly"
     :dense="dense"
@@ -38,20 +37,16 @@ export default defineComponent({
     const data = [
       { text: 'Male', value: true },
       { text: 'Female', value: false },
+      { text: 'Unknown', value: null },
     ];
 
     function input(val: string) {
       emit('input', val);
     }
 
-    function ruleRequired(val: string): boolean | string {
-      return !!val.trim() || 'Please select genders';
-    }
-
     return {
       data,
       input,
-      ruleRequired,
     };
   },
 });

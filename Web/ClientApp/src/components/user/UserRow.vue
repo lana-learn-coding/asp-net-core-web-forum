@@ -31,16 +31,16 @@
         <v-icon small class="material-icons-outlined">place</v-icon>
         <span v-if="!user.workCountryId" class="ml-2">unknown</span>
         <span class="ml-2" v-else>
-          {{ user.workCountry.name }}, {{ user.workCityId ? user.workCity.name : 'unknown' }}
+          {{ user.workCountry.name }}, {{ user.workCityId ? user.workCity.name : 'Unknown' }}
         </span>
       </div>
       <div>
         <v-icon small class="material-icons-outlined">business_center</v-icon>
         <div class="ml-2 d-inline">
           <span>
-            {{ user.workPositionId ? user.workPosition.name : 'unknown' }},
+            {{ user.workPositionId ? user.workPosition.name : 'Unknown' }},
           </span>
-          <span>{{ user.workExperienceId ? user.workExperience.measurement : 'unknown' }}</span>
+          <span>{{ user.workExperienceId ? user.workExperience.measurement : 'Unknown' }}</span>
         </div>
       </div>
     </v-col>
