@@ -12,7 +12,7 @@ namespace DAL.Database
     // but it is useful when you need a lot of data to test
     public class FakeDataDatabaseInitializer : DatabaseInitializer
     {
-        private const bool Test = false;
+        private const bool Test = true;
 
         protected override void Seed(ModelContext context)
         {
