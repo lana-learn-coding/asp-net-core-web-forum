@@ -149,7 +149,7 @@ export default defineComponent({
       username: '',
       email: '',
       password: '',
-      roleIds: '',
+      roleIds: [],
     });
 
     return {
