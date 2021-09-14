@@ -45,6 +45,15 @@ namespace Core.Services
             return user;
         }
 
+        public string ConfirmEmail(string token)
+        {
+            var user = DbSet.FirstOrDefault(x => x.EmailConfirmToken.Equals(token)) ??
+                       throw new InvalidDataException("token", "Invalid token");
+            user.EmailConfirmToken = string.Empty;
+            Context.SaveChanges();
+            return user.Email;
+        }
+
         public override UserView Create(User entity)
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);

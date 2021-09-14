@@ -15,6 +15,8 @@ namespace Core.Model
 
         public string PostsCount { get; set; }
 
+        public string EmailConfirmToken { get; set; }
+
         public virtual ICollection<Role> Roles { get; set; }
 
         public virtual IEnumerable<Guid> RoleIds => Roles.Select(x => x.Id);
