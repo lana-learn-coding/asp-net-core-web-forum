@@ -37,6 +37,7 @@ namespace DAL.Database
                     Username = faker.Person.UserName + i,
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = faker.Person.Email + i,
+                    EmailConfirmToken = faker.Random.Bool() ? string.Empty : Guid.NewGuid().ToString()
                 };
                 context.Users.Add(user);
                 Console.WriteLine($"User: {user.Username}");
