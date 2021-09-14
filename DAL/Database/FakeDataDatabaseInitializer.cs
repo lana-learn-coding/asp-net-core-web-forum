@@ -94,11 +94,11 @@ namespace DAL.Database
             var users = context.Users.ToList();
             var forums = context.Forums.ToList();
             var tags = context.Tags.ToList();
-            for (var i = 0; i < 200; i++)
+            for (var i = 0; i < 120; i++)
             {
                 var id = Guid.NewGuid();
                 var faker = new Faker();
-                var postCount = faker.Random.Int(10, 50);
+                var postCount = faker.Random.Int(5, 25);
                 var thread = new Thread
                 {
                     Id = id,
