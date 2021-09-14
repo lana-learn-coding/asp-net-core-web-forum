@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-navigation-drawer
-      v-auth="'Admin'"
+      v-if="isAuthorized('Admin')"
       v-model="drawer"
       app
     >
@@ -71,7 +71,7 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="primary" dark>
-      <v-app-bar-nav-icon @click="drawer = !drawer" v-auth="'Admin'"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer" v-if="isAuthorized('Admin')"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
     </v-app-bar>
 
@@ -88,7 +88,7 @@ import { defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import { useLocalStorage, useTitle } from '@vueuse/core';
 import { useRoute, useVuetify } from '@/composable/compat';
 import AppIcon from '@/components/app/AppIcon.vue';
-import { useUser } from '@/services/auth';
+import { isAuthorized, useUser } from '@/services/auth';
 import { useMessage } from '@/composable/message';
 
 export default defineComponent({
@@ -153,6 +153,7 @@ export default defineComponent({
     onMounted(greet);
 
     return {
+      isAuthorized,
       title,
       drawer,
       links,
