@@ -54,7 +54,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" lg="5" xl="6">
                     <v-text-field
-                      :value="user.dateOfBirth || 'Unknown'"
+                      :value="user.dateOfBirth ? formatDate(user.dateOfBirth) : 'Unknown'"
                       dense
                       label="BirthDate"
                       persistent-placeholder
@@ -211,6 +211,7 @@ import AppLatestThreads from '@/components/app/AppLatestThreads.vue';
 import GenderSelect from '@/components/form/GenderSelect.vue';
 import AutoCompleteSelect from '@/components/form/AutoCompleteSelect.vue';
 import { useBreadcrumbs } from '@/composable/breadcrumbs';
+import { formatDate } from '@/composable/date';
 
 export default defineComponent({
   name: 'Profile',
@@ -248,7 +249,7 @@ export default defineComponent({
       ]);
     }, { immediate: true });
 
-    return { user };
+    return { user, formatDate };
   },
 });
 </script>
