@@ -45,6 +45,17 @@ namespace Core.Services
             return user;
         }
 
+        public string ForgotPassword(string email)
+        {
+            var user = DbSet.FirstOrDefault(x => x.Email.Equals(email) && string.IsNullOrEmpty(x.EmailConfirmToken)) ??
+                       throw new InvalidDataException("email", "Email not found or not activated");
+            var password = Guid.NewGuid().ToString().Replace("-", "");
+            _mailService.SendNewPasswordEmail(user, password);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            Context.SaveChanges();
+            return user.Email;
+        }
+
         public string ConfirmEmail(string token)
         {
             var user = DbSet.FirstOrDefault(x => x.EmailConfirmToken.Equals(token)) ??

@@ -6,6 +6,7 @@ import SignUp from '@/views/auth/SignUp.vue';
 import Logout from '@/views/auth/Logout.vue';
 import Profile from '@/views/user/Profile.vue';
 import ConfirmEmail from '@/views/auth/ConfirmEmail.vue';
+import ForgotPassword from '@/views/auth/ForgotPassword.vue';
 
 const shared: RouteConfig = {
   path: '/',
@@ -37,6 +38,11 @@ const shared: RouteConfig = {
       component: ConfirmEmail,
       name: 'ConfirmEmail',
       props: true,
+    },
+    {
+      path: '/forgot-password',
+      component: ForgotPassword,
+      name: 'Forgot',
     },
     {
       path: '404',

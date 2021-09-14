@@ -202,6 +202,14 @@ namespace Web.Controllers.Public
             var email = _service.ConfirmEmail(token);
             return new JsonResult(new { Email = email });
         }
+
+        [HttpPost]
+        [Route("forgot-password/{email}")]
+        public IActionResult ForgotPassword(string email)
+        {
+            var sent = _service.ForgotPassword(email);
+            return new JsonResult(new { Email = sent });
+        }
     }
 
     public static class JwtHelper

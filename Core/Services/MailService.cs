@@ -6,7 +6,9 @@ using Core.Dto;
 using Core.Model;
 using Core.Services.Base;
 using DAL;
+using DAL.Models.Auth;
 using DAL.Models.Forum;
+using DAL.Validation;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +49,18 @@ namespace Core.Services
             }
 
             Task.Run(() => SendMail(request));
+        }
+
+        public void SendNewPasswordEmail(User user, string newPassword)
+        {
+            if (!string.IsNullOrEmpty(user.EmailConfirmToken)) return;
+
+            SendMail(new MailRequest
+            {
+                To = user.Email,
+                Subject = "Forgot password",
+                Body = $"Please use this password to login {newPassword}"
+            });
         }
 
         public string SendEmailConfirmMail(string email, string username)
