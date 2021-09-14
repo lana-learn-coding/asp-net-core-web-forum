@@ -86,6 +86,11 @@
       </v-avatar>
     </template>
 
+    <template #table.emailConfirmToken="{ item }">
+      <v-chip color="success" dark label small v-if="!item.emailConfirmToken">Confirmed</v-chip>
+      <v-chip color="error" dark label small v-else>Not Confirmed</v-chip>
+    </template>
+
     <template #table.roles="{ item }">
       <template v-if="item.roles.length">
         <v-chip color="primary" dark label small v-for="role of item.roles" :key="role.name">
@@ -128,6 +133,7 @@ export default defineComponent({
       { text: 'Username', value: 'username' },
       { text: 'Email', value: 'email' },
       { text: 'Threads', value: 'threadsCount' },
+      { text: 'Email Confirm', value: 'emailConfirmToken' },
       { text: 'Posts', value: 'postsCount' },
       { text: 'Votes', value: 'votesCount' },
       { text: 'Roles', value: 'roles', sortable: false },
