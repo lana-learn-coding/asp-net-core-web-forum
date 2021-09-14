@@ -14,9 +14,10 @@ namespace Core.Model
 
         public override string Avatar => User.Avatar;
         public override string Username => User.Username;
+
+        public override bool IsEmailConfirmed => User.IsEmailConfirmed;
+
         public override string Email { get; set; }
-        
-        public bool IsEmailConfirmed { get; set; }
 
         public bool? Gender { get; set; }
 

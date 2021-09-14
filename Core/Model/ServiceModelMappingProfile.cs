@@ -54,7 +54,9 @@ namespace Core.Model
 
             //User
             var showUserInfo = false;
-            CreateMap<User, UserViewBase>();
+            CreateMap<User, UserViewBase>()
+                .ForMember(m => m.IsEmailConfirmed,
+                    opt => opt.MapFrom(x => string.IsNullOrEmpty(x.EmailConfirmToken)));
             CreateMap<User, UserView>()
                 .ForMember(m => m.VotesCount,
                     opt => opt.MapFrom(x => x.Votes.Count))
@@ -64,8 +66,6 @@ namespace Core.Model
                     opt => opt.MapFrom(x => x.Posts.Count));
 
             CreateMap<UserInfo, UserInfoView>()
-                .ForMember(m => m.IsEmailConfirmed,
-                    opt => opt.MapFrom(x => !showUserInfo || string.IsNullOrEmpty(x.User.EmailConfirmToken)))
                 .ForMember(m => m.ThreadsCount,
                     opt => opt.MapFrom(x => x.User.Posts.Count(p => p.Id.Equals(p.ThreadId))))
                 .ForMember(m => m.Email,

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Core.Dto;
+using Core.Model;
 using Core.Services.Base;
 using DAL;
+using DAL.Models.Forum;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,27 @@ namespace Core.Services
             _context = context;
             _httpContext = httpContextAccessor.HttpContext;
             _configuration = configuration;
+        }
+
+        public void SendThreadStatusUpdateMail(ThreadView thread, ThreadStatus? threadStatus)
+        {
+            if (!thread.User.IsEmailConfirmed) return;
+
+            var status = threadStatus?.ToString() ?? "Deleted";
+            var request = new MailRequest
+            {
+                To = thread.User.Email,
+                Subject = $"Admin has changed your thread to {status}",
+                Body = $"Admin has updated status of thread {thread.Title} to {status}"
+            };
+            if (threadStatus.HasValue && (threadStatus.Value.Equals(ThreadStatus.Approved) ||
+                                          threadStatus.Value.Equals(ThreadStatus.Closed)))
+            {
+                var host = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host.Value}/threads/{thread.Slug}";
+                request.Body += $"<br><a href=\"{host}\">Click here to visit the thread</a>";
+            }
+
+            Task.Run(() => SendMail(request));
         }
 
         public string SendEmailConfirmMail(string email, string username)
