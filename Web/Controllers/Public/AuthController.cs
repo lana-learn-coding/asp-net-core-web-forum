@@ -194,6 +194,22 @@ namespace Web.Controllers.Public
             _cache.Set(jwt.RefreshToken, jwt, jwt.RefreshExpires);
             return jwt;
         }
+
+        [HttpPost]
+        [Route("confirm-email/{token}")]
+        public IActionResult ConfirmEmail(string token)
+        {
+            var email = _service.ConfirmEmail(token);
+            return new JsonResult(new { Email = email });
+        }
+
+        [HttpPost]
+        [Route("forgot-password/{email}")]
+        public IActionResult ForgotPassword(string email)
+        {
+            var sent = _service.ForgotPassword(email);
+            return new JsonResult(new { Email = sent });
+        }
     }
 
     public static class JwtHelper

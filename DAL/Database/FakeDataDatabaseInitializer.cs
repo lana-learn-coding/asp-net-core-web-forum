@@ -12,25 +12,17 @@ namespace DAL.Database
     // but it is useful when you need a lot of data to test
     public class FakeDataDatabaseInitializer : DatabaseInitializer
     {
-        private const bool Test = true;
-
         protected override void Seed(ModelContext context)
         {
-            if (Test)
-            {
-                base.Seed(context);
-
-                Console.WriteLine("Start generating fake data...");
-                FakeUsers(context);
-                context.SaveChanges();
-
-                FakeForums(context);
-                context.SaveChanges();
-
-                FakeThreads(context);
-                context.SaveChanges();
-                Console.WriteLine("Generation completed.");
-            }
+            base.Seed(context);
+            Console.WriteLine("Start generating fake data...");
+            FakeUsers(context);
+            context.SaveChanges();
+            FakeForums(context);
+            context.SaveChanges();
+            FakeThreads(context);
+            context.SaveChanges();
+            Console.WriteLine("Generation completed.");
         }
 
         private static void FakeUsers(ModelContext context)
@@ -45,6 +37,7 @@ namespace DAL.Database
                     Username = faker.Person.UserName + i,
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = faker.Person.Email + i,
+                    EmailConfirmToken = faker.Random.Bool() ? string.Empty : Guid.NewGuid().ToString()
                 };
                 context.Users.Add(user);
                 Console.WriteLine($"User: {user.Username}");
@@ -102,11 +95,11 @@ namespace DAL.Database
             var users = context.Users.ToList();
             var forums = context.Forums.ToList();
             var tags = context.Tags.ToList();
-            for (var i = 0; i < 200; i++)
+            for (var i = 0; i < 120; i++)
             {
                 var id = Guid.NewGuid();
                 var faker = new Faker();
-                var postCount = faker.Random.Int(10, 50);
+                var postCount = faker.Random.Int(5, 25);
                 var thread = new Thread
                 {
                     Id = id,

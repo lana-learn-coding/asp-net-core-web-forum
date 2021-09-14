@@ -68,6 +68,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
+import { useTitle } from '@vueuse/core';
 import { useRouter } from '@/composable/compat';
 import { useHttp } from '@/services/http';
 import { useForm } from '@/composable/form';
@@ -77,6 +78,8 @@ export default defineComponent({
   name: 'SignUp',
 
   setup() {
+    useTitle('Sign Up');
+
     const { form, errors, setErrors, clearErrors, clearForm } = useForm({
       username: '',
       password: '',

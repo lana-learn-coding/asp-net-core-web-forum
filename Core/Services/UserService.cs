@@ -16,13 +16,15 @@ namespace Core.Services
     {
         private readonly HttpContext _httpContext;
         private readonly IConfigurationProvider _mapperConfig;
+        private readonly MailService _mailService;
 
         public UserService(DbContext context, IConfigurationProvider mapperConfig,
-            IHttpContextAccessor httpContextAccessor) : base(context)
+            IHttpContextAccessor httpContextAccessor, MailService mailService) : base(context)
         {
             DefaultSort = new List<string> { "UpdatedAt desc" };
             _mapperConfig = mapperConfig;
             _httpContext = httpContextAccessor.HttpContext;
+            _mailService = mailService;
         }
 
         public UserView Verify(string username, string password)
@@ -43,10 +45,40 @@ namespace Core.Services
             return user;
         }
 
+        public string ForgotPassword(string email)
+        {
+            var user = DbSet.FirstOrDefault(x => x.Email.Equals(email) && string.IsNullOrEmpty(x.EmailConfirmToken)) ??
+                       throw new InvalidDataException("email", "Email not found or not activated");
+            var password = Guid.NewGuid().ToString().Replace("-", "");
+            _mailService.SendNewPasswordEmail(user, password);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            Context.SaveChanges();
+            return user.Email;
+        }
+
+        public string ConfirmEmail(string token)
+        {
+            var user = DbSet.FirstOrDefault(x => x.EmailConfirmToken.Equals(token)) ??
+                       throw new InvalidDataException("token", "Invalid token");
+            user.EmailConfirmToken = string.Empty;
+            Context.SaveChanges();
+            return user.Email;
+        }
+
         public override UserView Create(User entity)
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
-            if (_httpContext.User.IsAdmin()) FillRoles(entity);
+            if (_httpContext.User.IsAdmin())
+            {
+                FillRoles(entity);
+                // always confirmed if account created by admin
+                entity.EmailConfirmToken = string.Empty;
+            }
+            else
+            {
+                entity.EmailConfirmToken = _mailService.SendEmailConfirmMail(entity.Email, entity.Username);
+            }
+
             entity.UserInfo = new UserInfo();
             return base.Create(entity);
         }

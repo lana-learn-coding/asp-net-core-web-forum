@@ -54,7 +54,9 @@ namespace Core.Model
 
             //User
             var showUserInfo = false;
-            CreateMap<User, UserViewBase>();
+            CreateMap<User, UserViewBase>()
+                .ForMember(m => m.IsEmailConfirmed,
+                    opt => opt.MapFrom(x => string.IsNullOrEmpty(x.EmailConfirmToken)));
             CreateMap<User, UserView>()
                 .ForMember(m => m.VotesCount,
                     opt => opt.MapFrom(x => x.Votes.Count))

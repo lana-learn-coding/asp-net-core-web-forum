@@ -91,7 +91,8 @@ namespace DAL.Database
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = "admin@admin.com",
                     Roles = new List<Role> { admin },
-                    UserInfo = new UserInfo()
+                    UserInfo = new UserInfo(),
+                    EmailConfirmToken =  string.Empty
                 }
             );
             context.Users.Add(new User
@@ -100,7 +101,8 @@ namespace DAL.Database
                     Username = "Test",
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = "test@test.com",
-                    UserInfo = new UserInfo()
+                    UserInfo = new UserInfo(),
+                    EmailConfirmToken = string.Empty
                 }
             );
             // this user act as default user mapping when deleted
@@ -111,7 +113,8 @@ namespace DAL.Database
                     Username = "Anon",
                     Password = BCrypt.Net.BCrypt.HashPassword("1"),
                     Email = "anon@anon.com",
-                    UserInfo = new UserInfo()
+                    UserInfo = new UserInfo(),
+                    EmailConfirmToken = string.Empty
                 }
             );
         }

@@ -54,5 +54,7 @@ namespace DAL.Models.Auth
 
         [NotMapped]
         public ICollection<Guid> RoleIds { get; set; } = new List<Guid>();
+
+        public string EmailConfirmToken { get; set; } = string.Empty;
     }
 }

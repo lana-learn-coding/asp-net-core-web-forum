@@ -84,8 +84,8 @@ namespace Web
             });
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
-            services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
-            services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
+            services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum"),Configuration.GetValue<bool?>("FakeData") ?? true));
+            services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum"), Configuration.GetValue<bool?>("FakeData") ?? true));
             services.AddAutoMapper(c =>
             {
                 c.AddProfile<WebDtoMappingProfile>();
@@ -97,7 +97,7 @@ namespace Web
             services.AddMemoryCache();
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(SimpleCrudService<>))
-                .AddClasses(classes => classes.AssignableTo(typeof(CrudService<,>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IService)))
                 .AsSelf()
                 .WithScopedLifetime()
             );

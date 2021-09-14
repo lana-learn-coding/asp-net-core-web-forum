@@ -20,9 +20,15 @@ namespace DAL
     {
         private static readonly Slugity Slugity = new();
 
-        public ModelContext(string connection) : base(connection)
+        public ModelContext(string connection, bool fakeData) : base(connection)
         {
-            System.Data.Entity.Database.SetInitializer(new FakeDataDatabaseInitializer());
+            if (fakeData)
+            {
+                System.Data.Entity.Database.SetInitializer(new FakeDataDatabaseInitializer());
+                return;
+            }
+
+            System.Data.Entity.Database.SetInitializer(new DatabaseInitializer());
         }
 
         public DbSet<Role> Roles { get; set; }

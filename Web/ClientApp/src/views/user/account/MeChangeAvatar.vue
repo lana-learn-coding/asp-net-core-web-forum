@@ -17,7 +17,7 @@
         >
         </image-picker>
         <v-img
-          :src="user.avatar || require('@/assets/anon.png')"
+          :src="form.avatar || require('@/assets/anon.png')"
           lazy-src="@/assets/anon_thumbnail.png"
           :alt="user.username"
           rounded

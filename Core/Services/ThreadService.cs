@@ -21,12 +21,15 @@ namespace Core.Services
 
         private readonly IConfigurationProvider _mapperConfig;
 
+        private readonly MailService _mailService;
+
         public ThreadService(DbContext context, IHttpContextAccessor httpContextAccessor,
-            IConfigurationProvider mapperConfig) : base(context)
+            IConfigurationProvider mapperConfig, MailService mailService) : base(context)
         {
             DefaultSort = new List<string> { "Priority", "LastActivityAt desc" };
             _httpContext = httpContextAccessor.HttpContext;
             _mapperConfig = mapperConfig;
+            _mailService = mailService;
         }
 
         protected override IQueryable<ThreadView> Query(IQueryable<Thread> queryable)
@@ -79,9 +82,13 @@ namespace Core.Services
             var thread = FindForWrite(slug);
             if (_httpContext.User.IsInRole("Admin"))
             {
-                thread.Status = entity.Status;
                 thread.Priority = entity.Priority;
                 thread.ForumId = entity.ForumId;
+                if (thread.Status != entity.Status)
+                {
+                    thread.Status = entity.Status;
+                    _mailService.SendThreadStatusUpdateMail(Get(slug), entity.Status);
+                }
             }
 
             thread.Title = entity.Title;
@@ -151,6 +158,7 @@ namespace Core.Services
                 Context.Set<Vote>().Remove(vote);
             }
 
+            _mailService.SendThreadStatusUpdateMail(Get(entity.Slug), null);
             base.Delete(entity);
         }
     }

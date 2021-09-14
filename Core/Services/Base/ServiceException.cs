@@ -72,6 +72,11 @@ namespace Core.Services.Base
                 [field] = messages
             };
         }
+        
+        public InvalidDataException(Exception inner) : base("Model is invalid", inner)
+        {
+            ModelErrors = new Dictionary<string, ICollection<string>>();
+        }
 
         public InvalidDataException() : base("Model is invalid")
         {
