@@ -84,8 +84,8 @@ namespace Web
             });
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
-            services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
-            services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum")));
+            services.AddScoped<DbContext>(_ => new ModelContext(Configuration.GetConnectionString("Forum"),Configuration.GetValue<bool?>("FakeData") ?? true));
+            services.AddScoped(_ => new ModelContext(Configuration.GetConnectionString("Forum"), Configuration.GetValue<bool?>("FakeData") ?? true));
             services.AddAutoMapper(c =>
             {
                 c.AddProfile<WebDtoMappingProfile>();
