@@ -5,6 +5,7 @@ import Login from '@/views/auth/Login.vue';
 import SignUp from '@/views/auth/SignUp.vue';
 import Logout from '@/views/auth/Logout.vue';
 import Profile from '@/views/user/Profile.vue';
+import ConfirmEmail from '@/views/auth/ConfirmEmail.vue';
 
 const shared: RouteConfig = {
   path: '/',
@@ -30,6 +31,12 @@ const shared: RouteConfig = {
       path: '/sign-up',
       component: SignUp,
       name: 'SignUp',
+    },
+    {
+      path: '/confirm-email/:token',
+      component: ConfirmEmail,
+      name: 'ConfirmEmail',
+      props: true,
     },
     {
       path: '404',
