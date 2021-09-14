@@ -1,6 +1,6 @@
 <template>
   <v-col cols="12" md="9">
-    <v-alert type="warning" v-if="!form.isEmailConfirmed" class="mb-3">You haven't confirmed your email</v-alert>
+    <v-alert type="warning" v-if="form.isEmailConfirmed === false" class="mb-3">You haven't confirmed your email</v-alert>
     <v-card flat>
       <v-card-title>
         <span>Yours Profile</span>
