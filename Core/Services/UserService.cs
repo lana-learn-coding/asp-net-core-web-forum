@@ -16,13 +16,15 @@ namespace Core.Services
     {
         private readonly HttpContext _httpContext;
         private readonly IConfigurationProvider _mapperConfig;
+        private readonly MailService _mailService;
 
         public UserService(DbContext context, IConfigurationProvider mapperConfig,
-            IHttpContextAccessor httpContextAccessor) : base(context)
+            IHttpContextAccessor httpContextAccessor, MailService mailService) : base(context)
         {
             DefaultSort = new List<string> { "UpdatedAt desc" };
             _mapperConfig = mapperConfig;
             _httpContext = httpContextAccessor.HttpContext;
+            _mailService = mailService;
         }
 
         public UserView Verify(string username, string password)
@@ -46,7 +48,17 @@ namespace Core.Services
         public override UserView Create(User entity)
         {
             entity.Password = BCrypt.Net.BCrypt.HashPassword(entity.Password);
-            if (_httpContext.User.IsAdmin()) FillRoles(entity);
+            if (_httpContext.User.IsAdmin())
+            {
+                FillRoles(entity);
+                // always confirmed if account created by admin
+                entity.EmailConfirmToken = string.Empty;
+            }
+            else
+            {
+                entity.EmailConfirmToken = _mailService.SendEmailConfirmMail(entity.Email, entity.Username);
+            }
+
             entity.UserInfo = new UserInfo();
             return base.Create(entity);
         }
